@@ -119,6 +119,47 @@ def plot_figure_2():
     plt.close()
 
 
+# --- GRAPHICAL ABSTRACT: BOUNDARY-CONDITION TIMELINE ---
+def plot_graphical_abstract():
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    # Time axis
+    t_max = 100
+    ax.axhline(0.5, color='black', linewidth=2)
+    ax.set_xlim(-5, t_max + 5)
+    ax.set_ylim(0, 1)
+
+    # Key time points
+    points = {
+        0: ("Exposure", "green"),
+        24: ("Parenteral\nBoundary", "red"),
+        72: ("Mucosal\nBoundary", "blue"),
+        96: ("Irreducible\nState", "black")
+    }
+
+    for t, (label, color) in points.items():
+        ax.plot(t, 0.5, 'o', color=color, markersize=10)
+        ax.text(t, 0.55, label, ha='center', va='bottom', color=color, fontweight='bold')
+
+    # Arrows/Zones
+    ax.annotate('', xy=(24, 0.45), xytext=(0, 0.45),
+                arrowprops=dict(arrowstyle='<->', color='red', lw=1.5))
+    ax.text(12, 0.4, 'High Risk\nWindow', ha='center', color='red', fontsize=9)
+
+    ax.annotate('', xy=(72, 0.35), xytext=(0, 0.35),
+                arrowprops=dict(arrowstyle='<->', color='blue', lw=1.5))
+    ax.text(36, 0.3, 'Mucosal Window of Opportunity', ha='center', color='blue', fontsize=9)
+
+    # Formalism
+    ax.text(50, 0.8, r"$\mathcal{P} \text{ Theorem: } E_{PEP}(t) \to 0 \text{ as } t \to \tau_{critical}$",
+            ha='center', fontsize=12, bbox=dict(facecolor='white', alpha=0.5))
+
+    ax.axis('off')
+    save_fig(fig, 'Graphical_Abstract_Boundary_Timeline')
+    plt.close()
+
+
 if __name__ == "__main__":
     plot_figure_1()
     plot_figure_2()
+    plot_graphical_abstract()
