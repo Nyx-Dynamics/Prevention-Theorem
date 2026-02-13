@@ -1,13 +1,15 @@
 # The Prevention Theorem
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Preprint](https://img.shields.io/badge/Preprint-10.20944%2Fpreprints202601.1090-blue)](https://doi.org/10.20944/preprints202601.1090.v1)
 
-**Time-Dependent Constraints on Post-Exposure Prophylaxis for HIV**
+**Finite Prevention Windows Under Irreversible Infection Establishment: A Mathematical Framework for HIV Post-Exposure Prophylaxis Timing**
 
 ## Overview
 
 This repository contains the computational implementation and analysis code for the Prevention Theorem, which formalizes HIV prevention as a mathematical boundary condition problem. The theorem establishes that post-exposure prophylaxis (PEP) can achieve true prevention (R₀(e) = 0) only when initiated within a finite biological window prior to irreversible proviral integration.
+
+> **Manuscript status:** Submitted to *The Journal of Infectious Diseases* (JID-S-26-00368, February 2026). Preprint available at [doi:10.20944/preprints202601.1090.v1](https://doi.org/10.20944/preprints202601.1090.v1).
 
 ### Key Findings
 
@@ -22,16 +24,30 @@ This repository contains the computational implementation and analysis code for 
 ```
 Prevention-Theorem/
 ├── SRC/
-│   ├── prevention_theorem_figures.py    # Main figure generation
+│   ├── jid_figures.py                   # JID manuscript figures (Monte Carlo, N=10,000)
+│   ├── prevention_theorem_figures.py    # Preprint figure generation
+│   ├── prevention_theorem.py            # Core model (preprint version)
 │   ├── PEP_mucosal.py                   # Mucosal vs parenteral analysis
 │   ├── generate_prevention_data.py      # Data generation utilities
 │   └── data_output/                     # Generated data files
-├── Figures/
-│   ├── Figure_1_Prevention_Theorem_Dynamics.tif
-│   └── Figure_2_Window_Compression.tif
-├── preprints_org/
-│   ├── prevention_theorem_preprints.tex # Manuscript (LaTeX)
-│   └── prevention_theorem_preprints.pdf # Compiled manuscript
+├── figures/
+│   ├── Fig1_RouteCompression.png        # JID Figure 1 (route-dependent efficacy)
+│   ├── Fig1_RouteCompression.tiff       # JID Figure 1 (high-res)
+│   ├── Fig2_DistributionOverlap.png     # JID Figure 2 (distribution overlap)
+│   ├── Fig2_DistributionOverlap.tiff    # JID Figure 2 (high-res)
+│   ├── Figure_1_Prevention_Theorem_Dynamics.tif  # Preprint Figure 1
+│   └── Figure_2_Window_Compression.tif           # Preprint Figure 2
+├── jid_submission/                      # JID manuscript files (JID-S-26-00368)
+│   ├── jid_manuscript_final_acd.tex
+│   ├── jid_manuscript_final_acd.docx
+│   ├── jid_supplement_final_acd.tex
+│   ├── jid_supplement_final_acd.docx
+│   ├── jid_references_final_acd.bib
+│   ├── JIDrefs.bst
+│   └── wber.cls
+├── preprints_org/                       # Original preprint submission
+│   ├── prevention_theorem_preprints.tex
+│   └── prevention_theorem_preprints.pdf
 ├── graphical_abstracts.py               # Graphical abstract generation
 └── README.md
 ```
@@ -106,11 +122,11 @@ If you use this code or the Prevention Theorem framework in your research, pleas
 ```bibtex
 @article{demidont2026prevention,
   author = {Demidont, A.C.},
-  title = {The Prevention Theorem: Time-Dependent Constraints on Post-Exposure Prophylaxis for HIV},
+  title = {Finite Prevention Windows Under Irreversible Infection Establishment: A Mathematical Framework for HIV Post-Exposure Prophylaxis Timing},
   journal = {Preprints.org},
   year = {2026},
-  doi = {10.20944/preprints202601.XXXX.v1},
-  url = {https://www.preprints.org/manuscript/202601.XXXX}
+  doi = {10.20944/preprints202601.1090.v1},
+  url = {https://www.preprints.org/manuscript/202601.1090}
 }
 ```
 
@@ -122,9 +138,8 @@ If you use this code or the Prevention Theorem framework in your research, pleas
   title = {Prevention-Theorem: Computational Implementation of Time-Dependent HIV Prevention Constraints},
   year = {2026},
   publisher = {GitHub},
-  version = {v1.0.0},
-  url = {https://github.com/Nyx-Dynamics/Prevention-Theorem},
-  doi = {10.5281/zenodo.XXXXXXX}
+  version = {v1.1.0},
+  url = {https://github.com/Nyx-Dynamics/Prevention-Theorem}
 }
 ```
 

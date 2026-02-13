@@ -2,12 +2,11 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "Prevention-Theorem: Computational Implementation of Time-Dependent HIV Prevention Constraints"
-version: 1.0.0
-date-released: 2026-01-09
+version: 1.1.0
+date-released: 2026-02-12
 authors:
   - family-names: "Demidont"
     given-names: "A.C."
-    orcid: "https://orcid.org/0000-0000-0000-0000"
     affiliation: "Nyx Dynamics, LLC"
     email: "ac.demidont@nyxdynamics.com"
 repository-code: "https://github.com/Nyx-Dynamics/Prevention-Theorem"
@@ -34,6 +33,8 @@ preferred-citation:
   authors:
     - family-names: "Demidont"
       given-names: "A.C."
-  title: "The Prevention Theorem: Time-Dependent Constraints on Post-Exposure Prophylaxis for HIV"
+  title: "Finite Prevention Windows Under Irreversible Infection Establishment: A Mathematical Framework for HIV Post-Exposure Prophylaxis Timing"
+  doi: "10.20944/preprints202601.1090.v1"
+  url: "https://www.preprints.org/manuscript/202601.1090"
   journal: "Preprints.org"
   year: 2026

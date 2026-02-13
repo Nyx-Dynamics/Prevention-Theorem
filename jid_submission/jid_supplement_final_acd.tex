@@ -1,0 +1,367 @@
+%% Supplementary Material — JID Prevention Theorem
+%% Companion to "Route-Specific Prevention Windows for HIV Post-Exposure Prophylaxis"
+%% Compiled with pdflatex
+%%
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+%% Theorem environments — use S-prefix numbering
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+%% Shortcuts (match main manuscript)
+\newcommand{\Pest}{P_{\mathrm{est}}}
+\newcommand{\Pint}{P_{\mathrm{int}}}
+\newcommand{\Pseed}{P_{\mathrm{seed}}}
+\newcommand{\Epep}{E_{\mathrm{PEP}}}
+\newcommand{\tcrit}{t_{\mathrm{crit}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+
+%% Custom numbering: S1.1, S2.1, etc.
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\renewcommand{\thetheorem}{\thesection.\arabic{theorem}}
+\renewcommand{\theproposition}{\thesection.\arabic{proposition}}
+\renewcommand{\thelemma}{\thesection.\arabic{lemma}}
+\renewcommand{\thecorollary}{\thesection.\arabic{corollary}}
+\renewcommand{\thedefinition}{\thesection.\arabic{definition}}
+\renewcommand{\theassumption}{A\arabic{assumption}}
+\renewcommand{\theremark}{\thesection.\arabic{remark}}
+
+\title{Supplementary Material:\\
+Mathematical Framework and Formal Proofs\\[6pt]
+\large Companion to ``Finite Prevention Windows Under Irreversible Infection Establishment: A Mathematical Framework for HIV Post-Exposure Prophylaxis Timing''}
+
+\author{A.C.\ Demidont, DO}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent This supplementary material provides the complete mathematical framework, formal definitions, and proofs supporting the main manuscript. Sections S1--S6 correspond to the results referenced in the Methods, Results, and Discussion sections of the main text. All notation is defined below; readers are referred to the main manuscript for biological context and interpretation.
+
+
+%% ============================================================
+\section{Probability Space and State Definitions}\label{sec:S1}
+\setcounter{theorem}{0}
+\setcounter{definition}{0}
+\setcounter{assumption}{0}
+
+Consider a single HIV exposure event $e$ occurring at time $t = 0$. We define a probability space $(\Omega, \mathcal{F}, \Prob)$ equipped with a filtration $\{\mathcal{F}_t\}_{t \geq 0}$ representing the evolving information about within-host viral dynamics.
+
+\begin{definition}[Within-host infection states]\label{def:S-states}
+Following exposure $e$, the within-host viral state at time $t$ is described by a random variable $Z(t) \in \{0,1,2\}$, where:
+\begin{itemize}
+\item $Z(t)=0$ (Susceptible): no productive infection; no self-sustaining replicative focus ($I(t) < I^{*}$).
+\item $Z(t)=1$ (Seeded): a replicative focus is established ($I(t) \ge I^{*}$) but reservoir commitment remains below the irreversibility threshold ($R(t) < R^{*}$).
+\item $Z(t)=2$ (Integrated): reservoir commitment exceeds the self-renewal threshold ($R(t) \ge R^{*}$), establishing an absorbing integrated state in this framework.
+\end{itemize}
+Operationally, $Z(t)=1$ corresponds to $I(t) \ge I^{*}$ with $R(t) < R^{*}$, while $Z(t)=2$ corresponds to $R(t) \ge R^{*}$. Thresholds $I^{*}$ and $R^{*}$ are defined in the main text (Section 5.1).
+
+\end{definition}
+
+\begin{definition}[Transition times]\label{def:S-stopping}
+Let $T_{\mathrm{seed}}$ and $T_{\mathrm{int}}$ be stopping times on $\{\mathcal{F}_t\}$ defined by:
+\begin{align}
+    T_{\mathrm{seed}} &= \inf\{t \geq 0 : Z(t) \geq 1\}, \label{eq:S-Tseed}\\
+    T_{\mathrm{int}} &= \inf\{t \geq 0 : Z(t) = 2\}. \label{eq:S-Tint}
+\end{align}
+We assume $T_{\mathrm{seed}} \leq T_{\mathrm{int}}$ almost surely.
+\end{definition}
+
+\begin{definition}[Cumulative transition probabilities]\label{def:S-cumprob}
+\begin{align}
+    \Pseed(t) &= \Prob(T_{\mathrm{seed}} \leq t), \label{eq:S-Pseed}\\
+    \Pint(t) &= \Prob(T_{\mathrm{int}} \leq t). \label{eq:S-Pint}
+\end{align}
+Since $T_{\mathrm{seed}} \leq T_{\mathrm{int}}$ a.s., we have $\Pseed(t) \geq \Pint(t)$ for all $t \geq 0$.
+\end{definition}
+
+\begin{definition}[Establishment probability]\label{def:S-Pest}
+The establishment probability at time $t$ is:
+\begin{equation}\label{eq:S-Pest}
+    \Pest(e,t) = \Prob(\text{exposure } e \text{ results in productive infection} \mid \mathcal{F}_t).
+\end{equation}
+Operational prevention for threshold $\eta$ is defined as $\Pest(e,t) < \eta$.
+\end{definition}
+
+
+\subsection{Assumptions}\label{sec:S-assumptions}
+
+\begin{assumption}[Irreversibility of integration]\label{S-A1}
+Once $Z(t) = 2$, the integrated state is absorbing: $\Prob(Z(s) = 0 \mid Z(t) = 2) = 0$ for all $s > t$.
+\end{assumption}
+
+\begin{assumption}[Stage-dependent drug efficacy]\label{S-A2}
+PEP efficacy depends on the within-host state:
+\begin{equation}\label{eq:S-stage-eff}
+    \varepsilon(Z(t)) = \begin{cases}
+        \varepsilon_{\max} & \text{if } Z(t) = 0, \\
+        \varepsilon_{\mathrm{mid}} & \text{if } Z(t) = 1, \\
+        \varepsilon_{\min} & \text{if } Z(t) = 2,
+    \end{cases}
+\end{equation}
+where $1 \geq \varepsilon_{\max} \geq \varepsilon_{\mathrm{mid}} \geq \varepsilon_{\min} \geq 0$, with $\varepsilon_{\min} = 0$.
+\end{assumption}
+
+\begin{assumption}[Monotonicity of integration]\label{S-A3}
+$\Pint(t)$ is non-decreasing with $\Pint(0) = 0$ and $\lim_{t \to \infty} \Pint(t) = 1$.
+\end{assumption}
+
+
+%% ============================================================
+\section[Time-Dependent PEP Efficacy]{Time-Dependent PEP Efficacy (Master Equation)}\label{sec:S2}
+\setcounter{theorem}{0}
+\setcounter{proposition}{0}
+
+\begin{proposition}[Time-dependent PEP efficacy]\label{prop:S-master}
+Under Assumption~\ref{S-A2}, the expected efficacy of PEP initiated at time $t$ is:
+\begin{equation}\label{eq:S-master}
+    \Epep(t) = (1 - \Pseed(t))\,\varepsilon_{\max} + (\Pseed(t) - \Pint(t))\,\varepsilon_{\mathrm{mid}} + \Pint(t)\,\varepsilon_{\min}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Partition the sample space at time $t$ according to $Z(t)$:
+\begin{align*}
+    \Prob(Z(t) = 0) &= 1 - \Pseed(t), \\
+    \Prob(Z(t) = 1) &= \Pseed(t) - \Pint(t), \\
+    \Prob(Z(t) = 2) &= \Pint(t).
+\end{align*}
+These are mutually exclusive and exhaustive. By the law of total expectation:
+\begin{align*}
+    \Epep(t) &= \E[\varepsilon(Z(t))] \\
+    &= \Prob(Z(t) = 0)\,\varepsilon_{\max} + \Prob(Z(t) = 1)\,\varepsilon_{\mathrm{mid}} + \Prob(Z(t) = 2)\,\varepsilon_{\min}. \qedhere
+\end{align*}
+\end{proof}
+
+
+%% ============================================================
+\section{The Finite Prevention Window Theorem}\label{sec:S3}
+\setcounter{theorem}{0}
+
+\begin{theorem}[Finite prevention window under irreversible establishment]\label{thm:S-window}
+Under Assumptions~\ref{S-A1}--\ref{S-A3}, $\Epep(t)$ satisfies:
+\begin{enumerate}
+    \item \emph{Upper bound}: $\Epep(t) \leq (1 - \Pint(t))\,\varepsilon_{\max} + \Pint(t)\,\varepsilon_{\min}$. If $\varepsilon_{\min} = 0$, then $\Epep(t) \leq 1 - \Pint(t)$.
+    \item \emph{Monotone decay}: $\Epep(t)$ is non-increasing in $t$.
+    \item \emph{Convergence to zero}: $\lim_{t \to \infty} \Epep(t) = \varepsilon_{\min} = 0$.
+    \item \emph{Finite critical time}: For any $\eta \in (0,1)$, $\tcrit(\eta) = \inf\{t \geq 0 : \Epep(t) < \eta\}$ is finite.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}\leavevmode
+\begin{enumerate}
+    \item[(i)] From Proposition~\ref{prop:S-master} and $\varepsilon_{\max} \geq \varepsilon_{\mathrm{mid}} \geq \varepsilon_{\min}$:
+    \begin{align*}
+        \Epep(t) &= (1 - \Pseed(t))\,\varepsilon_{\max} + (\Pseed(t) - \Pint(t))\,\varepsilon_{\mathrm{mid}} + \Pint(t)\,\varepsilon_{\min} \\
+        &\leq (1 - \Pseed(t))\,\varepsilon_{\max} + (\Pseed(t) - \Pint(t))\,\varepsilon_{\max} + \Pint(t)\,\varepsilon_{\min} \\
+        &= (1 - \Pint(t))\,\varepsilon_{\max} + \Pint(t)\,\varepsilon_{\min}.
+    \end{align*}
+    Setting $\varepsilon_{\min} = 0$ and $\varepsilon_{\max} \leq 1$ gives $\Epep(t) \leq 1 - \Pint(t)$.
+
+    \item[(ii)] Both $\Pseed(t)$ and $\Pint(t)$ are non-decreasing. Since $\varepsilon_{\max} \geq \varepsilon_{\mathrm{mid}} \geq \varepsilon_{\min}$, weight transfers monotonically from higher- to lower-efficacy states. Formally, for $t_1 < t_2$, setting $\Delta_s = \Pseed(t_2) - \Pseed(t_1) \geq 0$ and $\Delta_i = \Pint(t_2) - \Pint(t_1) \geq 0$:
+    \[
+        \Epep(t_1) - \Epep(t_2) = \Delta_s(\varepsilon_{\max} - \varepsilon_{\mathrm{mid}}) + \Delta_i(\varepsilon_{\mathrm{mid}} - \varepsilon_{\min}) \geq 0.
+    \]
+
+    \item[(iii)] By Assumption~\ref{S-A3}, $\Pint(t) \to 1$. Since $T_{\mathrm{seed}} \leq T_{\mathrm{int}}$ a.s., $\Pseed(t) \to 1$. Taking limits:
+    \[
+        \lim_{t \to \infty} \Epep(t) = 0 \cdot \varepsilon_{\max} + 0 \cdot \varepsilon_{\mathrm{mid}} + 1 \cdot \varepsilon_{\min} = \varepsilon_{\min} = 0.
+    \]
+
+    \item[(iv)] Since $\Epep$ is non-increasing by (ii) and converges to $0 < \eta$ by (iii), the set $\{t : \Epep(t) < \eta\}$ is non-empty. Its infimum $\tcrit(\eta)$ is finite, and by monotonicity, $\Epep(t) < \eta$ for all $t > \tcrit(\eta)$. \qedhere
+\end{enumerate}
+\end{proof}
+
+
+\subsection{The absorbing state (ODE grounding of Assumption~\ref{S-A1})}\label{sec:S-absorbing}
+
+Consider the standard target-cell-limited model:
+\begin{align}
+    \frac{dT}{dt} &= \lambda - dT - \beta T V, \label{eq:S-ode-T}\\
+    \frac{dI}{dt} &= \beta T V - \delta I, \label{eq:S-ode-I}\\
+    \frac{dV}{dt} &= pI - cV, \label{eq:S-ode-V}\\
+    \frac{dR}{dt} &= \alpha I, \label{eq:S-ode-R}
+\end{align}
+where $T$ = target cells, $I$ = infected cells, $V$ = free virus, $R$ = reservoir (integrated provirus).
+
+\begin{lemma}[Absorbing state]\label{lem:S-absorbing}
+The set $\mathcal{A} = \{(T,I,V,R) : R > 0\}$ is positively invariant. If $R(t_0) > 0$ for some $t_0$, then $R(t) > 0$ for all $t > t_0$.
+\end{lemma}
+
+\begin{proof}
+From $dR/dt = \alpha I \geq 0$ (since $\alpha > 0$ and $I \geq 0$), $R$ is non-decreasing. If $R(t_0) > 0$, then $R(t) \geq R(t_0) > 0$ for all $t \geq t_0$. ART can suppress $I \to 0$, $V \to 0$, but when $I = 0$, $dR/dt = 0$: the reservoir persists but does not shrink.
+\end{proof}
+
+
+%% ============================================================
+\section{Hazard-Rate Decomposition of Efficacy Loss}\label{sec:S4}
+\setcounter{theorem}{0}
+\setcounter{definition}{0}
+\setcounter{proposition}{0}
+\setcounter{remark}{0}
+
+\begin{definition}[Transition hazard rates]\label{def:S-hazard}
+Let $\Pseed$ and $\Pint$ be absolutely continuous with densities $f_{\mathrm{seed}}$ and $f_{\mathrm{int}}$:
+\begin{align}
+    \lambda_{\mathrm{seed}}(t) &= \frac{f_{\mathrm{seed}}(t)}{1 - \Pseed(t)}, \label{eq:S-lseed}\\
+    \lambda_{\mathrm{int}}(t) &= \frac{f_{\mathrm{int}}(t)}{\Pseed(t) - \Pint(t)}. \label{eq:S-lint}
+\end{align}
+\end{definition}
+
+\begin{proposition}[Hazard-rate decomposition]\label{prop:S-hazard}
+Under Assumptions~\ref{S-A1}--\ref{S-A3}, if $\Pseed$ and $\Pint$ are absolutely continuous:
+\begin{equation}\label{eq:S-dEdt}
+    \frac{d\Epep}{dt}(t) = -f_{\mathrm{seed}}(t)\,\Delta\varepsilon_1 - f_{\mathrm{int}}(t)\,\Delta\varepsilon_2 \leq 0,
+\end{equation}
+where $\Delta\varepsilon_1 = \varepsilon_{\max} - \varepsilon_{\mathrm{mid}}$ and $\Delta\varepsilon_2 = \varepsilon_{\mathrm{mid}} - \varepsilon_{\min}$. Equivalently:
+\begin{equation}\label{eq:S-dEdt-hazard}
+    \frac{d\Epep}{dt}(t) = -\lambda_{\mathrm{seed}}(t)\,(1 - \Pseed(t))\,\Delta\varepsilon_1 - \lambda_{\mathrm{int}}(t)\,(\Pseed(t) - \Pint(t))\,\Delta\varepsilon_2.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Differentiating the master equation~\eqref{eq:S-master}:
+\begin{align*}
+    \frac{d\Epep}{dt} &= -\Pseed'(t)\,\varepsilon_{\max} + [\Pseed'(t) - \Pint'(t)]\,\varepsilon_{\mathrm{mid}} + \Pint'(t)\,\varepsilon_{\min} \\
+    &= -\Pseed'(t)\,(\varepsilon_{\max} - \varepsilon_{\mathrm{mid}}) - \Pint'(t)\,(\varepsilon_{\mathrm{mid}} - \varepsilon_{\min}) \\
+    &= -f_{\mathrm{seed}}(t)\,\Delta\varepsilon_1 - f_{\mathrm{int}}(t)\,\Delta\varepsilon_2.
+\end{align*}
+Since $f_{\mathrm{seed}}, f_{\mathrm{int}} \geq 0$ and $\Delta\varepsilon_1, \Delta\varepsilon_2 \geq 0$, we have $d\Epep/dt \leq 0$.
+\end{proof}
+
+\begin{remark}[Interpretation]\label{rem:S-interp}
+Equation~\eqref{eq:S-dEdt} decomposes efficacy loss into two channels: the seeding hazard, weighted by the fraction in state~0 and the efficacy drop $\Delta\varepsilon_1$; and the integration hazard, weighted by the fraction in state~1 and the efficacy drop $\Delta\varepsilon_2$. At early times, the seeding channel dominates. At later times, mass accumulates in state~1 and the integration channel accelerates terminal efficacy collapse. The compact form shows that if $f_{\mathrm{seed}}$ and $f_{\mathrm{int}}$ can be estimated from within-host data, the entire efficacy trajectory is determined.
+\end{remark}
+
+
+%% ============================================================
+\section{Route Compression of the Prevention Window}\label{sec:S5}
+\setcounter{theorem}{0}
+\setcounter{corollary}{0}
+\setcounter{lemma}{0}
+\setcounter{assumption}{3}
+
+\begin{assumption}[Stochastic dominance of parenteral establishment]\label{S-A4}
+Parenteral exposure produces first-order stochastic dominance over mucosal exposure:
+\begin{align}
+    \Pseed^{(\mathrm{p})}(t) &\geq \Pseed^{(\mathrm{m})}(t) \quad \text{for all } t \geq 0, \label{eq:S-sd-seed}\\
+    \Pint^{(\mathrm{p})}(t) &\geq \Pint^{(\mathrm{m})}(t) \quad \text{for all } t \geq 0, \label{eq:S-sd-int}
+\end{align}
+with strict inequality on a set of positive Lebesgue measure for each.
+\end{assumption}
+
+\begin{corollary}[Route compression]\label{cor:S-compression}
+Under Assumptions~\ref{S-A1}--\ref{S-A4}:
+\begin{enumerate}
+    \item $\Epep^{(\mathrm{p})}(t) \leq \Epep^{(\mathrm{m})}(t)$ for all $t \geq 0$.
+    \item $\tcrit^{(\mathrm{p})}(\eta) \leq \tcrit^{(\mathrm{m})}(\eta)$ for any $\eta \in (0,1)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}\leavevmode
+\begin{enumerate}
+    \item[(i)] By Proposition~\ref{prop:S-master}, $\Epep(t)$ depends on $\Pseed(t)$ and $\Pint(t)$ through a weighted sum with non-negative coefficients on higher-efficacy terms. By Assumption~\ref{S-A4}, the weight on $\varepsilon_{\max}$ (equal to $1 - \Pseed(t)$) is smaller for the parenteral route, while the weight on $\varepsilon_{\min} = 0$ (equal to $\Pint(t)$) is larger. Hence $\Epep^{(\mathrm{p})}(t) \leq \Epep^{(\mathrm{m})}(t)$.
+
+    \item[(ii)] Since $\Epep^{(\mathrm{p})}(t) \leq \Epep^{(\mathrm{m})}(t)$ and both are non-increasing (Theorem~\ref{thm:S-window}(ii)), the parenteral efficacy crosses $\eta$ no later:
+    \[
+        \tcrit^{(\mathrm{p})}(\eta) = \inf\{t : \Epep^{(\mathrm{p})}(t) < \eta\} \leq \inf\{t : \Epep^{(\mathrm{m})}(t) < \eta\} = \tcrit^{(\mathrm{m})}(\eta). \qedhere
+    \]
+\end{enumerate}
+\end{proof}
+
+
+\begin{lemma}[Inoculum-monotone hitting times]\label{lem:S-inoculum}
+Let $(T, I, V, R)$ and $(\tilde{T}, \tilde{I}, \tilde{V}, \tilde{R})$ be solutions of the ODE system~\eqref{eq:S-ode-T}--\eqref{eq:S-ode-R} with identical parameters and initial conditions except $V(0) = v_0 < \tilde{v}_0 = \tilde{V}(0)$, with $T(0) = \tilde{T}(0)$, $I(0) = \tilde{I}(0) = 0$, $R(0) = \tilde{R}(0) = 0$. Then $\tilde{I}(t) \geq I(t)$ and $\tilde{R}(t) \geq R(t)$ for all $t \geq 0$, implying $T_{\mathrm{int}}(\tilde{v}_0) \leq T_{\mathrm{int}}(v_0)$ almost surely.
+\end{lemma}
+
+\begin{proof}
+The subsystem $(I, V, R)$ is cooperative (monotone) for fixed $T$: $\partial(\beta T V)/\partial V \geq 0$, $\partial(pI)/\partial I \geq 0$, $\partial(\alpha I)/\partial R = 0 \geq 0$. By comparison theorems for cooperative ODE systems \cite{ref:Smith1995}, solutions preserve the partial ordering induced by the initial conditions. Since $\tilde{V}(0) > V(0)$ with all other components equal, the comparison theorem gives $\tilde{V}(t) \geq V(t)$ and $\tilde{I}(t) \geq I(t)$ for all $t \geq 0$. From $dR/dt = \alpha I$, we have
+\[
+    \tilde{R}(t) = \alpha \int_0^t \tilde{I}(s)\,ds \geq \alpha \int_0^t I(s)\,ds = R(t),
+\]
+so the hitting time $\inf\{t : R(t) \geq R^*\}$ is earlier for larger inocula.
+\end{proof}
+
+\begin{remark}
+This lemma establishes that route-dependent window compression (Corollary~\ref{cor:S-compression}) arises as a natural consequence of different initial viral inocula: parenteral exposure delivers $V(0) \approx 10^3$ virions/mL directly into the bloodstream, compared to $V(0) \approx 1$ virion/mL for mucosal exposure after epithelial attenuation. Assumption~\ref{S-A4} (stochastic dominance) therefore follows from the ODE dynamics rather than requiring a separate biological assumption.
+\end{remark}
+
+
+%% ============================================================
+\section{Population-level PEP efficacy bound under access delays}\label{sec:S6}
+\setcounter{theorem}{0}
+\setcounter{definition}{0}
+\setcounter{proposition}{0}
+
+\begin{definition}[Expected population efficacy]\label{def:S-pop-eff}
+For a population with access delay distribution $T_{\mathrm{access}} \sim F_{\mathrm{access}}$:
+\begin{equation}\label{eq:S-pop-eff}
+    \bar{E}_{\mathrm{PEP}} = \E[\Epep(T_{\mathrm{access}})] = \int_0^\infty \Epep(t)\,dF_{\mathrm{access}}(t).
+\end{equation}
+\end{definition}
+
+\begin{proposition}[Population-level PEP efficacy bound]\label{prop:S-efficacy bound}
+Under Assumptions~\ref{S-A1}--\ref{S-A4}, if $F_{\mathrm{access}}(\tcrit^{(\mathrm{p})}(\eta))$ is small:
+\begin{equation}\label{eq:S-efficacy bound}
+    \bar{E}_{\mathrm{PEP}} \leq F_{\mathrm{access}}(\tcrit^{(\mathrm{p})}(\eta)) \cdot \varepsilon_{\max} + (1 - F_{\mathrm{access}}(\tcrit^{(\mathrm{p})}(\eta))) \cdot \eta.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Partition the integral at $\tcrit^{(\mathrm{p})}(\eta)$:
+\begin{align*}
+    \bar{E}_{\mathrm{PEP}} &= \int_0^{\tcrit^{(\mathrm{p})}} \Epep(t)\,dF_{\mathrm{access}}(t) + \int_{\tcrit^{(\mathrm{p})}}^\infty \Epep(t)\,dF_{\mathrm{access}}(t) \\
+    &\leq \varepsilon_{\max} \cdot F_{\mathrm{access}}(\tcrit^{(\mathrm{p})}) + \eta \cdot (1 - F_{\mathrm{access}}(\tcrit^{(\mathrm{p})})),
+\end{align*}
+using $\Epep(t) \leq \varepsilon_{\max}$ for $t \leq \tcrit$ and $\Epep(t) < \eta$ for $t > \tcrit$ (Theorem~\ref{thm:S-window}(iv)).
+\end{proof}
+
+Under a log-normal access delay with median 72 hours and GSD 2.0, $F_{\mathrm{access}}(24\text{h}) \approx 0.02$. With $\eta = 0.05$ and $\varepsilon_{\max} = 0.95$:
+\[
+    \bar{E}_{\mathrm{PEP}} \leq 0.02 \times 0.95 + 0.98 \times 0.05 = 0.068,
+\]
+i.e., expected population-level PEP efficacy below 7\%.
+
+
+%% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{ref:Tanner2025}
+Tanner MR, et al. Updated CDC guidelines for HIV postexposure prophylaxis. MMWR Recomm Rep. 2025.
+
+\bibitem{ref:Siliciano2015}
+Siliciano JD, Siliciano RF. Recent developments in the search for a cure for HIV-1 infection. J Allergy Clin Immunol. 2015;135:307--14.
+
+\bibitem{ref:Wahl2023}
+Wahl A, et al. Persistent HIV reservoirs in lymphoid tissue. Annu Rev Pathol. 2023;18:149--71.
+
+\bibitem{ref:McMichael2010}
+McMichael AJ, et al. The immune response during acute HIV-1 infection. Nat Rev Immunol. 2010;10:11--23.
+
+\bibitem{ref:Smith1995}
+Smith HL. Monotone Dynamical Systems: An Introduction to the Theory of Competitive and Cooperative Systems. Mathematical Surveys and Monographs, vol.~41. Providence, RI: American Mathematical Society; 1995.
+
+\bibitem{ref:Perelson1996}
+Perelson AS, et al. HIV-1 dynamics in vivo. Science. 1996;271:1582--6.
+
+\end{thebibliography}
+
+\end{document}
