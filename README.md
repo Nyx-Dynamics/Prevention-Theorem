@@ -16,6 +16,16 @@ This repository contains the computational implementation and analysis code for 
 - **Parenteral Window**: ~12–24 hours for injection exposures (bypasses mucosal bottlenecks)
 - **Irreversible Transition**: Once proviral integration occurs, the system enters an irreducible infection state
 
+## Quickstart
+```bash
+git clone https://github.com/Nyx-Dynamics/Prevention-Theorem.git
+cd Prevention-Theorem
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python reproduce_all.py
+```
+
 ## Repository Structure
 
 ```
