@@ -2,39 +2,24 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "Prevention-Theorem: Computational Implementation of Time-Dependent HIV Prevention Constraints"
-version: 1.1.0
-date-released: 2026-02-12
+version: v1.2.0
+doi: 10.5281/zenodo.18745661
+date-released: 2026-02-23
+url: "https://github.com/Nyx-Dynamics/Prevention-Theorem"
+repository-code: "https://github.com/Nyx-Dynamics/Prevention-Theorem"
+license: MIT
 authors:
-  - family-names: "Demidont"
+  - family-names: Demidont
     given-names: "A.C."
     affiliation: "Nyx Dynamics, LLC"
-    email: "ac.demidont@nyxdynamics.com"
-repository-code: "https://github.com/Nyx-Dynamics/Prevention-Theorem"
-url: "https://github.com/Nyx-Dynamics/Prevention-Theorem"
-license: MIT
-keywords:
-  - HIV prevention
-  - post-exposure prophylaxis
-  - PEP
-  - mathematical modeling
-  - epidemiology
-  - prevention theorem
-  - proviral integration
-abstract: >-
-  Computational implementation of the Prevention Theorem, which formalizes
-  HIV prevention as a mathematical boundary condition problem. The theorem
-  establishes that post-exposure prophylaxis (PEP) can achieve true prevention
-  (R₀(e) = 0) only when initiated within a finite biological window prior to
-  irreversible proviral integration. For mucosal exposures, this window extends
-  to approximately 72 hours; for parenteral exposures, it is compressed to
-  12-24 hours.
+    email: acdemidont@nyxdynamics.org
 preferred-citation:
   type: article
-  authors:
-    - family-names: "Demidont"
-      given-names: "A.C."
   title: "Finite Prevention Windows Under Irreversible Infection Establishment: A Mathematical Framework for HIV Post-Exposure Prophylaxis Timing"
-  doi: "10.20944/preprints202601.1090.v1"
-  url: "https://www.preprints.org/manuscript/202601.1090"
-  journal: "Preprints.org"
+  authors:
+    - family-names: Demidont
+      given-names: "A.C."
+  doi: 10.20944/preprints202601.1090.v1
+  url: "https://doi.org/10.20944/preprints202601.1090.v1"
   year: 2026
+  journal: "Preprints.org"
