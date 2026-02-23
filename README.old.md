@@ -1,16 +1,12 @@
 # Finite Prevention Windows Under Irreversible Infection Establishment
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18745661.svg)](https://doi.org/10.5281/zenodo.18745661)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Preprint](https://img.shields.io/badge/Preprint-10.20944%2Fpreprints202601.1090-blue)](https://doi.org/10.20944/preprints202601.1090.v1)
 
 **A Mathematical Framework for HIV Post-Exposure Prophylaxis Timing**
 
 ## Overview
 
 This repository contains the computational implementation and analysis code for the Prevention Theorem, which formalizes HIV prevention as a mathematical boundary condition problem. The theorem establishes that post-exposure prophylaxis (PEP) can achieve true prevention (R₀(e) = 0) only when initiated within a finite biological window prior to irreversible proviral integration.
-
-> **Manuscript status:** Submitted to *The Journal of Infectious Diseases* (JID-S-26-00368, February 2026). Preprint available at [doi:10.20944/preprints202601.1090.v1](https://doi.org/10.20944/preprints202601.1090.v1).
 
 ### Key Findings
 
@@ -20,34 +16,24 @@ This repository contains the computational implementation and analysis code for 
 - **Parenteral Window**: ~12–24 hours for injection exposures (bypasses mucosal bottlenecks)
 - **Irreversible Transition**: Once proviral integration occurs, the system enters an irreducible infection state
 
-## Quickstart
-```bash
-git clone https://github.com/Nyx-Dynamics/Prevention-Theorem.git
-cd Prevention-Theorem
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python reproduce_all.py
-```
-
 ## Repository Structure
 
 ```
 Prevention-Theorem/
 ├── SRC/
 │   ├── prevention_theorem_figures.py    # Theoretical framework figures (Fig 1–2)
-│   ├── route_compression.py             # JID manuscript figures (route-specific windows)
-│   ├── PEP_mucosal.py                   # Mucosal vs parenteral PEP analysis
-│   ├── middle_ground.py                 # Continuous inoculum spectrum model
-│   ├── prevention_theorem.py            # Core theorem implementation
-│   ├── jid_figures.py                   # JID-specific figure generation
-│   ├── generate_prevention_data.py      # Data generation utilities
-│   └── graphical_abstracts.py           # Graphical abstract generation
-├── figures/                             # All generated figures (PNG, TIFF, EPS)
-├── data/                                # Generated data outputs
-├── preprints_org/                       # Preprint manuscript (LaTeX/PDF)
-├── jid_submission/                      # JID submission materials
-├── reproduce_all.py                     # Reproducibility suite (single command)
+│   ├── route_compression.py            # JID manuscript figures (route-specific windows)
+│   ├── PEP_mucosal.py                  # Mucosal vs parenteral PEP analysis
+│   ├── middle_ground.py                # Continuous inoculum spectrum model
+│   ├── prevention_theorem.py           # Core theorem implementation
+│   ├── jid_figures.py                  # JID-specific figure generation
+│   ├── generate_prevention_data.py     # Data generation utilities
+│   └── graphical_abstracts.py          # Graphical abstract generation
+├── figures/                            # All generated figures (PNG, TIFF, EPS)
+├── data/                               # Generated data outputs
+├── preprints_org/                      # Preprint manuscript (LaTeX/PDF)
+├── jid_submission/                     # JID submission materials
+├── reproduce_all.py                    # Reproducibility suite (single command)
 ├── requirements.txt
 ├── CITATION.cff
 ├── LICENSE
@@ -146,10 +132,8 @@ cd SRC && python middle_ground.py
   title = {Prevention-Theorem: Computational Implementation of
            Time-Dependent HIV Prevention Constraints},
   year = {2026},
-  publisher = {Zenodo},
-  version = {v1.2.0},
-  doi = {10.5281/zenodo.18745661},
-  url = {https://doi.org/10.5281/zenodo.18745661}
+  publisher = {GitHub},
+  url = {https://github.com/Nyx-Dynamics/Prevention-Theorem}
 }
 ```
 
@@ -158,13 +142,6 @@ cd SRC && python middle_ground.py
 - **PWID Structural Barriers**: [Nyx-Dynamics/HIV_Prevention_PWID](https://github.com/Nyx-Dynamics/HIV_Prevention_PWID)
 - **Algorithmic Bias Epidemiology**: [Nyx-Dynamics/algorithmic-bias-epidemiology-academic](https://github.com/Nyx-Dynamics/algorithmic-bias-epidemiology-academic)
 - **LAI-PrEP Bridge Tool**: [Nyx-Dynamics/lai-prep-bridge-tool-pub](https://github.com/Nyx-Dynamics/lai-prep-bridge-tool-pub)
-- **Noise Decorrelation in HIV**: [Nyx-Dynamics/noise_decorrelation_hiv](https://github.com/Nyx-Dynamics/noise_decorrelation_hiv)
-- **Bridging the Gap — PrEP Cascade**: [Nyx-Dynamics/bridging_the_gap](https://github.com/Nyx-Dynamics/bridging_the_gap)
-
-## Interactive Summary
-
-Explore the full framework — narrated slide deck, infographic, and mind map:
-[nyxdynamics.org/research/prevention-theorem](https://nyxdynamics.org/research/prevention-theorem/)
 
 ## License
 
