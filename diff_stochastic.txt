@@ -1,0 +1,12 @@
+5c5
+< Adds a stochastic layer to PEP_parenteral_perelson.py addressing the core
+---
+> Adds a stochastic layer to PEP_parenteral.py addressing the core
+19c19
+<     The deterministic model (PEP_parenteral_perelson.py) gives:
+---
+>     The deterministic model (PEP_parenteral.py) gives:
+42c42
+<     PEP_parenteral_perelson.py — NOT the VL distribution center.
+---
+>     PEP_parenteral.py — NOT the VL distribution center.

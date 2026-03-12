@@ -1,0 +1,240 @@
+======================================================================
+AIDSVu CITY PROFILE PARSER
+Prevention Theorem — City-Stratified Stochastic PEP Model
+======================================================================
+Found 35 AIDSVu files. Parsing...
+  Parsing AIDSVu_State_ViralSuppression_2023-20250726.xlsx...   WARNING: Failed to parse AIDSVu_State_ViralSuppression_2023-20250726.xlsx: Worksheet named 'City Profile' not found
+FAILED
+  Parsing Atlanta... VS=65% | LateDx=19% | IDU=2.9% | VL_mean_log10=2.55 | Delay=5h
+  Parsing Austin... VS=68% | LateDx=21% | IDU=3.4% | VL_mean_log10=2.48 | Delay=3h
+  Parsing BatonRouge... VS=78% | LateDx=16% | IDU=8.3% | VL_mean_log10=2.20 | Delay=5h
+  Parsing Bridgeport... VS=68% | LateDx=19% | IDU=16.6% | VL_mean_log10=2.53 | Delay=6h
+  Parsing BrowardCO... VS=70% | LateDx=19% | IDU=3.9% | VL_mean_log10=2.42 | Delay=6h
+  Parsing Charleston... VS=67% | LateDx=23% | IDU=4.2% | VL_mean_log10=2.51 | Delay=10h
+  Parsing Charlotte... VS=66% | LateDx=20% | IDU=3.6% | VL_mean_log10=2.52 | Delay=5h
+  Parsing Columbia... VS=72% | LateDx=28% | IDU=5.7% | VL_mean_log10=2.36 | Delay=12h
+  Parsing Dallas... VS=64% | LateDx=20% | IDU=2.5% | VL_mean_log10=2.58 | Delay=6h
+  Parsing Denver... VS=57% | LateDx=21% | IDU=4.0% | VL_mean_log10=2.81 | Delay=3h
+  Parsing ElPaso... VS=62% | LateDx=18% | IDU=3.4% | VL_mean_log10=2.66 | Delay=4h
+  Parsing FortWorth... VS=68% | LateDx=20% | IDU=5.0% | VL_mean_log10=2.49 | Delay=6h
+  Parsing HamptonRoads... VS=63% | LateDx=20% | IDU=6.2% | VL_mean_log10=2.63 | Delay=6h
+  Parsing Hartford... VS=69% | LateDx=37% | IDU=23.4% | VL_mean_log10=2.51 | Delay=24h
+  Parsing Houston... VS=58% | LateDx=22% | IDU=4.4% | VL_mean_log10=2.78 | Delay=9h
+  Parsing Jackson... VS=52% | LateDx=14% | IDU=3.3% | VL_mean_log10=2.96 | Delay=6h
+  Parsing Jacksonville... VS=66% | LateDx=20% | IDU=6.3% | VL_mean_log10=2.54 | Delay=6h
+  Parsing KansasCity... VS=59% | LateDx=17% | IDU=4.6% | VL_mean_log10=2.73 | Delay=4h
+  Parsing LosAngeles... VS=65% | LateDx=19% | IDU=3.3% | VL_mean_log10=2.56 | Delay=5h
+  Parsing MiamiDadeCO... VS=60% | LateDx=18% | IDU=3.6% | VL_mean_log10=2.72 | Delay=6h
+  Parsing Milwaukee... VS=73% | LateDx=15% | IDU=5.6% | VL_mean_log10=2.32 | Delay=2h
+  Parsing NewHaven... VS=75% | LateDx=28% | IDU=21.6% | VL_mean_log10=2.33 | Delay=12h
+  Parsing NewOrleans... VS=71% | LateDx=18% | IDU=5.8% | VL_mean_log10=2.39 | Delay=6h
+  Parsing NewYork... VS=62% | LateDx=21% | IDU=10.4% | VL_mean_log10=2.67 | Delay=7h
+  Parsing OrangeCO... VS=64% | LateDx=23% | IDU=5.9% | VL_mean_log10=2.59 | Delay=7h
+  Parsing Orlando... VS=70% | LateDx=21% | IDU=6.2% | VL_mean_log10=2.43 | Delay=5h
+  Parsing PalmBeachCO... VS=65% | LateDx=26% | IDU=5.0% | VL_mean_log10=2.57 | Delay=14h
+  Parsing Phoenix... VS=54% | LateDx=20% | IDU=5.8% | VL_mean_log10=2.91 | Delay=4h
+  Parsing Raleigh... VS=66% | LateDx=24% | IDU=3.8% | VL_mean_log10=2.55 | Delay=10h
+  Parsing Richmond... VS=65% | LateDx=22% | IDU=7.1% | VL_mean_log10=2.57 | Delay=8h
+  Parsing SanAntonio... VS=64% | LateDx=20% | IDU=4.3% | VL_mean_log10=2.58 | Delay=6h
+  Parsing SanJuan... VS=52% | LateDx=16% | IDU=22.2% | VL_mean_log10=3.02 | Delay=13h
+  Parsing StLouis... VS=61% | LateDx=20% | IDU=3.3% | VL_mean_log10=2.68 | Delay=4h
+  Parsing Tampa... VS=72% | LateDx=20% | IDU=6.4% | VL_mean_log10=2.36 | Delay=6h
+
+Saved master city profiles: results/city_analysis/city_vl_profiles.csv (34 cities)
+
+======================================================================
+CITY PROFILE SUMMARY
+======================================================================
+
+Viral suppression range: 51.8% – 77.8%
+Late diagnosis range:     14.3% – 37.2%
+IDU prevalence range:     2.5% – 23.4%
+VL mean_log10 range:      2.20 – 3.02
+Structural delay range:   2h – 24h
+
+Delay category distribution:
+delay_category
+low_barrier         26
+moderate_barrier     7
+high_barrier         1
+
+VL profile distribution:
+vl_profile
+moderate_burden    24
+low_burden         10
+
+Top 5 cities by structural delay (worst barriers):
+       city           state  late_dx_pct  linkage_to_care_pct  estimated_structural_delay_h   delay_category  mean_log10
+   Hartford     Connecticut         37.2                 82.1                          24.4     high_barrier       2.514
+PalmBeachCO         Florida         25.9                 75.9                          13.5 moderate_barrier       2.574
+    SanJuan    Puerto\nRico         16.1                 63.0                          13.3 moderate_barrier       3.017
+   Columbia South\nCarolina         28.4                 89.0                          11.7 moderate_barrier       2.361
+   NewHaven     Connecticut         28.3                 90.0                          11.5 moderate_barrier       2.325
+
+Top 5 cities by VL burden (highest community VL):
+   city        state  viral_suppression_pct  idu_prevalence_pct  mean_log10      vl_profile
+SanJuan Puerto\nRico                   52.1             22.1527       3.017 moderate_burden
+Jackson  Mississippi                   51.8              3.2830       2.958 moderate_burden
+Phoenix      Arizona                   53.6              5.8370       2.913 moderate_burden
+ Denver     Colorado                   56.8              4.0342       2.811 moderate_burden
+Houston        Texas                   57.8              4.4400       2.782 moderate_burden
+
+======================================================================
+CITY-STRATIFIED STOCHASTIC PEP ANALYSIS
+Using city-specific structural delay as PEP initiation time
+======================================================================
+
+Running city-stratified analysis (n=5000 per city)...
+  Atlanta            | delay=5h | E[eff]=97.4% | P(futile)=0.0%
+  Austin             | delay=3h | E[eff]=98.0% | P(futile)=0.0%
+  BatonRouge         | delay=5h | E[eff]=97.9% | P(futile)=0.0%
+  Bridgeport         | delay=6h | E[eff]=97.3% | P(futile)=0.0%
+  BrowardCO          | delay=6h | E[eff]=97.1% | P(futile)=0.0%
+  Charleston         | delay=10h | E[eff]=95.5% | P(futile)=0.0%
+  Charlotte          | delay=5h | E[eff]=97.5% | P(futile)=0.0%
+  Columbia           | delay=12h | E[eff]=94.9% | P(futile)=0.0%
+  Dallas             | delay=6h | E[eff]=97.0% | P(futile)=0.0%
+  Denver             | delay=3h | E[eff]=97.5% | P(futile)=0.0%
+  ElPaso             | delay=4h | E[eff]=97.5% | P(futile)=0.0%
+  FortWorth          | delay=6h | E[eff]=97.3% | P(futile)=0.0%
+  HamptonRoads       | delay=6h | E[eff]=97.0% | P(futile)=0.0%
+  Hartford           | delay=24h | E[eff]=79.1% | P(futile)=0.0%
+  Houston            | delay=9h | E[eff]=95.5% | P(futile)=0.0%
+  Jackson            | delay=6h | E[eff]=96.3% | P(futile)=0.0%
+  Jacksonville       | delay=6h | E[eff]=96.9% | P(futile)=0.0%
+  KansasCity         | delay=4h | E[eff]=97.3% | P(futile)=0.0%
+  LosAngeles         | delay=5h | E[eff]=97.4% | P(futile)=0.0%
+  MiamiDadeCO        | delay=6h | E[eff]=96.9% | P(futile)=0.0%
+  Milwaukee          | delay=2h | E[eff]=98.3% | P(futile)=0.0%
+  NewHaven           | delay=12h | E[eff]=95.1% | P(futile)=0.0%
+  NewOrleans         | delay=6h | E[eff]=97.5% | P(futile)=0.0%
+  NewYork            | delay=7h | E[eff]=96.6% | P(futile)=0.0%
+  OrangeCO           | delay=7h | E[eff]=96.6% | P(futile)=0.0%
+  Orlando            | delay=5h | E[eff]=97.4% | P(futile)=0.0%
+  PalmBeachCO        | delay=14h | E[eff]=92.9% | P(futile)=0.0%
+  Phoenix            | delay=4h | E[eff]=97.2% | P(futile)=0.0%
+  Raleigh            | delay=10h | E[eff]=95.5% | P(futile)=0.0%
+  Richmond           | delay=8h | E[eff]=96.3% | P(futile)=0.0%
+  SanAntonio         | delay=6h | E[eff]=97.0% | P(futile)=0.0%
+  SanJuan            | delay=13h | E[eff]=91.4% | P(futile)=0.0%
+  StLouis            | delay=4h | E[eff]=97.6% | P(futile)=0.0%
+  Tampa              | delay=6h | E[eff]=97.5% | P(futile)=0.0%
+
+Saved city PEP results: results/city_analysis/city_pep_efficacy_results.csv
+
+======================================================================
+CITY-LEVEL EXPECTED PEP EFFICACY (ranked worst → best)
+======================================================================
+        city           state  structural_delay_h  pep_mean_efficacy_pct  p_futile_pct      vl_profile   delay_category
+    Hartford     Connecticut                24.4                  79.10           0.0 moderate_burden     high_barrier
+     SanJuan    Puerto\nRico                13.3                  91.44           0.0 moderate_burden moderate_barrier
+ PalmBeachCO         Florida                13.5                  92.89           0.0 moderate_burden moderate_barrier
+    Columbia South\nCarolina                11.7                  94.88           0.0      low_burden moderate_barrier
+    NewHaven     Connecticut                11.5                  95.11           0.0      low_burden moderate_barrier
+  Charleston South\nCarolina                 9.9                  95.49           0.0 moderate_burden moderate_barrier
+     Raleigh North\nCarolina                 9.7                  95.49           0.0 moderate_burden moderate_barrier
+     Houston           Texas                 8.6                  95.51           0.0 moderate_burden moderate_barrier
+     Jackson     Mississippi                 6.2                  96.30           0.0 moderate_burden      low_barrier
+    Richmond        Virginia                 7.8                  96.34           0.0 moderate_burden      low_barrier
+     NewYork       New\nYork                 6.8                  96.56           0.0 moderate_burden      low_barrier
+    OrangeCO      California                 7.0                  96.63           0.0 moderate_burden      low_barrier
+Jacksonville         Florida                 6.5                  96.91           0.0 moderate_burden      low_barrier
+ MiamiDadeCO         Florida                 5.6                  96.93           0.0 moderate_burden      low_barrier
+HamptonRoads        Virginia                 5.9                  96.97           0.0 moderate_burden      low_barrier
+      Dallas           Texas                 6.1                  96.98           0.0 moderate_burden      low_barrier
+  SanAntonio           Texas                 5.9                  97.05           0.0 moderate_burden      low_barrier
+   BrowardCO         Florida                 6.5                  97.11           0.0      low_burden      low_barrier
+     Phoenix         Arizona                 3.9                  97.22           0.0 moderate_burden      low_barrier
+  Bridgeport     Connecticut                 5.5                  97.25           0.0 moderate_burden      low_barrier
+   FortWorth           Texas                 5.5                  97.31           0.0      low_burden      low_barrier
+  KansasCity        Missouri                 4.3                  97.33           0.0 moderate_burden      low_barrier
+     Atlanta         Georgia                 5.0                  97.38           0.0 moderate_burden      low_barrier
+  LosAngeles      California                 4.8                  97.43           0.0 moderate_burden      low_barrier
+     Orlando         Florida                 5.4                  97.44           0.0      low_burden      low_barrier
+       Tampa         Florida                 5.7                  97.45           0.0      low_burden      low_barrier
+  NewOrleans       Louisiana                 5.5                  97.47           0.0      low_burden      low_barrier
+      Denver        Colorado                 3.4                  97.50           0.0 moderate_burden      low_barrier
+   Charlotte North\nCarolina                 4.7                  97.50           0.0 moderate_burden      low_barrier
+      ElPaso           Texas                 4.0                  97.51           0.0 moderate_burden      low_barrier
+     StLouis        Missouri                 3.7                  97.57           0.0 moderate_burden      low_barrier
+  BatonRouge       Louisiana                 5.0                  97.87           0.0      low_burden      low_barrier
+      Austin           Texas                 3.0                  97.98           0.0      low_burden      low_barrier
+   Milwaukee       Wisconsin                 1.9                  98.35           0.0      low_burden      low_barrier
+
+======================================================================
+COUNTERFACTUAL: All cities at 24h delay (no structural barrier)
+======================================================================
+
+Running city-stratified analysis (n=5000 per city)...
+  Atlanta            | delay=24h | E[eff]=79.6% | P(futile)=0.0%
+  Austin             | delay=24h | E[eff]=80.1% | P(futile)=0.0%
+  BatonRouge         | delay=24h | E[eff]=82.1% | P(futile)=0.0%
+  Bridgeport         | delay=24h | E[eff]=79.7% | P(futile)=0.0%
+  BrowardCO          | delay=24h | E[eff]=80.4% | P(futile)=0.0%
+  Charleston         | delay=24h | E[eff]=79.8% | P(futile)=0.0%
+  Charlotte          | delay=24h | E[eff]=79.7% | P(futile)=0.0%
+  Columbia           | delay=24h | E[eff]=80.9% | P(futile)=0.0%
+  Dallas             | delay=24h | E[eff]=79.3% | P(futile)=0.0%
+  Denver             | delay=24h | E[eff]=77.8% | P(futile)=0.0%
+  ElPaso             | delay=24h | E[eff]=78.8% | P(futile)=0.0%
+  FortWorth          | delay=24h | E[eff]=80.0% | P(futile)=0.0%
+  HamptonRoads       | delay=24h | E[eff]=79.0% | P(futile)=0.0%
+  Hartford           | delay=24h | E[eff]=79.8% | P(futile)=0.0%
+  Houston            | delay=24h | E[eff]=78.0% | P(futile)=0.0%
+  Jackson            | delay=24h | E[eff]=76.8% | P(futile)=0.0%
+  Jacksonville       | delay=24h | E[eff]=79.6% | P(futile)=0.0%
+  KansasCity         | delay=24h | E[eff]=78.3% | P(futile)=0.0%
+  LosAngeles         | delay=24h | E[eff]=79.5% | P(futile)=0.0%
+  MiamiDadeCO        | delay=24h | E[eff]=78.4% | P(futile)=0.0%
+  Milwaukee          | delay=24h | E[eff]=81.2% | P(futile)=0.0%
+  NewHaven           | delay=24h | E[eff]=81.1% | P(futile)=0.0%
+  NewOrleans         | delay=24h | E[eff]=80.7% | P(futile)=0.0%
+  NewYork            | delay=24h | E[eff]=78.7% | P(futile)=0.0%
+  OrangeCO           | delay=24h | E[eff]=79.3% | P(futile)=0.0%
+  Orlando            | delay=24h | E[eff]=80.4% | P(futile)=0.0%
+  PalmBeachCO        | delay=24h | E[eff]=79.4% | P(futile)=0.0%
+  Phoenix            | delay=24h | E[eff]=77.1% | P(futile)=0.0%
+  Raleigh            | delay=24h | E[eff]=79.6% | P(futile)=0.0%
+  Richmond           | delay=24h | E[eff]=79.4% | P(futile)=0.0%
+  SanAntonio         | delay=24h | E[eff]=79.3% | P(futile)=0.0%
+  SanJuan            | delay=24h | E[eff]=76.4% | P(futile)=0.0%
+  StLouis            | delay=24h | E[eff]=78.6% | P(futile)=0.0%
+  Tampa              | delay=24h | E[eff]=80.9% | P(futile)=0.0%
+
+Efficacy lost due to structural delay (worst cities):
+       city  pep_mean_efficacy_pct  structural_delay_h  pep_24h_counterfactual_pct  efficacy_lost_to_structural_delay_pp
+   Hartford                  79.10                24.4                       79.80                                  0.70
+PalmBeachCO                  92.89                13.5                       79.38                                -13.51
+   NewHaven                  95.11                11.5                       81.15                                -13.96
+   Columbia                  94.88                11.7                       80.89                                -13.99
+    SanJuan                  91.44                13.3                       76.37                                -15.07
+ Charleston                  95.49                 9.9                       79.84                                -15.65
+ BatonRouge                  97.87                 5.0                       82.09                                -15.78
+    Raleigh                  95.49                 9.7                       79.56                                -15.93
+      Tampa                  97.45                 5.7                       80.87                                -16.58
+  BrowardCO                  97.11                 6.5                       80.45                                -16.66
+
+======================================================================
+OUTPUT FILES:
+  results/city_analysis/city_vl_profiles.csv
+  results/city_analysis/city_pep_efficacy_results.csv
+  results/city_analysis/city_pep_efficacy_24h_counterfactual.csv
+  results/city_analysis/city_structural_delay_cost.csv
+======================================================================
+
+PERELSON 1996 GROUNDING NOTE:
+    VL distribution parameters are grounded in Perelson et al. (1996)
+    within-host HIV dynamics model. The log-normal VL distribution with
+    mean log10=4.5 for untreated infection reflects the paper's estimate
+    of steady-state viral burden during chronic infection.
+
+    The integration timeline compression (parenteral: 4-60h vs mucosal:
+    72-120h) is consistent with Perelson's viral kinetics: at high inoculum,
+    reverse transcription initiates within hours of entry, compressing the
+    window within which PEP can achieve R(0)=0.
+
+    Citation: Perelson AS, Neumann AU, Markowitz M, Leonard JM, Ho DD.
+    HIV-1 dynamics in vivo: virion clearance rate, infected cell life-span,
+    and viral generation time. Science. 1996;271(5255):1582-6.
+    doi: 10.1126/science.271.5255.1582
+    

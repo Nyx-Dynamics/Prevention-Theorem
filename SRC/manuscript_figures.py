@@ -30,6 +30,7 @@ from scipy.stats import lognorm
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from matplotlib.patches import Patch
+from datetime import datetime
 import sys
 import os
 
@@ -327,11 +328,12 @@ def figure2(E_pep_p, t_arr, tcrit_p,
 # ============================================================================
 
 def main():
+    TIMESTAMP = datetime.now().strftime('%Y-%m-%d %H:%M')
     show = '--show' in sys.argv
     
     print("=" * 70)
     print("JID Manuscript Figure Generation")
-    print("Prevention Theorem — Route-Specific PEP Windows")
+    print(f"Prevention Theorem — Route-Specific PEP Windows | {TIMESTAMP}")
     print("=" * 70)
     
     N = 10000
@@ -386,20 +388,20 @@ def main():
     
     # ---- Generate figures ----
     print(f"\n{'─'*70}")
-    print("Generating figures...")
+    print(f"[{TIMESTAMP}] Generating figures...")
     
     fig1 = figure1(E_pep_m, E_pep_p, t_arr, tcrit_m, tcrit_p)
     fig2 = figure2(E_pep_p, t_arr, tcrit_p)
     
     # ---- Output summary ----
     print(f"\n{'='*70}")
-    print("OUTPUT FILES:")
+    print(f"[{TIMESTAMP}] OUTPUT FILES:")
     for prefix in ['Fig1_RouteCompression', 'Fig2_DistributionOverlap']:
         for ext in ['png', 'tiff', 'pdf']:
             fpath = f'{prefix}.{ext}'
             if os.path.exists(fpath):
                 sz = os.path.getsize(fpath) / 1024
-                print(f"  {fpath:40s} ({sz:.0f} KB)")
+                print(f"  [{TIMESTAMP}] {fpath:40s} ({sz:.0f} KB)")
     
     print(f"\n{'─'*70}")
     print("FIGURE LEGENDS:")

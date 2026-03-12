@@ -1,0 +1,33 @@
+distribution,distribution_label,hours_to_pep,mean_efficacy_pct,median_efficacy_pct,ci_95_lower_pct,ci_95_upper_pct,ci_50_lower_pct,ci_50_upper_pct,ci_95_width_pct,p_below_50pct,p_below_30pct,p_futile_pct
+pwid_untreated,PWID (untreated/unsuppressed),0,97.4,97.75,93.57,99.01,96.84,98.36,5.44,0.0,0.0,0.0
+pwid_untreated,PWID (untreated/unsuppressed),6,94.74,95.41,87.03,98.31,93.44,96.78,11.28,0.0,0.0,0.0
+pwid_untreated,PWID (untreated/unsuppressed),12,89.57,90.52,76.86,96.67,86.83,93.32,19.8,0.0,0.0,0.0
+pwid_untreated,PWID (untreated/unsuppressed),18,81.3,82.02,65.26,93.07,76.74,86.63,27.81,0.0,0.0,0.0
+pwid_untreated,PWID (untreated/unsuppressed),24,71.03,71.05,54.64,86.2,65.72,76.53,31.56,0.0,0.0,0.0
+pwid_untreated,PWID (untreated/unsuppressed),36,52.6,54.14,28.27,65.33,49.71,57.54,37.05,26.27,2.91,0.0
+pwid_untreated,PWID (untreated/unsuppressed),48,35.73,39.62,4.97,52.97,26.34,47.33,47.99,86.46,30.76,6.72
+pwid_untreated,PWID (untreated/unsuppressed),72,3.85,1.39,0.05,23.5,0.45,4.17,23.45,100.0,98.74,89.02
+pwid_mixed_treatment,PWID (mixed treatment status),0,98.32,98.69,95.01,99.23,98.04,99.05,4.23,0.0,0.0,0.0
+pwid_mixed_treatment,PWID (mixed treatment status),6,96.76,97.55,89.72,98.85,96.06,98.41,9.13,0.0,0.0,0.0
+pwid_mixed_treatment,PWID (mixed treatment status),12,93.56,94.95,80.74,97.93,91.82,96.89,17.19,0.0,0.0,0.0
+pwid_mixed_treatment,PWID (mixed treatment status),18,87.84,89.64,69.44,95.81,84.08,93.54,26.38,0.0,0.0,0.0
+pwid_mixed_treatment,PWID (mixed treatment status),24,79.41,80.7,58.98,91.32,73.38,87.04,32.35,0.0,0.0,0.0
+pwid_mixed_treatment,PWID (mixed treatment status),36,60.12,60.37,38.24,72.52,55.61,66.28,34.28,9.39,1.24,0.0
+pwid_mixed_treatment,PWID (mixed treatment status),48,45.91,50.36,9.9,55.92,43.6,53.35,46.02,47.39,11.11,2.54
+pwid_mixed_treatment,PWID (mixed treatment status),72,14.9,9.27,0.11,41.21,2.23,26.43,41.11,100.0,78.54,51.68
+general_community,General HIV+ community,0,98.03,98.34,94.98,99.21,97.65,98.77,4.23,0.0,0.0,0.0
+general_community,General HIV+ community,6,96.11,96.74,89.68,98.8,95.19,97.75,9.12,0.0,0.0,0.0
+general_community,General HIV+ community,12,92.18,93.22,80.68,97.81,90.1,95.41,17.13,0.0,0.0,0.0
+general_community,General HIV+ community,18,85.36,86.46,69.36,95.53,81.37,90.52,26.17,0.0,0.0,0.0
+general_community,General HIV+ community,24,75.92,76.31,58.91,90.76,70.35,82.04,31.86,0.0,0.0,0.0
+general_community,General HIV+ community,36,57.03,57.41,38.08,71.54,53.67,61.4,33.46,12.44,1.1,0.0
+general_community,General HIV+ community,48,42.68,47.12,9.78,55.49,38.19,51.06,45.7,67.15,15.03,2.58
+general_community,General HIV+ community,72,8.56,4.0,0.11,39.53,1.2,11.82,39.42,100.0,93.01,71.53
+acute_infection_enriched,Acute-infection-enriched network,0,96.87,97.17,93.22,98.66,96.22,97.85,5.44,0.0,0.0,0.0
+acute_infection_enriched,Acute-infection-enriched network,6,93.59,94.13,86.41,97.5,92.15,95.62,11.08,0.0,0.0,0.0
+acute_infection_enriched,Acute-infection-enriched network,12,87.42,88.08,76.01,94.84,84.6,90.94,18.83,0.0,0.0,0.0
+acute_infection_enriched,Acute-infection-enriched network,18,78.08,78.44,64.36,89.43,73.91,82.67,25.07,0.0,0.0,0.0
+acute_infection_enriched,Acute-infection-enriched network,24,67.39,67.35,53.59,80.39,63.1,71.76,26.8,0.0,0.0,0.0
+acute_infection_enriched,Acute-infection-enriched network,36,49.33,51.33,26.06,60.14,46.26,54.6,34.08,41.84,3.97,0.0
+acute_infection_enriched,Acute-infection-enriched network,48,29.57,30.9,4.28,50.18,18.97,40.96,45.9,97.24,47.7,10.14
+acute_infection_enriched,Acute-infection-enriched network,72,1.53,0.64,0.04,8.75,0.25,1.61,8.7,100.0,99.96,98.05
