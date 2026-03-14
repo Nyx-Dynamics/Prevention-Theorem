@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Prevention-Theorem: Computational Implementation of Time-Dependent HIV Prevention Constraints"
+version: v1.2.0
+doi: 10.5281/zenodo.18745661
+date-released: 2026-02-23
+url: "https://github.com/Nyx-Dynamics/Prevention-Theorem"
+repository-code: "https://github.com/Nyx-Dynamics/Prevention-Theorem"
+license: MIT
+authors:
+  - family-names: Demidont
+    given-names: "A.C."
+    affiliation: "Nyx Dynamics, LLC"
+    email: acdemidont@nyxdynamics.org
+preferred-citation:
+  type: article
+  title: "Finite Prevention Windows Under Irreversible Infection Establishment: A Mathematical Framework for HIV Post-Exposure Prophylaxis Timing"
+  authors:
+    - family-names: Demidont
+      given-names: "A.C."
+  doi: 10.20944/preprints202601.1090.v1
+  url: "https://doi.org/10.20944/preprints202601.1090.v1"
+  year: 2026
+  journal: "Preprints.org"
