@@ -1,5 +1,5 @@
 # Finite Prevention Windows for HIV Post-Exposure Prophylaxis
-## Science Submission — Manuscript ID: aeh1546
+## Science Advances Submission — Manuscript ID: aeh1546
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19011771.svg)](https://doi.org/10.5281/zenodo.19011771)
 
