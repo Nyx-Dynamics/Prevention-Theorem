@@ -4,7 +4,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19011771.svg)](https://doi.org/10.5281/zenodo.19011771)
 
 **Submitted:** March 13, 2026  
-**Journal:** *Science*  
+**Journal:** *Science Advances*  
 **Author:** A.C. Demidont, DO — Nyx Dynamics, LLC  
 **Zenodo:** https://doi.org/10.5281/zenodo.19011771
 
