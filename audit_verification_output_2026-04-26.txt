@@ -1,0 +1,82 @@
+==============================================================================
+AUDIT VERIFICATION — Prevention-Theorem PEP model
+==============================================================================
+
+==============================================================================
+TESTING: Project-root version (PEP_parenteral_perelson.py)
+  sys.path[0] = /Users/acdstudpro/PycharmProjects/Prevention-Theorem
+==============================================================================
+  Loaded from: /Users/acdstudpro/PycharmProjects/Prevention-Theorem/PEP_parenteral_perelson.py
+
+Source VL      seeding_mid    int_complete   t_crit η=0.05    t_crit η=0.50   
+(copies/mL)    (hours)        (hours)        (hours)          (hours)         
+----------------------------------------------------------------------------
+50             35.2           78.4           86.2             43.8            
+200            32.8           73.6           81.4             41.4            
+1000           30.0           68.0           75.8             38.6            
+10000          26.0           60.0           67.8             34.4            
+30000          24.1           56.2           64.1             32.4            
+100000         22.0           52.0           59.9             30.1            
+1000000        18.0           44.0           52.1             25.6            
+
+==============================================================================
+TESTING: SRC/ version (Makefile uses this one)
+  sys.path[0] = /Users/acdstudpro/PycharmProjects/Prevention-Theorem/SRC
+==============================================================================
+  Loaded from: /Users/acdstudpro/PycharmProjects/Prevention-Theorem/SRC/PEP_parenteral_perelson.py
+
+Source VL      seeding_mid    int_complete   t_crit η=0.05    t_crit η=0.50   
+(copies/mL)    (hours)        (hours)        (hours)          (hours)         
+----------------------------------------------------------------------------
+50             35.2           78.4           86.2             43.8            
+200            32.8           73.6           81.4             41.4            
+1000           30.0           68.0           75.8             38.6            
+10000          26.0           60.0           67.8             34.4            
+30000          24.1           56.2           64.1             32.4            
+100000         22.0           52.0           59.9             30.1            
+1000000        18.0           44.0           52.1             25.6            
+
+==============================================================================
+CROSS-CHECK: project-root output == SRC/ output?
+==============================================================================
+  ✓ All 7 VL points produce identical t_crit values across both versions.
+    The cosmetic differences in plotting code do not affect the model.
+
+==============================================================================
+MUCOSAL VERIFICATION (SRC/PEP_mucosal.py)
+==============================================================================
+  seeding_midpoint     = 72 h  (line 25 of PEP_mucosal.py)
+  integration_complete = 120 h
+
+  Threshold η     t_crit (h)     
+  ------------------------------
+  η = 0.80        65.7           
+  η = 0.50        98.8           
+  η = 0.10        127.5          
+  η = 0.05        132.9            ← manuscript claims 68-76h here
+  η = 0.01        144.2          
+
+==============================================================================
+INTERPRETATION
+==============================================================================
+
+The manuscript text states:
+    parenteral t_crit at η=0.05 ≈ 16-28 hours
+    mucosal   t_crit at η=0.05 ≈ 68-76 hours
+
+The audit predicts:
+    parenteral t_crit at η=0.05 = 50-70 hours at PWID-relevant VL
+    mucosal   t_crit at η=0.05 = ~133 hours
+    The "16-28h" band corresponds to the parenteral SEEDING_MIDPOINT
+      (the 'seeding_mid' column in the parenteral table).
+    The "68-76h" band corresponds to the mucosal SEEDING_MIDPOINT (72h)
+      or to mucosal t_crit at η=0.80 (about 66h).
+
+If your output above matches the audit prediction, the manuscript text
+conflates seeding_midpoint with t_crit at η=0.05. This is a real
+discrepancy that needs to be reconciled before/during the revision round.
+
+If your output disagrees with the audit (e.g., parenteral t_crit at
+η=0.05 actually shows 16-28h on your machine), then something in your
+local environment overrides the model behavior, and we need to find what.
+
