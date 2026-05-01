@@ -188,9 +188,10 @@ def main_route_comparison(
     combined = pd.concat(all_dfs, ignore_index=True)
 
     # Save outputs
-    os.makedirs('/home/claude/multiscale_ode/results', exist_ok=True)
-    combined.to_csv('/home/claude/multiscale_ode/results/mc_realizations.csv', index=False)
-    summary_df.to_csv('/home/claude/multiscale_ode/results/mc_summary.csv', index=False)
+    results_dir = 'results/multiscale_model'
+    os.makedirs(results_dir, exist_ok=True)
+    combined.to_csv(os.path.join(results_dir, 'mc_realizations.csv'), index=False)
+    summary_df.to_csv(os.path.join(results_dir, 'mc_summary.csv'), index=False)
 
     print("\n" + "="*70)
     print("SUMMARY TABLE")
