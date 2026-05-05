@@ -1,0 +1,35 @@
+city,state,region,viral_suppression_pct,late_dx_pct,linkage_to_care_pct,idu_prevalence_pct,vl_mean_log10,vl_sd_log10,vl_profile,structural_delay_h,delay_category,pep_mean_efficacy_pct,pep_median_efficacy_pct,pep_ci95_lower_pct,pep_ci95_upper_pct,p_futile_pct,p_below_50pct,estimated_pwid_exposures,new_dx_cases,prevalence_rate,gini,poverty_pct
+Hartford,Connecticut,Northeast,69.0,37.2,82.1,23.4212,2.514,1.59,moderate_burden,24.4,high_barrier,78.79,81.48,54.13,89.17,0.0,1.24,0,70.0,340.0,0.467,9.8
+SanJuan,Puerto Rico,-1,52.1,16.1,63.0,22.152700000000003,3.017,1.715,moderate_burden,13.3,moderate_barrier,91.32,93.57,72.35,97.22,0.0,0.0,0,290.0,627.0,0.547,37.9
+PalmBeachCO,Florida,South,64.8,25.9,75.9,4.994400000000001,2.574,1.614,moderate_burden,13.5,moderate_barrier,92.79,94.62,77.62,97.16,0.0,0.0,0,296.0,677.0,0.508,13.1
+Columbia,South Carolina,South,72.0,28.4,89.0,5.722599999999999,2.361,1.517,low_burden,11.7,moderate_barrier,94.85,96.25,84.05,97.7,0.0,0.0,0,116.0,671.0,0.467,14.7
+NewHaven,Connecticut,Northeast,75.1,28.3,90.0,21.6096,2.325,1.498,low_burden,11.5,moderate_barrier,95.01,96.33,84.19,97.75,0.0,0.0,0,71.0,454.0,0.478,11.6
+Charleston,South Carolina,South,66.9,22.8,73.4,4.1681,2.508,1.588,moderate_burden,9.9,moderate_barrier,95.36,96.67,84.35,98.11,0.0,0.0,0,81.0,457.0,0.479,11.2
+Raleigh,North Carolina,South,65.5,24.1,77.3,3.83,2.549,1.604,moderate_burden,9.7,moderate_barrier,95.46,96.79,84.88,98.15,0.0,0.0,0,148.0,419.0,0.449,8.6
+Houston,Texas,South,57.8,22.1,75.2,4.44,2.782,1.677,moderate_burden,8.6,moderate_barrier,95.5,96.87,84.8,98.35,0.0,0.0,128,1297.0,774.0,0.483,13.6
+Jackson,Mississippi,South,51.8,14.3,76.2,3.2830000000000004,2.958,1.708,moderate_burden,6.2,low_barrier,96.28,97.42,86.1,98.7,0.0,0.0,0,108.0,782.0,0.49,17.4
+Richmond,Virginia,South,65.2,21.9,75.8,7.119,2.57,1.612,moderate_burden,7.8,low_barrier,96.3,97.35,87.78,98.48,0.0,0.0,0,188.0,504.0,0.461,10.0
+NewYork,New York,Northeast,62.1,21.2,79.6,10.3672,2.674,1.648,moderate_burden,6.8,low_barrier,96.5,97.58,87.62,98.62,0.0,0.0,102,1603.0,1356.0,0.514,12.4
+OrangeCO,California,West,64.3,23.3,85.9,5.877599999999999,2.592,1.62,moderate_burden,7.0,low_barrier,96.57,97.56,88.68,98.59,0.0,0.0,84,258.0,273.0,0.491,12.6
+Jacksonville,Florida,South,66.2,19.8,72.6,6.3096000000000005,2.537,1.599,moderate_burden,6.5,low_barrier,96.85,97.75,89.4,98.66,0.0,0.0,70,327.0,623.0,0.465,12.1
+MiamiDadeCO,Florida,South,59.7,18.2,78.4,3.5775,2.722,1.661,moderate_burden,5.6,low_barrier,96.91,97.81,89.73,98.76,0.0,0.0,0,1007.0,1239.0,0.508,13.1
+HamptonRoads,Virginia,South,63.0,20.1,73.9,6.1592,2.632,1.634,moderate_burden,5.9,low_barrier,96.91,97.82,89.51,98.73,0.0,0.0,80,270.0,521.0,0.446,10.9
+Dallas,Texas,South,64.3,20.0,73.9,2.5298999999999996,2.58,1.616,moderate_burden,6.1,low_barrier,96.98,97.83,90.02,98.71,0.0,0.0,99,910.0,927.0,0.464,10.5
+SanAntonio,Texas,South,64.5,19.9,74.2,4.2632,2.58,1.616,moderate_burden,5.9,low_barrier,97.01,97.82,90.45,98.73,0.0,0.0,54,402.0,411.0,0.46,13.4
+BrowardCO,Florida,South,69.7,18.7,75.5,3.8604000000000003,2.423,1.549,low_burden,6.5,low_barrier,97.05,97.84,90.61,98.66,0.0,0.0,0,582.0,1309.0,0.508,13.1
+Phoenix,Arizona,West,53.6,20.2,81.3,5.837,2.913,1.702,moderate_burden,3.9,low_barrier,97.11,97.99,89.15,98.93,0.0,0.0,111,586.0,374.0,0.455,11.2
+Bridgeport,Connecticut,Northeast,67.6,18.7,81.3,16.6284,2.532,1.597,moderate_burden,5.5,low_barrier,97.12,97.93,90.6,98.77,0.0,0.0,0,64.0,331.0,0.544,9.4
+FortWorth,Texas,South,67.5,20.0,76.1,4.977,2.493,1.581,low_burden,5.5,low_barrier,97.27,98.04,91.18,98.77,0.0,0.0,89,314.0,422.0,0.464,10.5
+KansasCity,Missouri,Midwest,59.4,16.7,78.9,4.577,2.734,1.665,moderate_burden,4.3,low_barrier,97.29,98.1,90.7,98.89,0.0,0.0,0,121.0,500.0,0.451,10.0
+Atlanta,Georgia,South,65.4,19.4,77.9,2.9407999999999994,2.549,1.604,moderate_burden,5.0,low_barrier,97.38,98.1,91.35,98.83,0.0,0.0,110,1730.0,875.0,0.468,11.0
+NewOrleans,Louisiana,South,71.0,17.5,80.1,5.7879000000000005,2.391,1.533,low_burden,5.5,low_barrier,97.41,98.1,91.87,98.77,0.0,0.0,89,246.0,780.0,0.509,18.3
+Tampa,Florida,South,72.0,20.0,76.3,6.359999999999999,2.363,1.519,low_burden,5.7,low_barrier,97.42,98.09,92.04,98.75,0.0,0.0,131,491.0,560.0,0.479,12.2
+Orlando,Florida,South,69.7,20.7,79.0,6.1561,2.431,1.553,low_burden,5.4,low_barrier,97.43,98.13,92.03,98.79,0.0,0.0,53,618.0,652.0,0.462,11.8
+LosAngeles,California,West,65.2,19.0,79.9,3.274,2.556,1.607,moderate_burden,4.8,low_barrier,97.45,98.19,91.51,98.85,0.0,0.0,327,1587.0,588.0,0.491,12.6
+Charlotte,North Carolina,South,66.3,20.0,79.3,3.6025,2.524,1.594,moderate_burden,4.7,low_barrier,97.46,98.18,91.74,98.86,0.0,0.0,0,283.0,796.0,0.476,10.5
+StLouis,Missouri,Midwest,61.0,20.4,83.6,3.2775999999999996,2.682,1.65,moderate_burden,3.7,low_barrier,97.51,98.25,91.2,98.94,0.0,0.0,0,203.0,569.0,0.466,10.3
+ElPaso,Texas,South,61.6,17.7,82.3,3.3626,2.664,1.645,moderate_burden,4.0,low_barrier,97.51,98.21,91.53,98.92,0.0,0.0,0,120.0,416.0,0.465,18.9
+Denver,Colorado,West,56.8,20.8,85.3,4.0342,2.811,1.683,moderate_burden,3.4,low_barrier,97.52,98.26,91.1,98.97,0.0,0.0,0,273.0,434.0,0.449,8.2
+BatonRouge,Louisiana,South,77.8,15.9,78.8,8.335799999999999,2.196,1.417,low_burden,5.0,low_barrier,97.86,98.39,93.81,98.83,0.0,0.0,0,128.0,1072.0,0.477,16.0
+Austin,Texas,South,67.8,20.6,86.4,3.3693999999999997,2.478,1.575,low_burden,3.0,low_barrier,97.94,98.51,93.54,99.0,0.0,0.0,0,338.0,423.0,0.461,9.9
+Milwaukee,Wisconsin,Midwest,73.3,14.6,88.5,5.6195,2.321,1.496,low_burden,1.9,low_barrier,98.34,98.74,95.15,99.08,0.0,0.0,0,119.0,476.0,0.471,12.4

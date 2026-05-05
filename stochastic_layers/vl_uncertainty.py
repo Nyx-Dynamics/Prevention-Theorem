@@ -28,47 +28,53 @@ THEORETICAL SIGNIFICANCE:
     is the information value of rapid source VL testing at PEP initiation.
     This has direct policy implications for ED-based PEP programs.
 
-VL DISTRIBUTION PARAMETERS (empirical basis):
-    Community VL distribution among untreated PWID approximates log-normal.
-    Source: NHBS/NHAS surveillance data; Metzger et al.; Degenhardt et al.
-        Mean log10 VL ~4.3–4.5 (unsuppressed PWID)
-        SD log10 VL ~1.1 (wide: ranges from suppressed to >6 log)
+VL DISTRIBUTION AND KINETIC PARAMETERIZATION:
 
-    KINETIC PARAMETERS (Perelson et al., Science 1996, PMID 8599114):
-        Virion t½ = 0.24 days (~6h)  [Table 1: c = 3.07 day⁻¹]
-        Eclipse phase = 0.9 days (~22h)  [Table 2: S − 1/c, minimal estimate]
-        Generation time τ = 2.6 days (~62h)  [Table 2]
-    These kinetic constants ground the integration timeline in
-    PEP_parenteral_perelson.py — NOT the VL distribution center.
-    DO NOT conflate: cite Perelson for kinetics, NHBS for VL distribution.
+    Viral load (VL) distribution parameters are derived from empirical
+    population surveillance data (NHBS/NHAS), with unsuppressed PWID
+    approximated by a log-normal distribution centered at mean log10 ≈ 4.5.
+
+    Perelson et al. (1996) provides the within-host kinetic parameters
+    used to anchor the temporal structure of the model, including:
+
+        - Virion clearance rate (c ≈ 3.07 day⁻¹)
+        - Eclipse phase duration (~22h)
+        - Viral generation time (~62h)
+
+    These kinetic constraints determine the biological timeline of infection
+    progression but do not define the population-level VL distribution.
 
 Author: AC Demidont, DO, AAHIVS
 Date: March 2026
 Updated: 2026-03-10 15:32
 """
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../route_models')))
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import os
-import sys
-from pathlib import Path
+from datetime import datetime
 from scipy import stats
 from scipy.special import expit
 from typing import Dict, List, Optional
 import warnings
 
-# --- Path Resolution Utility ---
-SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = SCRIPT_DIR.parent.parent.parent
-SRC_DIR = PROJECT_ROOT / 'SRC'
-
-# Add SRC to sys.path if not already present
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
-
 # Import the deterministic model
-from perelson.parenteral.PEP_parenteral_perelson import ParenteralExposureModel, REFERENCE_LOG10_VL
+from parenteral_route import ParenteralExposureModel, REFERENCE_LOG10_VL
+from route_biology import ROUTES
+
+# =============================================================================
+# CONSTANTS: Grounded in Perelson et al. (1996)
+# =============================================================================
+
+# Virion clearance rate (c) from Perelson et al. 1996
+# Mean ± SD = 3.07 ± 0.64 day⁻¹
+PERELSON_C = 3.07  # day⁻¹
+PERELSON_C_SD = 0.64  # day⁻¹
 
 # =============================================================================
 # VL DISTRIBUTION PARAMETERS
@@ -447,6 +453,8 @@ def print_stochastic_summary():
     """Print clinically interpretable summary table."""
     print("\n" + "=" * 80)
     print("EXPECTED PEP EFFICACY UNDER SOURCE VL UNCERTAINTY")
+    print(f"ROUTE MODEL: mucosal includes anatomical delay = {'yes' if ROUTES['mucosal']['barrier_delay'] else 'no'}")
+    print(f"ROUTE MODEL: parenteral bypasses mucosal barrier = {'yes' if not ROUTES['parenteral']['barrier_delay'] else 'no'}")
     print("Mean (95% Credible Interval) | n=10,000 Monte Carlo simulations")
     print("=" * 80)
 
@@ -530,7 +538,8 @@ def save_results_csv(output_dir: str = '.'):
     df_curves = pd.DataFrame(rows_curves)
     path1 = os.path.join(output_dir, 'pep_stochastic_efficacy_curves.csv')
     df_curves.to_csv(path1, index=False)
-    print(f"    Saved: {path1}  ({len(df_curves)} rows)")
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+    print(f"    [{timestamp}] Saved: {path1}  ({len(df_curves)} rows)")
 
     # ------------------------------------------------------------------
     # 2. Summary at key timepoints
@@ -562,7 +571,8 @@ def save_results_csv(output_dir: str = '.'):
     df_summary = pd.DataFrame(rows_summary)
     path2 = os.path.join(output_dir, 'pep_stochastic_summary_timepoints.csv')
     df_summary.to_csv(path2, index=False)
-    print(f"    Saved: {path2}  ({len(df_summary)} rows)")
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+    print(f"    [{timestamp}] Saved: {path2}  ({len(df_summary)} rows)")
 
     # ------------------------------------------------------------------
     # 3. VL knowledge premium — all distributions, fine-grained delays
@@ -610,7 +620,8 @@ def save_results_csv(output_dir: str = '.'):
 
     path3 = os.path.join(output_dir, 'pep_vl_knowledge_premium.csv')
     df_premium.to_csv(path3, index=False)
-    print(f"    Saved: {path3}  ({len(df_premium)} rows)")
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+    print(f"    [{timestamp}] Saved: {path3}  ({len(df_premium)} rows)")
 
     # ------------------------------------------------------------------
     # 4. CI width by timepoint — regime boundary identification
@@ -647,7 +658,8 @@ def save_results_csv(output_dir: str = '.'):
     df_ciwidth = pd.DataFrame(rows_ciwidth)
     path4 = os.path.join(output_dir, 'pep_stochastic_ci_width_regimes.csv')
     df_ciwidth.to_csv(path4, index=False)
-    print(f"    Saved: {path4}  ({len(df_ciwidth)} rows)")
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+    print(f"    [{timestamp}] Saved: {path4}  ({len(df_ciwidth)} rows)")
 
     print(f"\n  All CSVs written to: {os.path.abspath(output_dir)}")
     return {
@@ -663,9 +675,10 @@ def save_results_csv(output_dir: str = '.'):
 # =============================================================================
 
 def main():
+    TIMESTAMP = datetime.now().strftime('%Y-%m-%d %H:%M')
     print("=" * 80)
     print("PEP STOCHASTIC EXTENSION — VL UNCERTAINTY LAYER")
-    print("Prevention Theorem | Monte Carlo Analysis")
+    print(f"Prevention Theorem | Monte Carlo Analysis | {TIMESTAMP}")
     print("=" * 80)
 
     print_stochastic_summary()
@@ -674,6 +687,7 @@ def main():
     fig, curves = plot_stochastic_analysis(
         save_path='pep_stochastic_vl_uncertainty.png'
     )
+    print(f"[{TIMESTAMP}] Saved: pep_stochastic_vl_uncertainty.png")
 
     print("\n" + "=" * 80)
     print("VL KNOWLEDGE PREMIUM — PWID UNTREATED POPULATION")
@@ -690,7 +704,7 @@ def main():
 
     # --- CSV export ---
     print("\n" + "=" * 80)
-    print("EXPORTING CSV FILES")
+    print(f"EXPORTING CSV FILES | {TIMESTAMP}")
     print("=" * 80)
     save_results_csv(output_dir='pep_stochastic_results')
 

@@ -1,0 +1,16 @@
+study,route,delay_h,NHP_protection,model_E_PEP,concordant,cv
+Otten 2000,mucosal,12,1.0,0.95,True,0.0
+Otten 2000,mucosal,36,1.0,0.95,True,0.0
+Otten 2000,mucosal,72,0.5,0.6002032520325203,True,0.0
+Otten 2000,mucosal,12,1.0,0.95,True,0.3
+Otten 2000,mucosal,36,1.0,0.95,True,0.3
+Otten 2000,mucosal,72,0.5,0.5933593749999999,True,0.3
+Otten 2000,mucosal,12,1.0,0.95,True,0.5
+Otten 2000,mucosal,36,1.0,0.95,True,0.5
+Otten 2000,mucosal,72,0.5,0.6018367346938776,True,0.5
+Tsai 1998 IV,parenteral,24,1.0,0.5,False,0.0
+Tsai 1998 IV,parenteral,48,0.5,0.0,False,0.0
+Tsai 1998 IV,parenteral,24,1.0,0.5,False,0.3
+Tsai 1998 IV,parenteral,48,0.5,0.0,False,0.3
+Tsai 1998 IV,parenteral,24,1.0,0.5,False,0.5
+Tsai 1998 IV,parenteral,48,0.5,0.0,False,0.5
