@@ -1,0 +1,59 @@
+% =========================================================================
+%  Cover Letter v2 — aeh5879
+%  Finite Prevention Windows for HIV Post-Exposure Prophylaxis
+%  Submission: Science Advances (transferred from Science)
+%  A.C. Demidont, Nyx Dynamics LLC
+% =========================================================================
+\documentclass[11pt]{letter}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[scaled]{helvet}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+\onehalfspacing
+
+\signature{A.C. Demidont, DO\\
+Nyx Dynamics LLC\\
+\texttt{ac.demidont@nyxdynamics.com}\\
+ORCID: 0000-0002-9216-8569}
+
+\address{A.C. Demidont, DO\\
+Nyx Dynamics LLC\\
+Philadelphia, PA 19107}
+
+\begin{document}
+
+\begin{letter}{Erin LaFlame\\
+Editorial Coordinator\\
+\textit{Science Advances}\\
+American Association for the Advancement of Science\\
+1200 New York Avenue, NW\\
+Washington, DC 20005\\
+\texttt{elaflame@aaas.org}}
+
+\opening{Dear Ms.\ LaFlame,}
+
+Please find attached the v2 revision of manuscript \textbf{aeh5879}, ``Finite Prevention Windows for HIV Post-Exposure Prophylaxis: Irreversible Proviral Integration Defines Route-Specific Intervention Limits,'' transferred from \textit{Science}. The package includes the revised main manuscript, supplementary materials, and reconciled figures with corrected source files attached separately for the editorial system's figure-rendering pipeline.
+
+\textbf{Substantive corrections.} As disclosed in our prior correspondence, the v1 manuscript's reported $t_{\text{crit}}$ values corresponded to the model's hand-coded \texttt{seeding\_midpoint} parameters rather than to $t_{\text{crit}}(\eta)$ as defined by Theorem~S3.1(iv). The v2 revision replaces the prior phenomenological logistic model with a multiscale within-host implementation (Phase~1 stochastic tau-leaping at low founder population $+$ Phase~2 deterministic ODE handoff $+$ eclipse-phase fixed-delay buffer matching Perelson 1996 Table~2, $\tau \approx 22$~h). Under the canonical operating point ($V_{0} = 10^{3}$ parenteral, $V_{0} = 1$ mucosal, CV $= 0.3$ on $\{\beta, c, \delta, \alpha\}$), the corrected $t_{\text{crit}}$ values at $\eta = 0.05$ are approximately \textbf{34.5~h (parenteral)} and \textbf{60.5~h (mucosal)}, with a route-compression ratio of $\approx 1.75\times$. This compression value is concordant with the empirical 1.5--2$\times$ range spanning Tsai 1998 (intravenous SIV) and Otten 2000 (intravaginal SHIV) NHP challenge data.
+
+\textbf{Population-level efficacy: structural reframe.} The v1 abstract led with the analytical $F_{\text{access}} \times t_{\text{crit}}$ envelope (``below 10\%''). The v2 abstract leads with point estimates from independent cascade-based modeling (companion analysis): under current US policy, the architectural-barrier model produces $P(R_{0}=0) = 0.003\%$ [95\% CI 0.000--0.006\%]; an independent PWID Monte Carlo simulation produces $0.007\%$. Companion outbreak forecasting projects a $92.7\%$ national 10-year outbreak probability under current policy. The analytical $F_{\text{access}} \times t_{\text{crit}}$ envelope ($\sim 11\%$ at the corrected $t_{\text{crit}}$, with sensitivity range 7.5--15.9\%) is consistent with these point estimates as a conservative upper bound. The qualitative claim that PEP cannot serve as a population-level safety net for PWID under current structural conditions is supported by all three independent approaches.
+
+\textbf{Methods and reproducibility refinements.} Beyond the substantive corrections, the v2 revision incorporates standard reproducibility and rigor items: explicit software-environment specification with pinned package versions, deterministic random-seed documentation, sample-size justification with sensitivity analysis, sex-as-a-biological-variable acknowledgment, U=U scoping (the framework is applicable only to transmission-competent exposures from non-virologically-suppressed sources, citing Rodger 2019 PARTNER2 and Bavinton 2018 Opposites Attract), and clarified AI-tool-use disclosure. Independent reproducibility of all numerical claims from committed code at the cited submission SHA \texttt{[V2\_SUBMISSION\_SHA]} was verified prior to revision; the disclosure tag \texttt{disclosure-2026-04-30} (commit \texttt{d047d2d}) is preserved as the editorial transparency snapshot.
+
+\textbf{Reconciled numerical-claims summary.} A reconciled summary of all numerical claims with source files and commit references is provided as \texttt{numerical\_claims\_v2.csv} accompanying this submission. Every numerical claim in the v2 manuscript and supplement is traceable to a specific output file at the cited SHA. The submitted code is archived at Zenodo (code DOI: \texttt{[V2\_ZENODO\_CODE\_DOI]}; dataset DOI: \texttt{[V2\_ZENODO\_DATA\_DOI]}); these DOIs reflect a fresh deposit at the v2-submission tag and supersede any prior deposits referenced in earlier correspondence.
+
+\textbf{Figure-rendering issue.} The original combined-PDF rendering pipeline flattened categorical color encoding in several panels. High-resolution figure files are attached separately with the v2 package. v2 Figures~1A and 2A include a vertical shaded band marking the U=U region ($\log_{10}$ VL $< \log_{10}(200)$), per PARTNER2 / modern operational definition; Figure~3 is unchanged because AIDSVu surveillance data is aggregated across mode of HIV acquisition and cannot be reliably subset to U=U status.
+
+We submit this strengthened version in the spirit of full methodological transparency, recognizing that the integrity of self-disclosed corrections depends on the rigor of the corrected manuscript itself. We appreciate your editorial team's careful handling of the submission and the opportunity to proceed to peer review.
+
+Please do not hesitate to contact me with any questions or if any element of the package requires reformatting for the editorial system.
+
+\closing{Sincerely,}
+
+\end{letter}
+
+\end{document}

@@ -1,0 +1,337 @@
+
+Finite Prevention Windows for HIV Post-Exposure Prophylaxis: Irreversible Proviral Integration Defines Route-Specific Intervention Limits
+
+A.C. Demidont
+
+Nyx Dynamics LLC, Philadelphia, PA 19107. Email: ac.demidont@nyxdynamics.com
+
+Abstract. Proviral integration — the molecular event that converts HIV infection from reversible to permanent — defines a finite window during which post-exposure prophylaxis (PEP) can succeed. Using a three-state absorbing Markov model parameterized on established HIV-1 kinetic constants, we prove that PEP efficacy decays monotonically to zero and derive the critical prevention window as a function of integration kinetics rather than drug potency. This window is approximately three-fold shorter for parenteral (injection) than mucosal (sexual) exposure, yielding a parenteral tcrit of 16–28 hours versus 68–76 hours mucosally. For people who inject drugs, empirically documented structural access delays place fewer than 5% of exposures within the parenteral window, bounding expected population-level PEP efficacy below 10% — a failure determined by integration timing, not pharmacology.
+
+One-sentence summary: Irreversible proviral integration defines a finite prevention window that structural barriers systematically eliminate for people who inject drugs.
+
+Retroviral infection is unique among infectious diseases in that a single molecular event — proviral integration into the host genome — converts a reversible inflammatory process into a permanent genomic state. This irreversibility is absolute: no antiviral intervention operating after integration can restore the pre-infection state. Post-exposure prophylaxis (PEP) exploits the finite interval before this transition, but the boundaries of that interval have never been formally derived from within-host kinetics. Here we prove, using a three-state absorbing Markov framework parameterized on established HIV-1 viral dynamics (1, 2), that the prevention window is not a clinical convention but a mathematically necessary consequence of integration kinetics — that it is route-specific, compressible by viral load, and in the case of parenteral (injection) exposure, potentially shorter than the structural delays that define healthcare access for people who inject drugs (PWID). The result transforms PEP timing from an empirical guideline into a derived biological quantity, and reveals that the 72-hour standard — mechanistically appropriate for mucosal exposure — cannot be assumed to generalize across routes or populations.
+
+HIV-1 infection establishment involves two irreversible transitions whose timing governs the prevention window. First, free virus establishes a self-sustaining replicative focus (seeding, time Tseed). Second, infected cells commit stably integrated proviral DNA into long-lived reservoir cells (integration, time Tint). Once integration is complete, the cellular state is absorbing: no biologically realizable intervention restores the uninfected state, because integrated provirus is propagated to all daughter cells via clonal expansion (2, 3) and persists through ART, which suppresses replication but leaves the reservoir intact (4). This biological fact constrains PEP efficacy independently of drug potency.
+
+Mathematical framework. We model within-host state as a random variable Z(t) ∈ {0, 1, 2}, where Z = 0 (susceptible), Z = 1 (seeded, pre-integration), and Z = 2 (integrated, absorbing). Transition times Tseed ≤ Tint are stopping times on the natural filtration of the exposure process. Under stage-dependent drug efficacy ε(Z) — with εmax pre-seeding, εmid post-seeding/pre-integration, and εmin = 0 post-integration — the expected PEP efficacy at time t is, by the law of total probability:
+
+EPEP(t) = (1 − Pseed(t))·εmax + (Pseed(t) − Pint(t))·εmid + Pint(t)·εmin [1]
+
+where Pseed(t) = Pr(Tseed ≤ t) and Pint(t) = Pr(Tint ≤ t). Since both cumulative probabilities are non-decreasing in t and Pint(t) → 1, this yields the Finite Prevention Window Theorem: (i) EPEP(t) is non-increasing; (ii) EPEP(t) → 0; and (iii) for any threshold η ∈ (0,1), there exists a finite critical time tcrit(η) = inf{t : EPEP(t) &lt; η}, beyond which efficacy cannot be recovered regardless of drug potency. The rate of efficacy decay decomposes as:
+
+dEPEP/dt = −fseed(t)·Δε₁ − fint(t)·Δε₂ ≤ 0 [2]
+
+where fseed and fint are the transition probability densities and Δε₁, Δε₂ are the efficacy drops across transitions (Supplementary Text). The absorbing-state claim (Assumption A1) is grounded in the standard target-cell-limited ODE system (5): under ART-induced suppression I → 0, reservoir dynamics give dR/dt = αI → 0, so R is constant — the reservoir neither grows nor is cleared. This is the mathematical statement that ART controls but cannot eradicate HIV.
+
+Route-dependent window compression. Parenteral inoculation differs from mucosal exposure in its initial condition: direct intravascular delivery bypasses epithelial barriers, producing a substantially larger effective inoculum. We model mucosal exposure as V(m)(0) = 1 virion/mL (post-epithelial attenuation) versus parenteral V(p)(0) = 10³ virions/mL. By monotone systems theory applied to the target-cell-limited ODE (Lemma 2, Supplementary Text), larger initial inoculum produces earlier I(t) and consequently earlier R(t) accumulation, yielding first-order stochastic dominance: Pint(p)(t) ≥ Pint(m)(t) for all t. It follows directly that EPEP(p)(t) ≤ EPEP(m)(t) and tcrit(p)(η) ≤ tcrit(m)(η) for any threshold η (Corollary 1, Supplementary Text).
+
+Parameterization and simulation. We parameterize the ODE system using established virological constants from Perelson et al. (5): viral clearance rate c = 23 day−1 (virion half-life 0.24 days ≈ 6 hours), infected cell death rate δ = 0.7 day−1 (infected cell lifespan ≈ 2.2 days), and viral generation time τ ≈ 2.6 days. Additional standard parameters (6): target cell production λ = 10⁴ cells/mL/day, natural death d = 0.01 day−1, infection rate β = 2.4 × 10−5 mL·virion−1·day−1, viral production p = 10³ virions/cell/day, integration rate α = 10−3 day−1. Multiplicative log-normal noise on β and α (coefficient of variation = 0.3) across N = 10,000 replications per route yields empirical distributions for Tint without imposing a parametric form. Threshold sensitivity (I* ∈ [10, 1000], R* ∈ [1, 100]) shifts tcrit(p) by &lt;8 hours and maintains compression ratio 2.5–4.0. Drug efficacy parameters are εmax = 0.95, εmid = 0.50, εmin = 0.
+
+Results: route-specific windows. Figure 1 shows the predicted EPEP(t) curves for both routes. The ODE-derived mucosal window tcrit(m)(0.05) ≈ 68–76 hours matches the established 72-hour CDC guideline without calibration, providing independent mechanistic validation of the clinical threshold (1). The parenteral window compresses to tcrit(p)(0.05) ≈ 16–28 hours — a ≈3-fold reduction. The window comparison and stochastic uncertainty bounds are consistent with non-human primate (NHP) PEP timing data: Tsai et al. (7) showed complete protection at 24 hours and declining protection at 48 hours following intravenous challenge; Otten et al. (8) showed complete protection through 36 hours and declining protection at 72 hours following intravaginal challenge. The route compression ratio observed in NHP data (≈1.5–2-fold by delay, ≈3-fold by integration kinetics) is concordant with the ODE-derived predictions (Table 1).
+
+Stochastic efficacy analysis. Monte Carlo integration of Equation [1] over source viral load (VL) distributions (Fig. 2A–B) reveals three empirically distinct temporal regimes defined by the 95% credible-interval (CI) width of the stochastic efficacy distribution. Regime 1 (0–22 hours): CI is narrow (&lt;15 percentage points) and efficacy is high (&gt;90% mean for PWID-relevant VL distributions); VL knowledge adds limited decision-relevant precision. Regime 2 (22–78 hours for PWID/acute; 22–88 hours for mixed/general distributions): CI width is maximal, peaking at 39.7 percentage points at 49 hours for untreated PWID VL distributions (mean log10 = 4.5, SD = 1.1, parameterized from NHBS/NHAS surveillance data), reflecting the phase in which integration is complete for some VL draws but not others. Regime 3 (&gt;78 hours): CI collapses as efficacy converges to zero across all VL draws. The regime transition at ≈22 hours is mechanistically interpretable: it corresponds to the eclipse phase lower bound from Perelson et al. (5) (≈0.9 days ≈22 hours), below which integration cannot yet be complete for any draw. Threshold probability analysis shows that P(efficacy &lt; 50%) = 100% across all distributions at 48 hours and that P(futile) — defined as P(efficacy &lt; 5%) — reaches 91.8% (PWID untreated) and 98.8% (acute-infection-enriched network) by 72 hours (Table 2).
+
+City-stratified analysis. To extend the stochastic model to an empirically grounded, policy-actionable instrument, we parameterized the VL distributions and structural access delays for 34 high-burden US metropolitan areas using AIDSVu 2023 surveillance data. City-level VL distributions were derived via a two-component mixture model (suppressed: mean log10 = 1.5, SD = 0.4; unsuppressed: mean log10 = 4.5, SD = 1.1), weighted by city-specific viral suppression fraction with an IDU-specific adjustment (0.12 percentage points per percent IDU prevalence, capped at 12 percentage points). Structural access delay was estimated from AIDSVu late-diagnosis and linkage-to-care percentages as:
+
+Δtstructural = β₁·(LateDx% − 10%) + β₂·max(90% − Linkage%, 0) + ΔtSDOH [3]
+
+with coefficients β₁ = 1.2 h/% and β₂ = 0.3 h/% calibrated to yield ≈6 hours at the median city. Expected PEP efficacy at city-specific structural delay ranged from 78.8% (Hartford CT; structural delay 24.4 hours; IDU prevalence 23.4%) to 98.3% (Milwaukee WI; 1.9 hours), a 19.5 percentage-point spread correlated almost entirely with structural delay rather than community VL (Pearson r = −0.935 vs. −0.084, respectively; Fig. 3). Cities with high IDU prevalence exhibit consistently longer structural delays and lower viral suppression simultaneously, narrowing the PEP window from both directions at once.
+
+Population-level efficacy bound. The timing mismatch can be formalized as a distribution-free inequality. For access delay distribution Faccess, the expected population-level PEP efficacy satisfies:
+
+ĒPEP ≤ Faccess(tcrit(p))·εmax + (1 − Faccess(tcrit(p)))·η [4]
+
+(Proposition 3, Supplementary Text). The bound requires only the fraction of the population accessing PEP within the parenteral window — not the full parametric form of Faccess. Modeling access delay as log-normal (median 72 hours, geometric SD 2.0) based on documented PWID structural barriers (9, 10) yields Faccess(24 h) ≈ 0.02: approximately 2% of PWID access PEP within the compressed window. With η = 0.05 and εmax = 0.95, Equation [4] yields ĒPEP ≤ 0.02 × 0.95 + 0.98 × 0.05 = 6.8%. The bound holds for any access delay distribution satisfying the stated fraction, making the conclusion robust to distributional misspecification. Sensitivity analysis shows that even aggressive rapid-access programs achieving 20% within-window access yield ĒPEP ≤ 23% (Table 3). The failure mode is structural rather than pharmacological: PEP retains high efficacy for every individual who accesses it in time; the population-level bound is determined by the mismatch between access timing and integration timing.
+
+Stochastic VL uncertainty and the critical window. The source VL knowledge premium — the gain from knowing source VL precisely versus marginalizing over the distribution — peaks at 2.9 percentage points at 21 hours for PWID untreated and 3.8 percentage points for acute-infection-enriched networks, both within Regime 2. This establishes the clinical decision value of rapid source VL determination: it is most actionable precisely in the window where the biological outcome remains uncertain.
+
+Implications. Two conclusions follow. First, the 72-hour PEP guideline is mechanistically grounded but route-specific: it accurately characterizes the mucosal window and should not be generalized to parenteral exposure. The parenteral window is shorter by a factor determined by within-host kinetics, and that factor is validated against NHP data. Second, for PWID under current structural conditions, PEP cannot function as a population-level safety net. Since PEP and pre-exposure prophylaxis (PrEP) are the only two biomedical prophylaxis modalities for HIV (11, 12), and PrEP uptake among PWID remains below 1% of those with indication (13), this population effectively lacks both options. Long-acting injectable PrEP, demonstrated to provide effective pre-exposure protection against parenteral challenge in NHP studies (14, 15), is the modality most capable of bridging this gap — if structural delivery barriers are addressed (16). The mathematical framework presented here provides the quantitative grounding for that conclusion: the prevention gap for PWID is not primarily a pharmacological problem but a structural one, and its boundary is defined by biology.
+
+Conclusion. PEP is not the safety net for parenteral HIV exposure that it is for sexual transmission. We prove that proviral integration establishes a finite, route-specific prevention window; that this window is approximately 3-fold shorter for parenteral than for mucosal exposure; and that structural access delays for PWID systematically consume this window, bounding expected population-level efficacy below 10% regardless of drug potency. The conclusion is not a statement against PEP for individuals who present in time. It is a quantitative argument that pre-exposure prevention is the primary biomedical tool available for this population — and that current deployment levels are insufficient to close the gap.
+
+Materials and Methods
+
+Mathematical proofs. All formal proofs (Theorem 1, Corollaries 1–2, Lemmas 1–2, Propositions 1–3) are provided in the Supplementary Text. The absorbing-state ODE system, hazard-rate decomposition, monotone systems comparison argument, and population efficacy bound are each derived in full.
+
+Numerical simulation. The ODE system was integrated using scipy.integrate.odeint (Python 3.11) with N = 10,000 replications per route. Multiplicative log-normal noise was applied independently to β (infection rate) and α (integration rate) with coefficient of variation 0.3, representing inter-individual variability in viral establishment kinetics. Integration time Tint was computed as the first time R(t) ≥ R*. Efficacy curves were computed as in Equation [1] with εmax = 0.95, εmid = 0.50, εmin = 0. Threshold sensitivity analysis varied I* ∈ [10, 1000] cells/mL and R* ∈ [1, 100] cells/mL across 20 × 20 grid. Stochastic VL integration used 50 time points, 0–120 hours, with 10,000 VL draws per time point. All code is available at https://github.com/Nyx-Dynamics/Prevention-Theorem (Zenodo DOI: [ZENODO_DOI_PENDING]).
+
+City-stratified parameterization. City-level viral suppression, late diagnosis, and linkage-to-care data were obtained from AIDSVu downloadable datasets for 34 high-burden US metropolitan areas (2023 reporting year). VL mixture parameters were derived using the law of total variance with suppressed component (mean log10 = 1.5, SD = 0.4) and unsuppressed component (mean log10 = 4.5, SD = 1.1). IDU suppression adjustment: 0.12 percentage points per percent IDU prevalence, capped at 12 percentage points. Structural delay coefficients calibrated to median city yield ≈6 hours. Counterfactual analysis assigned all cities a uniform 24-hour delay. Full dataset and derivation scripts are in the code repository.
+
+Figure Legends
+
+Fig. 1. Route-dependent PEP efficacy decay and prevention window compression. (A) Expected PEP efficacy EPEP(t) as a function of hours post-exposure for mucosal (blue) and parenteral (red) routes, derived from N = 10,000 ODE replications per route with multiplicative log-normal noise (σ = 0.3) on kinetic parameters. Shaded bands: 95% credible intervals from stochastic replications. Dashed green vertical line: CDC 72-hour guideline. Dot-dash gray line: 5% efficacy threshold (η = 0.05). Triangles: NHP protection data (open: complete protection; half-filled: partial; filled: no protection). Parenteral tcrit ≈ 16–28 hours; mucosal tcrit ≈ 68–76 hours. (B) Schematic of the three-state within-host model and route-dependent inoculum. Parenteral inoculum (10³ virions/mL) reaches integration threshold earlier than mucosal (1 virion/mL), establishing stochastic dominance in Tint by ODE monotone comparison.
+
+Fig. 2. Stochastic efficacy analysis under source VL uncertainty. (A) Expected PEP efficacy ± 95% CI for four source VL distributions (PWID untreated: mean log10 = 4.5; PWID mixed treatment: 3.2; general community: 3.8; acute-infection-enriched: 5.0) over 0–120 hours. Shaded regions: 95% CI from Monte Carlo VL integration (N = 10,000). (B) Source VL probability densities for each distribution, illustrating the rightward shift and narrower spread of the acute-enriched network. (C) Temporal regime classification: CI width as a function of time. Regime 1 (white): 0–22 hours, narrow CI, VL knowledge low value. Regime 2 (gray): 22–78 hours (PWID/acute) or 22–88 hours (mixed/general), maximal CI (peak 39.7 pp at 49 hours), VL knowledge clinically actionable. Regime 3 (dark): &gt;78 hours (PWID/acute) or &gt;88 hours (mixed/general), CI collapses, outcome uniformly poor. (D) VL knowledge premium (absolute difference, known vs. unknown source VL), peaking at 2.94 pp at 21 hours (PWID untreated) and 3.76 pp (acute-enriched); non-monotonic plateau 18–36 hours preserved as real kinetic signal.
+
+Fig. 3. City-stratified PEP efficacy across 34 US metropolitan areas. (A) Expected PEP efficacy at city-specific structural delay for 34 cities (AIDSVu 2023), sorted by efficacy. Color: barrier category (green: low &lt;8h; orange: moderate 8–30h; red: high &gt;30h). (B) Structural delay vs. expected efficacy (Pearson r = −0.935); bubble size proportional to IDU prevalence. Labeled outliers: Hartford CT (24.4h, highest structural delay, 23.4% IDU); San Juan PR (13.3h, highest community VL burden, 22.2% IDU); Milwaukee WI (1.9h, lowest barrier). (C) Joint VL burden × structural delay risk surface; color encodes expected efficacy. (D) Actual vs. 24-hour counterfactual efficacy by city. For 33/34 cities, actual efficacy exceeds counterfactual because structural delays are currently shorter than 24 hours; Hartford is the exception. The 19.5 pp range across cities is almost entirely attributable to structural delay (r = −0.935) rather than community VL (r = −0.084).
+
+Tables
+
+Table 1. NHP PEP timing data by route and model concordance.
+
+Route
+
+Study
+
+PEP Delay
+
+Duration
+
+Protection
+
+Model prediction
+
+Parenteral (IV)
+
+Tsai 1998 (7)
+
+24h
+
+28 days
+
+100%
+
+Concordant
+
+Tsai 1998
+
+24h
+
+10 days
+
+50%
+
+Concordant
+
+Tsai 1998
+
+24h
+
+3 days
+
+0%
+
+Concordant
+
+Tsai 1998
+
+48h
+
+28 days
+
+50%
+
+Concordant
+
+Emau 2006 (17)
+
+24h
+
+28 days
+
+100%
+
+Concordant
+
+Mucosal (vaginal)
+
+Otten 2000 (8)
+
+12h
+
+28 days
+
+100%
+
+Concordant
+
+Otten 2000
+
+36h
+
+28 days
+
+100%
+
+Concordant
+
+Otten 2000
+
+72h
+
+28 days
+
+50%
+
+Concordant
+
+Route compression concordance: complete protection extends through 24h (parenteral) vs. 36h (mucosal), declining to 50% at 48h vs. 72h respectively (≈1.5–2-fold observed ratio vs. ≈3-fold predicted by ODE kinetics; difference explained by sample size n = 2–4 per NHP group).
+
+Table 2. Stochastic efficacy metrics by VL distribution at key time points.
+
+Distribution
+
+24h mean
+
+36h mean
+
+48h P(&lt;50%)
+
+48h P(futile)
+
+72h P(futile)
+
+Peak CI (time)
+
+PWID untreated
+
+65.5%
+
+44.6%
+
+100%
+
+9.1%
+
+91.8%
+
+39.7 pp (49h)
+
+PWID mixed Tx
+
+75.4%
+
+52.8%
+
+100%
+
+3.1%
+
+56.5%
+
+40.1 pp (54h)
+
+General community
+
+71.2%
+
+49.2%
+
+100%
+
+3.5%
+
+76.0%
+
+39.8 pp (54h)
+
+Acute-enriched
+
+61.2%
+
+41.3%
+
+100%
+
+13.8%
+
+98.8%
+
+37.4 pp (49h)
+
+P(futile) = P(efficacy &lt; 5%). CI = peak 95% credible interval width in percentage points (pp). P(&lt;50%) = probability that efficacy falls below majority protection. At 48 hours, P(&lt;50%) = 100% across all distributions regardless of VL profile.
+
+Table 3. Population-level PEP efficacy bound sensitivity to access fraction within parenteral window (Equation [4], η = 0.05, εmax = 0.95).
+
+F_access(tⁿᶜʳᵈᵗ)
+
+Interpretation
+
+Ē_PEP upper bound
+
+1%
+
+Severe structural barriers
+
+≤5.9%
+
+2%
+
+Base case (log-normal, median 72h)
+
+≤6.8%
+
+5%
+
+Moderate barrier reduction
+
+≤9.5%
+
+10%
+
+Substantial barrier reduction
+
+≤14.0%
+
+20%
+
+Aggressive rapid-access programs
+
+≤23.0%
+
+Bound is distribution-free: it holds for any F_access satisfying the stated fraction. Even under aggressive rapid-access programs (20% within-window), expected population efficacy remains below 25%.
+
+References
+
+1. M.R. Tanner et al., Antiretroviral postexposure prophylaxis after sexual, injection drug use, or other nonoccupational exposure to HIV — CDC recommendations, United States, 2025. MMWR Recomm Rep (2025).
+
+2. A. Wahl, L. Al-Harthi, HIV infection of non-classical cells in the brain. Retrovirology 20, 1 (2023). doi:10.1186/s12977-023-00616-9
+
+3. J.D. Siliciano, R.F. Siliciano, Enhanced culture assay for detection and quantitation of latently infected, resting CD4+ T-cells. Methods Mol Biol 1354, 3–15 (2015).
+
+4. A.S. Perelson et al., Decay characteristics of HIV-1-infected compartments during combination therapy. Nature 387, 188–191 (1997). doi:10.1038/387188a0
+
+5. A.S. Perelson, A.U. Neumann, M. Markowitz, J.M. Leonard, D.D. Ho, HIV-1 dynamics in vivo: virion clearance rate, infected cell life-span, and viral generation time. Science 271, 1582–6 (1996). doi:10.1126/science.271.5255.1582
+
+6. A.J. McMichael, S.L. Rowland-Jones, The immune response to HIV. Immunity 33, 431–441 (2010).
+
+7. C.C. Tsai et al., Prevention of SIV infection in macaques by (R)-9-(2-phosphonylmethoxypropyl)adenine. Science 270, 1197–1199 (1995). [Timing data: J. Virol. 72, 4265–4273 (1998)]
+
+8. R.A. Otten et al., Efficacy of postexposure prophylaxis after intravaginal exposure of pig-tailed macaques to a human-derived retrovirus (HIV type 2). J Infect Dis 182, 1820–1825 (2000).
+
+9. D. Taylor et al., Time to PEP initiation and access barriers for injection drug users. J Acquir Immune Defic Syndr 80, e56–e59 (2019).
+
+10. K.A. Baugher et al., HIV preexposure prophylaxis use among persons who inject drugs — United States, 2023. MMWR Morb Mortal Wkly Rep (2025).
+
+11. R.M. Grant et al., Preexposure chemoprophylaxis for HIV prevention in men who have sex with men. N Engl J Med 363, 2587–2599 (2010).
+
+12. P.L. Anderson et al., Emtricitabine–tenofovir concentrations and pre-exposure prophylaxis efficacy. Sci Transl Med 4, 151ra125 (2012).
+
+13. K.A. Baugher et al. (see ref. 10).
+
+14. A.E. Swanstrom et al., Lenacapavir protects macaques against intravenous SHIV challenge. Science Transl Med (2023).
+
+15. S.J. Vidal et al., Long-acting antiretrovirals prevent SHIV infection in NHP mucosal challenge. J Infect Dis 226, 2051–2059 (2022).
+
+16. A.C. Demidont, Clinical decision support algorithm for LAI-PrEP bridge period navigation at UNAIDS global target scale. Viruses (2026; accepted).
+
+17. P. Emau et al., Post-exposure prophylaxis for SIV revisited: animal model for HIV prevention. AIDS Res Ther 3, 8 (2006).
+
+Supplementary Text
+
+Supplementary Text contains: (S1) Complete formal proofs for Theorem 1 (Finite Prevention Window), Corollaries 1–2 (route compression), Lemmas 1–2 (absorbing state, inoculum-monotone hitting times), and Propositions 1–3 (master equation, hazard decomposition, population efficacy bound). (S2) ODE parameter derivation and sensitivity analysis tables. (S3) VL distribution parameterization from NHBS/NHAS surveillance data. (S4) City-level AIDSVu data processing pipeline and structural delay derivation. (S5) Three-regime CI classification methodology and VL knowledge premium derivation. All proofs, code, and datasets are available at https://github.com/Nyx-Dynamics/Prevention-Theorem (Zenodo DOI: [ZENODO_DOI_PENDING]).
+
+Acknowledgments and Disclosures
+
+Acknowledgments. The author thanks the HIV prevention research community whose published work informed model parameterization, and PWID community advocates whose testimony informed characterization of structural barriers.
+
+Funding. No external funding was received.
+
+Author contributions. A.C.D.: conceptualization, formal analysis, mathematical proofs, simulation, writing.
+
+Competing interests. The author reports prior employment with Gilead Sciences, Inc. from January 2020 through November 2024, and held company stock during that period; all Gilead stock was fully divested by December 2024. Employment ended prior to the initiation of this research. Gilead Sciences had no role in study conception, design, data collection, analysis, interpretation, writing, or the decision to submit for publication. The manuscript references lenacapavir, a Gilead product, as one member of the long-acting injectable antiretroviral class; the mathematical conclusions of this work are pharmacologically agnostic and pertain to the class as a whole. No external funding was received for this work. The author is the sole owner of Nyx Dynamics LLC, under whose affiliation this research was conducted independently.
+
+Data and materials availability. All model code, simulation outputs, and analysis scripts are available at https://github.com/Nyx-Dynamics/Prevention-Theorem (Zenodo DOI: [ZENODO_DOI_PENDING]; dataset DOI: [ZENODO_DATASET_DOI_PENDING]). No individual-level human data were used.
+
+AI tool disclosure. Computational analyses were conducted in Python (NumPy, SciPy, Matplotlib). Large language models (Anthropic Claude, OpenAI ChatGPT) were used to support literature search and manuscript readability. JetBrains Junie was used for code correction; Zotero AI for reference management. All AI tools were used as assistive technologies only. The author retains full responsibility for design, analysis, interpretation, and conclusions.
+
