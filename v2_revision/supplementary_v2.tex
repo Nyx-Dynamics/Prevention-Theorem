@@ -100,7 +100,7 @@ ORCID: 0000-0002-9216-8569
 \end{itemize}
 
 \vspace{0.5em}
-\noindent\textbf{Note on v2 changes.} The mathematical content in Sections~S1--S6 (theorems, proofs, lemmas, propositions) is unchanged from v1. Numerical worked examples in Section~S6 have been updated to reflect verified values from the multiscale model implementation (commit \texttt{[V2\_SUBMISSION\_SHA]}). New material in Sections~S7--S8 documents the multiscale implementation and NHP concordance.
+\noindent\textbf{Note on v2 changes.} The mathematical content in Sections~S1--S6 (theorems, proofs, lemmas, propositions) is unchanged from v1. Numerical worked examples in Section~S6 have been updated to reflect verified values from the multiscale model implementation (commit \texttt{37e27ea}). New material in Sections~S7--S8 documents the multiscale implementation and NHP concordance.
 
 % =========================================================================
 \section{Probability Space, State Definitions, and Assumptions}
@@ -331,7 +331,7 @@ using $\Epep(t) \leq \emax$ for $t \leq \tcrit$ and $\Epep(t) < \eta$ for $t > \
 
 \subsection{Worked example (v2 verified values)}
 
-Using the multiscale model output at the canonical operating point ($V_{0} = 10^{3}$ parenteral, CV $= 0.3$ on $\beta, c, \delta, \alpha$; commit \texttt{[V2\_SUBMISSION\_SHA]}), $\tcrit^{(p)}(0.05) \approx 34.5$~h. Modeling access delay as log-normal (median 96~h, geometric SD 2.0):
+Using the multiscale model output at the canonical operating point ($V_{0} = 10^{3}$ parenteral, CV $= 0.3$ on $\beta, c, \delta, \alpha$; commit \texttt{37e27ea}), $\tcrit^{(p)}(0.05) \approx 34.5$~h. Modeling access delay as log-normal (median 96~h, geometric SD 2.0):
 \[
 \Faccess(34.5~\text{h}) = \Phi\!\left(\frac{\ln 34.5 - \ln 96}{\ln 2}\right) = \Phi(-1.476) \approx 0.0699.
 \]
@@ -370,7 +370,7 @@ $\Faccess$ derives from population-wide PEP-access surveillance, which includes 
 % =========================================================================
 \section{Multiscale Within-Host Model: Implementation}
 
-The multiscale within-host model combines stochastic founder-phase dynamics with deterministic ODE integration once productive infection is established. This section documents the implementation; all code is reproducible from \texttt{SRC/multiscale\_model/} at commit \texttt{[V2\_SUBMISSION\_SHA]} of the project repository.
+The multiscale within-host model combines stochastic founder-phase dynamics with deterministic ODE integration once productive infection is established. This section documents the implementation; all code is reproducible from \texttt{SRC/multiscale\_model/} at commit \texttt{37e27ea} of the project repository.
 
 \subsection{Phase~1: Stochastic founder-phase tau-leaping}
 

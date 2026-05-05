@@ -36,9 +36,9 @@ The following placeholders appear in the LaTeX sources and **must** be replaced 
 
 | Placeholder | What to replace with | When |
 |---|---|---|
-| `[V2_SUBMISSION_SHA]` | The new annotated tag SHA (e.g., output of `git rev-parse v2-submission-2026-05-XX`) | After v2 commits land and tag is created |
-| `[V2_ZENODO_CODE_DOI]` | Code Zenodo DOI from a fresh deposit at the v2-submission tag (NOT the disclosure-era DOI) | After fresh Zenodo deposit |
-| `[V2_ZENODO_DATA_DOI]` | Dataset Zenodo DOI from the same fresh deposit | After fresh Zenodo deposit |
+| `37e27ea` | The new annotated tag SHA (e.g., output of `git rev-parse v2-submission-2026-05-XX`) | After v2 commits land and tag is created |
+| `10.5281/zenodo.20044747` | Code Zenodo DOI from a fresh deposit at the v2-submission tag (NOT the disclosure-era DOI) | After fresh Zenodo deposit |
+| `10.5281/zenodo.20044747` | Dataset Zenodo DOI from the same fresh deposit | After fresh Zenodo deposit |
 
 The placeholders are intentional — they document at what step in the workflow each value gets pinned. Do not pre-fill any of these from prior values; the v2 deposit and v2 SHA are new artifacts.
 
@@ -49,7 +49,7 @@ The placeholders are intentional — they document at what step in the workflow 
 3. **N-sensitivity sweep**: run the model at $V_0=10^3$, CV=0.3, $N \in \{200, 500, 1000, 5000\}$ to confirm $t_{\text{crit}}$ stable to ±0.5h across that range (matches Methods §Numerical simulation claim).
 4. **Commit + tag**: make the v2 commits (methods refinements, repo hygiene, restored files), then `git tag -a v2-submission-2026-05-XX -m "Science Advances aeh5879 v2 submission"` and push tag.
 5. **Zenodo fresh deposit**: trigger a new Zenodo deposit at the v2-submission tag via GitHub-Zenodo integration (or manual upload). Capture the new code DOI and dataset DOI.
-6. **Fill placeholders**: substitute `[V2_SUBMISSION_SHA]`, `[V2_ZENODO_CODE_DOI]`, `[V2_ZENODO_DATA_DOI]` throughout `main_v2.tex`, `supplementary_v2.tex`, and `cover_letter_v2.tex`. Recompile and verify the values render correctly in the PDF output.
+6. **Fill placeholders**: substitute `37e27ea`, `10.5281/zenodo.20044747`, `10.5281/zenodo.20044747` throughout `main_v2.tex`, `supplementary_v2.tex`, and `cover_letter_v2.tex`. Recompile and verify the values render correctly in the PDF output.
 7. **Final reconciliation**: rebuild `numerical_claims_v2.csv` with `commit_sha` column updated to the v2-submission SHA for every row that previously cited `d047d2d` (the multiscale numbers reproduce identically because the model code is unchanged from d047d2d to the v2 SHA).
 8. **Verify**: AC reads PDF output of all three documents end to end; spot-checks every number in the manuscript and supplement against the corresponding row in `numerical_claims_v2.csv`.
 9. **Submit**: send to Erin with corrected figure files attached, along with a note pointing to the numerical-claims CSV in supplementary materials.
@@ -124,4 +124,4 @@ The placeholders are intentional — they document at what step in the workflow 
 - 4 rows: cascade-based point estimates (current policy, decriminalization, MSM comparison)
 - 4 rows: outbreak forecasting (national 5/10-yr, regional, median time)
 
-Every row with `commit_sha` value `d047d2d` will be updated to `[V2_SUBMISSION_SHA]` after the v2 tag is created (the multiscale model code is unchanged between d047d2d and the v2 tag, so the numbers reproduce identically; only the cited SHA changes).
+Every row with `commit_sha` value `d047d2d` will be updated to `37e27ea` after the v2 tag is created (the multiscale model code is unchanged between d047d2d and the v2 tag, so the numbers reproduce identically; only the cited SHA changes).
