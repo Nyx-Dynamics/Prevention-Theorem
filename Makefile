@@ -1,43 +1,47 @@
-# Makefile for Prevention Theorem Manuscript Figures (Science)
-# Standardizes generation of Fig 1, Fig 2, Fig 3, and Supp Fig S3
+# Makefile for Prevention Theorem (Science Advances v2 Revisions)
+# Author: Junie (Autonomous Programmer)
+# Date: 2026-05-05
 
 PYTHON = python3
+REPRO_SCRIPT = reproduce_all_v2.py
+FIGURES_DIR = v2_revision/figures
+RUNS_DIR = v2_revision/runs
 SRC_DIR = SRC
-RESULTS_DIR = results/city_analysis
-STOCHASTIC_RESULTS = pep_stochastic_results
 
-.PHONY: all clean fig1 fig2 fig3 aidsvu
+.PHONY: all figure1 figure2 figure3 clean clean-runs help
 
-all: fig1 fig2 aidsvu fig3
+all: ## Reproduce all figures (1, 2, 3, 4) into a new timestamped run directory
+	$(PYTHON) $(REPRO_SCRIPT)
 
-# Script 1 — PEP_parenteral_perelson.py
-# Produces: pep_parenteral_vl_sweep.png → Fig 1
-fig1:
-	@echo "[$(shell date +'%Y-%m-%d %H:%M')] Generating Fig 1..."
-	cd $(SRC_DIR) && $(PYTHON) PEP_parenteral_perelson.py
+figure1: ## Generate Figure 1 only (Route comparison)
+	$(PYTHON) v2_revision/make_figure_1_v2.py
 
-# Script 2 — PEP_stochastic_perelson.py
-# Produces: pep_stochastic_vl_uncertainty.png → Fig 2 + CSVs
-fig2:
-	@echo "[$(shell date +'%Y-%m-%d %H:%M')] Generating Fig 2 and Stochastic results..."
-	cd $(SRC_DIR) && $(PYTHON) PEP_stochastic_perelson.py
+figure2: ## Generate Figure 2 only (Stochastic VL)
+	PYTHONPATH=$(SRC_DIR) $(PYTHON) $(SRC_DIR)/perelson/stochastic/PEP_stochastic_perelson.py
+	@if [ -f pep_stochastic_vl_uncertainty.png ]; then \
+		mv pep_stochastic_vl_uncertainty.png $(FIGURES_DIR)/Figure_2_Stochastic_Efficacy_VL_Uncertainty.png; \
+		echo "Moved to $(FIGURES_DIR)/Figure_2_Stochastic_Efficacy_VL_Uncertainty.png"; \
+	fi
 
-# Script 3a — AIDSVu_city_stratified_perelson.py
-# Produces: city_vl_profiles.csv, city_pep_efficacy_results.csv, etc.
-aidsvu:
-	@echo "[$(shell date +'%Y-%m-%d %H:%M')] Parsing AIDSVu city profiles..."
-	cd $(SRC_DIR) && $(PYTHON) AIDSVu_city_stratified_perelson.py
-	@cp $(RESULTS_DIR)/*.csv $(SRC_DIR)/
+figure3: ## Generate Figure 3 & 4 only (City stratified)
+	$(PYTHON) v2_revision/city_stratified_figures.py
+	@if [ -f results/city_analysis/Fig_CityStratified_PEP.png ]; then \
+		mv results/city_analysis/Fig_CityStratified_PEP.png $(FIGURES_DIR)/Figure_3_City_Stratified_PEP_Efficacy.png; \
+	fi
+	@if [ -f results/city_analysis/Fig_CityComparison_Focus.png ]; then \
+		mv results/city_analysis/Fig_CityComparison_Focus.png $(FIGURES_DIR)/Figure_S1_CityComparison_Focus.png; \
+	fi
 
-# Script 3b — city_stratified_figures.py
-# Produces: Fig_CityStratified_PEP.png → Fig 3, Fig_CityComparison_Focus.png → Supp Fig S3
-fig3: aidsvu
-	@echo "[$(shell date +'%Y-%m-%d %H:%M')] Generating Fig 3 and Supp Fig S3..."
-	cd $(SRC_DIR) && $(PYTHON) city_stratified_figures.py
+clean: ## Remove generated figures from static figures/ directory
+	rm -rf $(FIGURES_DIR)/*.png
+	rm -rf $(FIGURES_DIR)/*.pdf
+	rm -rf pep_stochastic_results/*.csv
+	rm -f pep_stochastic_vl_uncertainty.png
+	@echo "Cleanup of static figures complete."
 
-clean:
-	rm -f $(SRC_DIR)/*.png
-	rm -f $(SRC_DIR)/*.csv
-	rm -rf $(RESULTS_DIR)
-	rm -rf $(STOCHASTIC_RESULTS)
-	rm -rf SRC/pep_stochastic_results
+clean-runs: ## Remove all timestamped run directories
+	rm -rf $(RUNS_DIR)/*
+	@echo "Cleanup of all runs complete."
+
+help: ## Display this help message
+	@grep -E '^[a-zA-Z1-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'

@@ -1,0 +1,620 @@
+% =========================================================================
+%  Supplementary Materials for:
+%  Finite Prevention Windows for HIV Post-Exposure Prophylaxis:
+%  Irreversible Proviral Integration Defines Route-Specific and
+%  Population-Level Intervention Limits
+%
+%  A.C. Demidont, DO Nyx Dynamics LLC
+%  Companion to main manuscript submitted to Science Advances
+% =========================================================================
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[scaled]{helvet}
+
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{mathtools}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{float}
+
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+
+% Theorem environments — SI numbering
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}{Assumption}[section]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% Macros (mirror main file)
+\newcommand{\Tseed}{T_{\text{seed}}}
+\newcommand{\Tint}{T_{\text{int}}}
+\newcommand{\Pseed}{P_{\text{seed}}}
+\newcommand{\Pint}{P_{\text{int}}}
+\newcommand{\Epep}{E_{\text{PEP}}}
+\newcommand{\Ebarpep}{\bar{E}_{\text{PEP}}}
+\newcommand{\Faccess}{F_{\text{access}}}
+\newcommand{\tcrit}{t_{\text{crit}}}
+\newcommand{\emax}{\varepsilon_{\max}}
+\newcommand{\emid}{\varepsilon_{\text{mid}}}
+\newcommand{\emin}{\varepsilon_{\min}}
+
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+% S-prefixed numbering for Science-style supplement
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thesubsection}{S\arabic{section}.\arabic{subsection}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+\usepackage{titlesec}
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
+
+% =========================================================================
+\begin{document}
+
+\begin{flushleft}
+{\Large\bfseries Supplementary Materials for\par}
+\vspace{0.3em}
+{\large\bfseries Finite Prevention Windows for HIV Post-Exposure Prophylaxis: Irreversible Proviral Integration Defines Route-Specific and Population-Level Intervention Limits\par}
+\vspace{0.8em}
+A.C. Demidont, DO\textsuperscript{*}\\
+\textit{Nyx Dynamics LLC, Philadelphia, PA 19107, USA}\\
+\textsuperscript{*}Correspondence: \texttt{ac.demidont@nyxdynamics.com}\\
+ORCID: 0000-0002-9216-8569
+\end{flushleft}
+
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+
+\noindent\textbf{This PDF file includes:}
+\begin{itemize}[leftmargin=2em,nosep]
+    \item Sections~S1--S6: Mathematical development with complete proofs
+    \item Sections~S7--S9: Extended methods and parameter tables
+    \item Section~S10: Complete figure inventory with panel-level descriptions
+\end{itemize}
+
+% =========================================================================
+\section{Probability Space, State Definitions, and Assumptions}
+
+Consider a single HIV exposure event $e$ occurring at time $t = 0$ on probability space $(\Omega, \mathcal{F}, \mathbb{P})$ with filtration $\{\mathcal{F}_{t}\}_{t \geq 0}$.
+
+\subsection{Within-host states}
+
+\begin{definition}[Within-host infection states]
+$Z(t) \in \{0, 1, 2\}$:
+\begin{itemize}[nosep,leftmargin=2em]
+    \item $Z(t) = 0$ (Susceptible): no productive infection; $I(t) < I^{*}$.
+    \item $Z(t) = 1$ (Seeded): replicative focus established ($I(t) \geq I^{*}$) but reservoir below irreversibility threshold ($R(t) < R^{*}$).
+    \item $Z(t) = 2$ (Integrated): $R(t) \geq R^{*}$. Absorbing state under Assumption~A1.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Transition stopping times]
+\[
+\Tseed = \inf\{t \geq 0 : Z(t) \geq 1\}, \qquad
+\Tint  = \inf\{t \geq 0 : Z(t) = 2\}.
+\]
+We assume $\Tseed \leq \Tint$ almost surely.
+\end{definition}
+
+\begin{definition}[Cumulative transition probabilities]
+$\Pseed(t) = \mathbb{P}(\Tseed \leq t)$, $\Pint(t) = \mathbb{P}(\Tint \leq t)$. Since $\Tseed \leq \Tint$ a.s., $\Pseed(t) \geq \Pint(t)$ for all $t \geq 0$.
+\end{definition}
+
+\subsection{Assumptions}
+
+\begin{assumption}[Irreversibility of integration]
+Once $Z(t) = 2$, the state is absorbing: $\mathbb{P}(Z(s) = 0 \mid Z(t) = 2) = 0$ for all $s > t$.
+
+\textit{Biological grounding}: Integrated provirus persists for the lifetime of the host cell and propagates to daughter cells via clonal expansion. ART suppresses replication ($I \to 0$) but $dR/dt = \alpha I \to 0$: the reservoir is static under ART but does not shrink. No approved therapy achieves eradication.
+\end{assumption}
+
+\begin{assumption}[Stage-dependent drug efficacy]
+\[
+\varepsilon(Z(t)) =
+\begin{cases}
+\emax & Z(t) = 0,\\
+\emid & Z(t) = 1,\\
+\emin = 0 & Z(t) = 2,
+\end{cases}
+\qquad
+\text{with } 1 \geq \emax \geq \emid \geq 0.
+\]
+\end{assumption}
+
+\begin{assumption}[Monotonicity of integration]
+$\Pint(t)$ is non-decreasing, $\Pint(0) = 0$, $\lim_{t\to\infty} \Pint(t) = 1$.
+\end{assumption}
+
+% =========================================================================
+\section{Master Equation}
+
+\begin{proposition}[Master equation]\label{prop:master}
+Under Assumption~A2,
+\begin{equation}
+\Epep(t) = \big(1 - \Pseed(t)\big)\emax + \big(\Pseed(t) - \Pint(t)\big)\emid + \Pint(t)\,\emin
+\label{eq:master_si}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Partition the sample space at time $t$ by $Z(t)$:
+\[
+\mathbb{P}(Z = 0) = 1 - \Pseed,\quad
+\mathbb{P}(Z = 1) = \Pseed - \Pint,\quad
+\mathbb{P}(Z = 2) = \Pint.
+\]
+These events are mutually exclusive and exhaustive. By the law of total expectation:
+\[
+\Epep(t) = \mathbb{E}[\varepsilon(Z(t))] = (1 - \Pseed)\,\emax + (\Pseed - \Pint)\,\emid + \Pint\,\emin. \qedhere
+\]
+\end{proof}
+
+% =========================================================================
+\section{The Finite Prevention Window Theorem}
+
+\begin{theorem}[Finite Prevention Window]\label{thm:finite}
+Under Assumptions~A1--A3, $\Epep(t)$ satisfies:
+\begin{enumerate}[label=\textnormal{(\roman*)},leftmargin=2.5em]
+    \item $\Epep(t) \leq \big(1 - \Pint(t)\big)\,\emax$;
+    \item $\Epep(t)$ is non-increasing in $t$;
+    \item $\Epep(t) \to 0$ as $t \to \infty$;
+    \item for any $\eta \in (0,1)$, $\tcrit(\eta) = \inf\{t : \Epep(t) < \eta\}$ is finite.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textit{Part (i) --- Upper bound.} Replace $\emid$ with $\emax$ in (\ref{eq:master_si}):
+\[
+\Epep(t) \leq (1 - \Pseed)\emax + (\Pseed - \Pint)\emax + \Pint\,\emin = (1 - \Pint)\emax + \Pint\,\emin.
+\]
+With $\emin = 0$: $\Epep(t) \leq (1 - \Pint(t))\emax$.
+
+\textit{Part (ii) --- Monotone decay.} For $t_{1} < t_{2}$, let $\Delta_{S} = \Pseed(t_{2}) - \Pseed(t_{1}) \geq 0$ and $\Delta_{I} = \Pint(t_{2}) - \Pint(t_{1}) \geq 0$. Then
+\[
+\Epep(t_{1}) - \Epep(t_{2}) = \Delta_{S}(\emax - \emid) + \Delta_{I}(\emid - \emin) \geq 0.
+\]
+
+\textit{Part (iii) --- Convergence.} By A3, $\Pint(t) \to 1$. Since $\Tseed \leq \Tint$ a.s., $\Pseed(t) \to 1$. Limits give $\Epep(t) \to 0\cdot\emax + 0\cdot\emid + 1\cdot\emin = 0$.
+
+\textit{Part (iv) --- Finite critical time.} By (ii), $\Epep$ is non-increasing; by (iii), $\Epep \to 0 < \eta$. Therefore $\{t : \Epep(t) < \eta\}$ is non-empty, and $\tcrit(\eta)$ is finite.
+\end{proof}
+
+% =========================================================================
+\section{Hazard-Rate Decomposition of Efficacy Loss}
+
+\begin{definition}[Hazard rates]
+$\lambda_{\text{seed}}(t) = f_{\text{seed}}(t)/(1 - \Pseed(t))$, $\lambda_{\text{int}}(t) = f_{\text{int}}(t)/(\Pseed(t) - \Pint(t))$.
+\end{definition}
+
+\begin{proposition}[Decomposition]\label{prop:hazard}
+Under Assumptions~A1--A3 with absolute continuity,
+\begin{equation}
+\frac{d\Epep}{dt} = -f_{\text{seed}}(t)\,\Delta\varepsilon_{1} - f_{\text{int}}(t)\,\Delta\varepsilon_{2} \;\leq\; 0
+\label{eq:hazard_si}
+\end{equation}
+where $\Delta\varepsilon_{1} = \emax - \emid$ and $\Delta\varepsilon_{2} = \emid - \emin$.
+\end{proposition}
+
+\begin{proof}
+Differentiating (\ref{eq:master_si}):
+\[
+\frac{d\Epep}{dt} = -f_{\text{seed}}\emax + (f_{\text{seed}} - f_{\text{int}})\emid + f_{\text{int}}\emin = -f_{\text{seed}}\Delta\varepsilon_{1} - f_{\text{int}}\Delta\varepsilon_{2} \leq 0. \qedhere
+\]
+\end{proof}
+
+\begin{remark}
+Equation~\ref{eq:hazard_si} decomposes efficacy loss into a seeding channel ($f_{\text{seed}}$, gap $\Delta\varepsilon_{1}$) and an integration channel ($f_{\text{int}}$, gap $\Delta\varepsilon_{2}$). At early times, seeding dominates; as mass accumulates in state~1, the integration channel accelerates terminal efficacy collapse.
+\end{remark}
+
+% =========================================================================
+\section{Route Compression and Inoculum-Monotone Hitting Times}
+
+\subsection{ODE system}
+
+The standard target-cell-limited within-host model:
+\begin{equation}
+\frac{dT}{dt} = \lambda - dT - \beta TV, \quad
+\frac{dI}{dt} = \beta TV - \delta I, \quad
+\frac{dV}{dt} = pI - cV, \quad
+\frac{dR}{dt} = \alpha I
+\label{eq:ode}
+\end{equation}
+where $T$ = target cells, $I$ = infected cells, $V$ = free virions, $R$ = cells with stable proviral integration.
+
+\begin{lemma}[Absorbing state]\label{lem:absorb}
+The set $\mathcal{A} = \{R > 0\}$ is positively invariant. If $R(t_{0}) > 0$ then $R(t) > 0$ for all $t > t_{0}$.
+\end{lemma}
+
+\begin{proof}
+$dR/dt = \alpha I \geq 0$, so $R$ is non-decreasing. Under ART, $I \to 0$ and $dR/dt \to 0$: the reservoir is static but does not shrink.
+\end{proof}
+
+\subsection{Route-dependent initial conditions}
+
+$V^{(m)}(0) = 1$ virion/mL (mucosal, post-epithelial attenuation) versus $V^{(p)}(0) = 10^{3}$ virions/mL (parenteral, direct intravascular delivery). All ODE parameters in (\ref{eq:ode}) are identical across routes.
+
+\begin{lemma}[Inoculum-monotone hitting times]\label{lem:monotone}
+Solutions of (\ref{eq:ode}) with $V(0) = v_{0} < \tilde{V}(0) = \tilde{v}$ satisfy $\tilde{I}(t) \geq I(t)$ and $\tilde{R}(t) \geq R(t)$ for all $t \geq 0$. Therefore $\Tint(\tilde{v}) \leq \Tint(v_{0})$ a.s.
+\end{lemma}
+
+\begin{proof}
+The subsystem $(I, V, R)$ is cooperative for fixed $T$:
+\[
+\frac{\partial(\beta TV)}{\partial V} \geq 0, \quad
+\frac{\partial(pI)}{\partial I} \geq 0, \quad
+\frac{\partial(\alpha I)}{\partial R} = 0.
+\]
+By comparison theorems for cooperative ODE systems\cite{smith1995}, solutions are order-preserving in initial conditions. Since $\tilde{V}(0) > V(0)$: $\tilde{V}(t) \geq V(t)$ and $\tilde{I}(t) \geq I(t)$ for all $t \geq 0$. Then
+\[
+\tilde{R}(t) = \alpha \int_{0}^{t} \tilde{I}(s)\,ds \;\geq\; \alpha \int_{0}^{t} I(s)\,ds = R(t),
+\]
+so $\Tint(\tilde{v}) \leq \Tint(v_{0})$.
+\end{proof}
+
+\subsection{Route compression corollary}
+
+\begin{assumption}[Stochastic dominance]
+$\Pint^{(p)}(t) \geq \Pint^{(m)}(t)$ for all $t \geq 0$. Follows from Lemma~\ref{lem:monotone} under route-specific inocula.
+\end{assumption}
+
+\begin{corollary}[Route compression]\label{cor:route}
+Under Assumptions~A1--A4:
+\begin{enumerate}[label=\textnormal{(\roman*)},leftmargin=2.5em]
+    \item $\Epep^{(p)}(t) \leq \Epep^{(m)}(t)$;
+    \item $\tcrit^{(p)}(\eta) \leq \tcrit^{(m)}(\eta)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(i) The weight on $\emax$ equals $1 - \Pseed(t)$, which is smaller for parenteral; the weight on $\emin = 0$ equals $\Pint(t)$, which is larger for parenteral. So $\Epep^{(p)} \leq \Epep^{(m)}$.
+
+(ii) Both functions are non-increasing; $\tcrit^{(p)}(\eta) = \inf\{t : \Epep^{(p)} < \eta\} \leq \inf\{t : \Epep^{(m)} < \eta\} = \tcrit^{(m)}(\eta)$.
+\end{proof}
+
+% =========================================================================
+\section{Population-Level PEP Efficacy Bound}
+
+\begin{definition}
+$\Ebarpep = \mathbb{E}[\Epep(T_{\text{access}})] = \int_{0}^{\infty} \Epep(t)\,d\Faccess(t)$.
+\end{definition}
+
+\begin{proposition}[Population-level bound]\label{prop:bound}
+Under Assumptions~A1--A4,
+\begin{equation}
+\Ebarpep \;\leq\; \Faccess(\tcrit)\,\emax + \big(1 - \Faccess(\tcrit)\big)\,\eta
+\label{eq:bound_si}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Partition the integral at $\tcrit(\eta)$:
+\[
+\Ebarpep = \int_{0}^{\tcrit} \Epep(t)\,d\Faccess + \int_{\tcrit}^{\infty} \Epep(t)\,d\Faccess
+\;\leq\; \emax\,\Faccess(\tcrit) + \eta\,(1 - \Faccess(\tcrit)),
+\]
+using $\Epep(t) \leq \emax$ for $t \leq \tcrit$ and $\Epep(t) < \eta$ for $t > \tcrit$ (Theorem~\ref{thm:finite}(iv)).
+\end{proof}
+
+\textbf{Worked example.} Log-normal access delay (median 72~h, geometric SD 2.0): $\Faccess(24~\text{h}) \approx 0.02$. With $\eta = 0.05$ and $\emax = 0.95$:
+\[
+\Ebarpep \leq 0.02 \times 0.95 + 0.98 \times 0.05 = 0.068.
+\]
+Expected population PEP efficacy below 7\%.
+
+% =========================================================================
+\section{Parameter Tables}
+
+\subsection{ODE system parameters (Perelson 1996 anchored)}
+
+\begin{table}[H]
+\centering
+\small
+\caption{ODE system parameters anchored on Perelson et al.\ 1996 (PMID 8599114).}
+\begin{tabular}{@{}llllp{4.5cm}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Units} & \textbf{Source} \\
+\midrule
+$\delta$ & Infected cell death rate & 0.7 & day$^{-1}$ ($t_{1/2} \approx 1.6$d) & Perelson 1996, Table~1 \\
+$c$ & Viral clearance rate & 23 & day$^{-1}$ ($t_{1/2} = 0.24$d $\approx 6$h) & Perelson 1996, Table~1 \\
+$\tau$ & Viral generation time & 2.6 & days ($\approx 62$h) & Perelson 1996, Table~2 \\
+Eclipse phase & Min time to integration competence & 0.9 & days ($\approx 22$h) & Perelson 1996, Table~2 \\
+$\beta$ & Infection rate constant & $2.4 \times 10^{-5}$ & mL$\cdot$virion$^{-1}\cdot$day$^{-1}$ & Standard model \\
+$p$ & Virion production per infected cell & $10^{3}$ & virions/cell/day & Standard model \\
+$\alpha$ & Stable integration rate & $10^{-3}$ & day$^{-1}$ & Calibrated \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Parameters $c$ and $\delta$ directly from Table~1; eclipse phase and generation time from Table~2. \textit{Note:} the reference $\log_{10}$ VL $= 4.5$ for PWID is from NHBS/NHAS surveillance, not from Perelson 1996 (whose patients had mean $\log_{10}$ VL $\approx 5.3$).
+
+\subsection{Drug efficacy parameters}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Stage-dependent drug efficacy parameters.}
+\begin{tabular}{@{}llcp{6.5cm}@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{State $Z(t)$} & \textbf{Justification} \\
+\midrule
+$\emax$ (pre-seeding) & 0.95 & $Z(t) = 0$ & Near-complete suppression of initial RT; consistent with tenofovir/FTC NHP protection data \\
+$\emid$ (seeded/pre-int) & 0.50 & $Z(t) = 1$ & Partial suppression of established replicative focus; sensitivity $\pm 40\%$ shifts $\tcrit < 6$h \\
+$\emin$ (integrated) & 0 (fixed) & $Z(t) = 2$ & ART does not eradicate provirus; set to 0 by A2 and Lemma~\ref{lem:absorb} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Route-specific initial conditions and thresholds}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Route-specific initial conditions and threshold parameters.}
+\begin{tabular}{@{}lllp{6cm}@{}}
+\toprule
+\textbf{Parameter} & \textbf{Mucosal} & \textbf{Parenteral} & \textbf{Note} \\
+\midrule
+$V(0)$ virions/mL & 1 & $10^{3}$ & 3-log difference drives route compression; post-epithelial attenuation vs.\ direct IV delivery \\
+$T(0)$ CD4 cells/mL & $10^{6}$ & $10^{6}$ & Identical; peripheral blood \\
+$I(0)$ and $R(0)$ & 0 & 0 & No infected cells or reservoir at exposure \\
+$I^{*}$ (seeding threshold) & 100 cells/mL & 100 cells/mL & Sensitivity: $[10, 1000]$; $\tcrit$ shifts $<8$h; compression ratio stable \\
+$R^{*}$ (integration threshold) & 10 cells/mL & 10 cells/mL & Sensitivity: $[1, 100]$; parenteral/mucosal ratio stable 2.5--4.0$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Stochastic simulation parameters}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Stochastic simulation parameters.}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\midrule
+$N$ Monte Carlo replications & 10{,}000/route & Per route, per distribution, per timepoint \\
+Time points (dense curves) & 50 (0--120~h) & Equally spaced; resolves all three regime boundaries \\
+VL draws per timepoint & 10{,}000 & Independent draws from $P(\text{VL})$ per timepoint \\
+Noise model ($\beta$, $\alpha$) & Log-normal CV $= 0.3$ & Multiplicative noise on infection and integration rates \\
+CI type & 95\% credible interval & From stochastic efficacy distribution; not parameter bootstrap \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =========================================================================
+\section{Stochastic VL Analysis --- Extended Methods}
+
+\subsection{Source VL distributions}
+
+Expected PEP efficacy was computed as a Monte Carlo integral over source viral load:
+\begin{equation}
+\mathbb{E}[\Epep(t)] = \int \Epep(t, \text{VL})\,P(\text{VL})\,d\text{VL}
+\label{eq:mc_integral}
+\end{equation}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Source VL distributions parameterized from surveillance data. All log10-normal.}
+\begin{tabular}{@{}llcp{6cm}@{}}
+\toprule
+\textbf{Distribution} & \textbf{Mean $\log_{10}$} & \textbf{SD} & \textbf{Empirical basis} \\
+\midrule
+PWID untreated/unsuppressed & 4.5 & 1.1 & NHBS/NHAS surveillance; chronic untreated HIV-1 in PWID networks \\
+PWID mixed treatment & 3.2 & 1.5 & Mixture: suppressed ($\sim 1.5$) + unsuppressed ($\sim 4.5$) in partially treated PWID networks \\
+General HIV+ community & 3.8 & 1.2 & Mixed treatment uptake; heterogeneous MSM/general community networks \\
+Acute-infection-enriched & 5.0 & 0.9 & High-transmission networks; acute viremia peak; recent-infection clustering \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textit{Note:} PWID untreated mean $\log_{10} = 4.5$ is from NHBS/NHAS surveillance, NOT from Perelson 1996.
+
+\subsection{Three-regime temporal classification}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Three-regime CI-width classification for the PWID untreated distribution.}
+\begin{tabular}{@{}lp{4cm}lp{5cm}@{}}
+\toprule
+\textbf{Regime} & \textbf{Hours (PWID untreat.)} & \textbf{Peak CI width} & \textbf{Clinical interpretation} \\
+\midrule
+1 --- Early window & 0--22.0~h & $<$15~pp & VL uncertainty low-impact; initiate PEP immediately regardless of source VL \\
+2 --- Critical window & 22.0--78.4~h (PWID/acute); 22.0--88.2~h (mixed/general) & 39.7~pp at 49~h & Maximal VL uncertainty; source VL testing clinically actionable; VL premium peaks at 21~h \\
+3 --- Late window & 78.4--120~h (PWID/acute); 88.2--120~h (mixed/general) & $<$10~pp (collapsed) & Efficacy uniformly poor; VL irrelevant; $P$(futile) $> 90\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The Regime 1/2 boundary at 22.04~h is consistent across all four VL distributions (eclipse phase lower bound, Perelson 1996). The Regime 2/3 boundary is distribution-dependent: 78.37~h for PWID untreated and acute-infection-enriched distributions (higher VL accelerates CI collapse); 88.16~h for mixed-treatment and general-community distributions. This distribution-specificity is biologically coherent: higher inoculum populations exhaust the critical window earlier.
+
+\subsection{VL knowledge premium and non-monotonic plateau}
+
+VL knowledge premium $=$ absolute difference in expected $\Epep(t)$ between known vs.\ unknown source VL. Peak values: 3.76~pp at 21~h (acute-enriched); 2.94~pp (PWID untreated); 1.87~pp (general community); 1.27~pp (mixed Tx). All distributions peak at 21~h --- maximal VL-knowledge value at critical window onset.
+
+The non-monotonic plateau between 18--36~hours in the PWID untreated and acute-enriched premium curves is a verified real kinetic signal (not numerical artefact). It arises from the interaction of the logistic inflection of the seeding-integration cascade with the $\sim$2-hour urgency reduction at the seeding midpoint in the parenteral model, creating a period during which the distribution of integration outcomes is maximally bimodal. This feature is preserved without smoothing in all reported outputs.
+
+% =========================================================================
+\section{City-Stratified Analysis --- Extended Methods}
+
+\subsection{Data source}
+
+City-level HIV surveillance data were extracted from AIDSVu downloadable datasets for 34 high-burden US metropolitan areas (2023 reporting year; downloaded October 2025).
+
+\subsection{Mixture-model VL derivation}
+
+\begin{equation}
+\mu_{\text{mix}} = f_{s}\,\mu_{\text{suppressed}} + (1 - f_{s})\,\mu_{\text{unsuppressed}}
+\label{eq:mixture}
+\end{equation}
+
+Suppressed: $\log_{10}$ mean $= 1.5$, SD $= 0.4$. Unsuppressed: $\log_{10}$ mean $= 4.5$, SD $= 1.1$. IDU correction: $f_{s}$ reduced by 0.12~percentage points per percent IDU prevalence, capped at 12~percentage points total.
+
+\subsection{Structural delay derivation}
+
+\begin{equation}
+\Delta t_{\text{structural}} = \beta_{1}\,(\text{LateDx}\% - 10\%) + \beta_{2}\,\max(90\% - \text{Linkage}\%,\,0) + \Delta t_{\text{SDOH}}
+\label{eq:delay_si}
+\end{equation}
+
+$\beta_{1} = 1.2$~h/\%; $\beta_{2} = 0.3$~h/\%. SDOH modifier 0--6~h from Gini + poverty. Barrier categories: low ($<$8~h), moderate (8--18~h), high (18--30~h), severe ($\geq$30~h).
+
+\subsection{Counterfactual analysis}
+
+Parallel simulation assigning all 34 cities a uniform 24-hour access delay isolates structural barrier contribution from community VL. 33/34 cities show observed efficacy $>$ counterfactual (structural delays $<$24~h). Hartford CT is the sole exception (delay 24.4~h; high-barrier category, 18--30~h). Counterfactual range across cities: 76.2\%--82.1\%.
+
+% =========================================================================
+\section{Figure Inventory}
+
+\textbf{Overview.} Three main figures (Figs.~1--3 of the main text), each up to four panels, generated by three Python scripts. All figures at 300~dpi. This inventory maps every panel to its source script, output file, and description.
+
+\subsection{Figure 1 --- Route-Dependent PEP Efficacy Decay}
+
+Source: \texttt{PEP\_parenteral\_perelson.py}, function \texttt{plot\_vl\_sweep()}. Output: \texttt{pep\_parenteral\_vl\_sweep.png}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lp{4cm}p{8cm}@{}}
+\toprule
+\textbf{Panel} & \textbf{Title} & \textbf{Description} \\
+\midrule
+A & Efficacy Curves by Source Viral Load (Parenteral/PWID) & $\Epep(t)$ vs.\ hours post-exposure for 7 source VL levels ($\log_{10} = 3.0$--$6.0$). Demonstrates VL as the primary window compressor. X-axis: 0--120~h; Y-axis: efficacy 0--1. Vertical dashed lines at 24~h, 48~h, 72~h. Primary panel. \\
+B & Biological Window Compression by Source VL & Effective prevention window (hours, defined as $\tcrit$ at $\eta = 0.05$) as a function of $\log_{10}$~VL. Monotone compression from $\sim$74~h ($\log_{10}$~VL 3.0) to $\sim$16~h ($\log_{10}$~VL 6.0). Horizontal reference lines at 72~h (CDC) and 24~h. \\
+C & Probability PEP Already Too Late by Source VL and Time & $\Pint(t)$ as a function of $\log_{10}$~VL at $t = 24, 48, 72$~h. Shows $>$50\% integration probability reached before 24~h at high VL ($\log_{10} > 5$). \\
+D & Mucosal vs.\ Parenteral Efficacy & Paired efficacy curves for mucosal (solid) and parenteral (dashed) at matched VL values ($\log_{10} = 3.0, 4.5, 6.0$). Demonstrates $\sim$3-fold compression ratio. Validates NHP concordance table. Primary panel. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Figure 2 --- Stochastic Efficacy Analysis Under Source VL Uncertainty}
+
+Source: \texttt{PEP\_stochastic\_perelson.py}, function \texttt{plot\_stochastic\_analysis()}. Output: \texttt{pep\_stochastic\_vl\_uncertainty.png}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lp{4cm}p{8cm}@{}}
+\toprule
+\textbf{Panel} & \textbf{Title} & \textbf{Description} \\
+\midrule
+A & Mean $\pm$ 95\% CI Efficacy Curves by Community VL Distribution & Mean $\Epep(t) \pm$ 95\% CI for all four VL distributions over 0--120~h. Shaded CI bands. Regime shading overlaid: Regime 1 (white, 0--22.0~h), Regime 2 (light gray, 22.0--78.4~h for PWID/acute; 22.0--88.2~h for mixed/general), Regime 3 (dark gray). Primary panel. \\
+B & Community VL Distributions & $\log_{10}$-normal density plots for all four VL distributions on common x-axis. Shows 1.8-log spread between extreme distributions. \\
+C & Probability of Sub-Therapeutic PEP by Delay and Community & $P(\text{efficacy} < 50\%)$ vs.\ hours post-exposure for all four distributions. Threshold line at $P = 0.50$. Key result: $P(<50\%) = 100\%$ at 48~h for ALL distributions. Primary panel. \\
+D & VL Knowledge Premium & VL knowledge premium (pp, absolute) vs.\ hours for all four distributions. Peaks at 21~h for all distributions (3.76~pp acute-enriched; 2.94~pp PWID untreated). Non-monotonic plateau 18--36~h preserved with annotation. Primary panel. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Figure 3 --- City-Stratified PEP Efficacy Across 34 US Metropolitan Areas}
+
+Source: \texttt{city\_stratified\_figures.py}. Outputs: \texttt{Fig\_CityStratified\_PEP.png} (4-panel, primary) and \texttt{Fig\_CityComparison\_Focus.png} (3-panel, focus cities).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lp{4cm}p{8cm}@{}}
+\toprule
+\textbf{Panel} & \textbf{Title} & \textbf{Description} \\
+\midrule
+A & City-Stratified PEP Efficacy at City-Specific Structural Delay & Ranked horizontal bar chart for 34 cities. Colors: green $=$ low barrier ($<$8~h), orange $=$ moderate (8--18~h), red $=$ high (18--30~h). Range: Milwaukee 98.3\% to Hartford 78.8\%. Primary panel. \\
+B & Structural Delay vs.\ PEP Efficacy & Scatter: x $=$ structural delay, y $=$ efficacy. Bubble size proportional to IDU prevalence. Color by region. Pearson $r = -0.935$ annotated. Primary panel. \\
+C & Joint VL Burden $\times$ Structural Delay Risk Surface & 2D scatter/heatmap: x $=$ community mean $\log_{10}$~VL, y $=$ structural delay, color $=$ efficacy. Shows structural delay (y) drives most variance; community VL (x) has limited effect ($r = -0.084$). \\
+D & Actual vs.\ Counterfactual (24~h) PEP Efficacy by City & Paired lollipop/dot: actual (solid) vs.\ 24~h counterfactual (open) for 34 cities. 33/34 cities: actual $>$ counterfactual. Hartford only exception ($-0.59$~pp deficit). Primary panel. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Recommended figure assignment}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Suggested figure assignment.}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Slot} & \textbf{Content} & \textbf{Source file} & \textbf{Panels} \\
+\midrule
+Main Fig.~1 & Source VL as window compressor & \texttt{pep\_parenteral\_vl\_sweep.png} & All 4 \\
+Main Fig.~2 & Stochastic VL uncertainty & \texttt{pep\_stochastic\_vl\_uncertainty.png} & All 4 \\
+Main Fig.~3 & City-stratified determinants & \texttt{Fig\_CityStratified\_PEP.png} & All 4 \\
+Supp.\ Fig.\ S1 & Focus-city structural decomposition & \texttt{Fig\_CityComparison\_Focus.png} & All 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All figures are generated by existing scripts in the project repository: \url{https://github.com/Nyx-Dynamics/Prevention-Theorem}. Each main figure carries a self-contained argument: Fig.~1 establishes that the biological window exists and is route-specific; Fig.~2 establishes that VL uncertainty creates three clinically distinct regimes; Fig.~3 establishes that structural barriers consume the window at population scale.
+
+% =========================================================================
+% Supplementary Figure
+% =========================================================================
+\clearpage
+\section*{Supplementary Figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{FigS1_city_comparison_focus.png}
+\caption{\textbf{Selected city comparison: structural determinants of PEP window access.}
+Six focus cities (Hartford CT, San Juan PR, Jackson MS, Phoenix AZ, Denver CO, Milwaukee WI) chosen to span the structural delay range.
+(\textbf{A}) Viral suppression percentage (solid bars) vs.\ linkage to care percentage (faded bars) for each city. Reference line at 90\% UNAIDS target.
+(\textbf{B}) Structural delay decomposition by component: late diagnosis contribution (red), linkage gap contribution (orange), and SDOH modifier (purple). Hartford's delay is dominated by late diagnosis (37\% LateDx); San Juan's by linkage gap.
+(\textbf{C}) Expected PEP efficacy with 95\% credible intervals (colored bars) and 24~h counterfactual efficacy (gray diamonds) for each city. Reference line at 90\% efficacy threshold.}
+\label{fig:focus}
+\end{figure}
+
+% =========================================================================
+% Supplementary references
+% =========================================================================
+\renewcommand{\refname}{\large\textbf{Supplementary References}}
+
+\begin{thebibliography}{9}
+\bibitem{tanner2025}
+M.R. Tanner \textit{et al.}, Antiretroviral postexposure prophylaxis --- CDC recommendations 2025. \textit{MMWR Recomm. Rep.} (2025).
+
+\bibitem{siliciano2015}
+J.D. Siliciano, R.F. Siliciano, Enhanced culture assay for detection of latently infected resting CD4+ T-cells. \textit{Methods Mol. Biol.} \textbf{1354}, 3--15 (2015).
+
+\bibitem{wahl2023}
+A. Wahl, L. Al-Harthi, HIV infection of non-classical cells in the brain. \textit{Retrovirology} \textbf{20}, 1 (2023).
+
+\bibitem{perelson1997}
+A.S. Perelson \textit{et al.}, Decay characteristics of HIV-1-infected compartments during combination therapy. \textit{Nature} \textbf{387}, 188--191 (1997).
+
+\bibitem{perelson1996}
+A.S. Perelson, A.U. Neumann, M. Markowitz, J.M. Leonard, D.D. Ho, HIV-1 dynamics \textit{in vivo}: virion clearance rate, infected cell life-span, and viral generation time. \textit{Science} \textbf{271}, 1582--1586 (1996).
+
+\bibitem{mcmichael2010}
+A.J. McMichael, S.L. Rowland-Jones, The immune response to HIV. \textit{Immunity} \textbf{33}, 431--441 (2010).
+
+\bibitem{smith1995}
+H.L. Smith, \textit{Monotone Dynamical Systems} (AMS Mathematical Surveys vol.~41, 1995).
+\end{thebibliography}
+
+\end{document}
