@@ -318,8 +318,11 @@ ax.set_xticklabels(focus_cities, fontsize=9, rotation=30, ha='right')
 ax.set_ylabel('%', fontsize=10)
 ax.set_title('A. Viral Suppression (solid)\nvs. Linkage to Care (lighter shade)',
              fontsize=10, fontweight='bold')
+# F4.1 (Path A): extend Panel A y-axis to 0 — shows full-range data without
+# visually exaggerating city-to-city differences. Reviewer-defensive choice.
 ax.axhline(90, color='gray', linestyle='--', alpha=0.4, linewidth=0.8)
-ax.set_ylim(40, 105)
+ax.set_ylim(0, 105)
+ax.set_yticks([0, 20, 40, 60, 80, 100])
 ax.grid(axis='y', alpha=0.3)
 
 # Panel B: Structural delay components
@@ -367,8 +370,10 @@ for i, city in enumerate(focus_cities):
 
     ax.barh(i, mean_e, color=color, alpha=0.8, height=0.5)
     ax.plot([lo, hi], [i, i], 'k-', linewidth=2, alpha=0.5)
-    ax.plot(cf, i, 'D', color='#BDC3C7', markersize=7,
-            alpha=0.9, zorder=5)
+    # F4.3 (hardened): black diamond with white edge, larger size, on top.
+    # Distinguishable from colored bars even when values are similar.
+    ax.scatter(cf, i, marker='D', s=100, c='black',
+               edgecolors='white', linewidths=1.5, zorder=10)
 
 ax.set_yticks(y)
 ax.set_yticklabels(focus_cities, fontsize=9)

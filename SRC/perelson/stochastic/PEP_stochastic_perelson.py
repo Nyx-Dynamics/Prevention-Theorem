@@ -387,8 +387,9 @@ def plot_stochastic_analysis(save_path: str = None):
 
     ax.axvline(x=72, color='black', linewidth=1.5, linestyle='--',
                label='72h guideline', alpha=0.7)
+    # F2.5 (final): "24h" only — brief in legend; caption carries interpretive language
     ax.axvline(x=24, color='navy', linewidth=1.5, linestyle='--',
-               label='24h PEP initiation', alpha=0.7)
+               label='24h', alpha=0.7)
     ax.axhline(y=50, color='gray', linewidth=1, linestyle='-.',
                alpha=0.6, label='50% of patients sub-therapeutic')
 

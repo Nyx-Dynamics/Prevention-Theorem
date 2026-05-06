@@ -116,31 +116,33 @@ axA.axvline(72, color='#2D7A2D', linestyle='--', alpha=0.6, linewidth=1)
 axA.text(72, 102, 'CDC 72h', fontsize=8.5, color='#2D7A2D', ha='center',
          bbox=dict(facecolor='white', edgecolor='none', pad=1.5))
 
-# --- F1.1 fix: place t_crit labels in low-traffic area BELOW the curves
-#     (around y=20-30, x>=TCRIT) where there is no NHP marker, no curve, no callout.
-#     Use bbox so labels are clearly separated from any underlying gridlines.
-TCRIT_LABEL_BBOX = dict(facecolor='white', edgecolor=None, boxstyle='round,pad=0.25', alpha=0.9)
-
-# Parenteral t_crit label — bottom area, right of the dotted line
+# --- F1.1 (hardened): white bbox at full opacity + zorder=20 occludes any
+#     triangle marker passing behind the t_crit label text. Eliminates the
+#     "▽4.5 h" rendering risk at PDF vector zoom.
+# Parenteral t_crit annotation
 axA.annotate(
     r"$t^{(p)}_{\mathrm{crit}} \approx 34.5$ h",
-    xy=(TCRIT_P, 5),                                      # arrow tip at η=0.05 line
-    xytext=(TCRIT_P + 12, 22),                            # text below curves, right
-    fontsize=10.5, color=COL_P, weight='bold',
-    arrowprops=dict(arrowstyle='-', color=COL_P, lw=0.7, alpha=0.6),
+    xy=(TCRIT_P, 50),
+    xytext=(TCRIT_P + 8, 65),
+    fontsize=10, color=COL_P,
+    arrowprops=dict(arrowstyle='-', color=COL_P, lw=0.5, alpha=0.6),
     ha='left', va='center',
-    bbox=dict(facecolor='white', edgecolor=COL_P, boxstyle='round,pad=0.3', alpha=0.95),
+    bbox=dict(boxstyle='round,pad=0.25', facecolor='white',
+              edgecolor='none', alpha=1.0),
+    zorder=20,
 )
 
-# Mucosal t_crit label — bottom area, right of mucosal dotted line, above parenteral label
+# Mucosal t_crit annotation
 axA.annotate(
     r"$t^{(m)}_{\mathrm{crit}} \approx 60.5$ h",
-    xy=(TCRIT_M, 5),
-    xytext=(TCRIT_M + 12, 36),
-    fontsize=10.5, color=COL_M, weight='bold',
-    arrowprops=dict(arrowstyle='-', color=COL_M, lw=0.7, alpha=0.6),
-    ha='left', va='center',
-    bbox=dict(facecolor='white', edgecolor=COL_M, boxstyle='round,pad=0.3', alpha=0.95),
+    xy=(TCRIT_M, 50),
+    xytext=(TCRIT_M - 8, 70),
+    fontsize=10, color=COL_M,
+    arrowprops=dict(arrowstyle='-', color=COL_M, lw=0.5, alpha=0.6),
+    ha='right', va='center',
+    bbox=dict(boxstyle='round,pad=0.25', facecolor='white',
+              edgecolor='none', alpha=1.0),
+    zorder=20,
 )
 
 # NHP overlay — colored markers; concordant (up-triangle) vs non-concordant (down-triangle).
