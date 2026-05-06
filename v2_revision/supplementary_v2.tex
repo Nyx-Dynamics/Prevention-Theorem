@@ -664,6 +664,21 @@ Source: \texttt{stochastic\_layers/city\_stratified\_figures.py}. Outputs: \text
 
 Figure~3 panels are unchanged from v1; the AIDSVu surveillance data underlying this figure is aggregated across mode of HIV acquisition and cannot be reliably subset to U=U status. The figure caption in the main text explicitly notes this scope limitation.
 
+\subsection{Supplementary Figure S1 --- Selected City Comparison: Structural Determinants}
+
+Source: \texttt{stochastic\_layers/city\_stratified\_figures.py} (focus-city panel). Output: \texttt{Figure\_S1\_CityComparison\_Focus.png}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/Figure_S1_CityComparison_Focus.png}
+\caption{\textbf{Selected city comparison: structural determinants of PEP window access.}
+Six high-vulnerability US cities (Hartford CT, San Juan PR, Jackson MS, Phoenix AZ, Denver CO, Milwaukee WI), ranked left-to-right from highest to lowest structural barrier.
+(\textbf{A}) Viral suppression rate (solid bars) vs.\ linkage-to-care rate (lighter shade), per AIDSVu 2023.
+(\textbf{B}) Structural-delay decomposition by component: late-diagnosis ($\beta_{1}$ contribution), linkage gap ($\beta_{2}$ contribution), and SDOH modifier. Hartford's 24.4-hour structural delay decomposes as Late Dx~$\approx 21$~h, Linkage Gap~$\approx 3$~h, SDOH~$\approx 3$~h, identifying late-diagnosis as the dominant driver --- a Connecticut-specific epidemiological finding consistent with regional surveillance reports.
+(\textbf{C}) Expected PEP efficacy at city-specific structural delay (95\% credible-interval bars; $\diamond$ marker = 24-hour counterfactual). Hartford is the only city among the 34 in Figure~3 where actual expected efficacy falls below the 24-hour counterfactual, reflecting the structural-delay overshoot.}
+\label{fig:S1_focus}
+\end{figure}
+
 % =========================================================================
 % Supplementary references
 % =========================================================================
@@ -673,11 +688,11 @@ Figure~3 panels are unchanged from v1; the AIDSVu surveillance data underlying t
 \bibitem{tanner2025_si}
 M.R. Tanner \textit{et al.}, Antiretroviral postexposure prophylaxis --- CDC recommendations 2025. \textit{MMWR Recomm. Rep.} (2025).
 
-\bibitem{siliciano2015_si}
-J.D. Siliciano, R.F. Siliciano, Enhanced culture assay for detection of latently infected resting CD4+ T-cells. \textit{Methods Mol. Biol.} \textbf{1354}, 3--15 (2015).
+\bibitem{siliciano2005_si}
+J.D. Siliciano, R.F. Siliciano, Enhanced culture assay for detection and quantitation of latently infected, resting CD4$^{+}$ T-cells carrying replication-competent virus in HIV-1-infected individuals, in \textit{Human Retrovirus Protocols} (Humana Press, New Jersey, 2005), vol.~304, pp.~3--16.
 
-\bibitem{wahl2023_si}
-A. Wahl, L. Al-Harthi, HIV infection of non-classical cells in the brain. \textit{Retrovirology} \textbf{20}, 1 (2023).
+\bibitem{chun1995_si}
+T.W. Chun, D. Finzi, J. Margolick, K. Chadwick, D. Schwartz, R.F. Siliciano, In vivo fate of HIV-1-infected T cells: quantitative analysis of the transition to stable latency. \textit{Nat. Med.} \textbf{1}, 1284--1290 (1995).
 
 \bibitem{perelson1997_si}
 A.S. Perelson \textit{et al.}, Decay characteristics of HIV-1-infected compartments during combination therapy. \textit{Nature} \textbf{387}, 188--191 (1997).

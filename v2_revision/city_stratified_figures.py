@@ -91,11 +91,10 @@ df_sorted = df.sort_values('structural_delay_h', ascending=True).reset_index(dro
 fig, axes = plt.subplots(2, 2, figsize=(16, 14))
 fig.patch.set_facecolor('#FAFAFA')
 
+# XF.1 (revised): single-line bold suptitle; no branding/subtitle.
 fig.suptitle(
-    'City-Stratified Stochastic: PEP Efficacy Analysis\n'
-    "Empirically Derived from AIDSVu Surveillance Data (2023)\n"
-    "VL distributions grounded in Perelson et al., Science 1996",
-    fontsize=16, fontweight='bold', y=0.96
+    'City-Stratified PEP Efficacy Across 34 US Metropolitan Areas',
+    fontsize=14, fontweight='bold', y=0.985
 )
 
 # ── Panel A: Ranked city PEP efficacy at city-specific structural delay ──
@@ -158,12 +157,26 @@ for _, row in df.iterrows():
                     xytext=(4, 2), textcoords='offset points',
                     fontsize=7, color='#2C3E50', alpha=0.85)
 
-# Trend line
-z = np.polyfit(df['structural_delay_h'],
-               df['pep_mean_efficacy_pct'], 1)
+# F3.2 (revised): OLS fit excluding Hartford (the high-barrier outlier),
+# annotated as such. Pearson r reported across the remaining 33 cities so
+# the dashed line summarizes the typical-city cluster rather than being
+# pulled by Hartford's leverage.
+_df_no_hartford = df[df['city'] != 'Hartford']
+z = np.polyfit(_df_no_hartford['structural_delay_h'],
+               _df_no_hartford['pep_mean_efficacy_pct'], 1)
 p = np.poly1d(z)
 x_line = np.linspace(0, 26, 100)
-ax.plot(x_line, p(x_line), 'k--', alpha=0.35, linewidth=1.2)
+_pearson_r_no_hartford = _df_no_hartford['structural_delay_h'].corr(
+    _df_no_hartford['pep_mean_efficacy_pct'])
+_pearson_r_all = df['structural_delay_h'].corr(df['pep_mean_efficacy_pct'])
+ax.plot(x_line, p(x_line), 'k--', alpha=0.35, linewidth=1.2,
+        label=f'OLS fit (excl.\\ Hartford; n=33, Pearson r = {_pearson_r_no_hartford:.3f})')
+# Corner annotation: full-sample r for transparency
+ax.text(0.98, 0.04,
+        f'All 34 cities: r = {_pearson_r_all:.3f}',
+        transform=ax.transAxes, ha='right', va='bottom',
+        fontsize=7, color='#444', style='italic',
+        bbox=dict(facecolor='white', edgecolor='#bbb', boxstyle='round,pad=0.25', alpha=0.9))
 
 ax.set_xlabel('Structural Delay (hours)', fontsize=10)
 ax.set_ylabel('Expected PEP Efficacy (%)', fontsize=10)
@@ -191,6 +204,9 @@ ax.set_facecolor('#F8F9FA')
 # Create colormap for efficacy
 cmap = LinearSegmentedColormap.from_list(
     'eff', ['#E74C3C', '#F39C12', '#2ECC71'])
+# F3.3 (revised): colorbar 70-100% gives Hartford (~78%) visual room as the
+# outlier without compressing the high-efficacy cluster (most cities >93%).
+_eff_min, _eff_max = df['pep_mean_efficacy_pct'].min(), df['pep_mean_efficacy_pct'].max()
 scatter_eff = ax.scatter(
     df['structural_delay_h'],
     df['vl_mean_log10'],
@@ -200,11 +216,12 @@ scatter_eff = ax.scatter(
     alpha=0.85,
     edgecolors='white',
     linewidths=0.8,
-    vmin=75, vmax=100
+    vmin=70.0, vmax=100.0
 )
 
 cbar = plt.colorbar(scatter_eff, ax=ax)
-cbar.set_label('Expected PEP Efficacy (%)', fontsize=9)
+cbar.set_label(f'Expected PEP Efficacy (%) [observed: {_eff_min:.1f}--{_eff_max:.1f}]',
+               fontsize=9)
 
 # Annotate key cities
 for _, row in df.iterrows():
@@ -261,6 +278,9 @@ ax.grid(axis='y', alpha=0.3, linewidth=0.5)
 # ── Final layout ──────────────────────────────────────────────────────────
 plt.tight_layout(pad=4.0)
 fig.subplots_adjust(top=0.88, hspace=0.3, wspace=0.25)
+# XF.2: dual save — PDF (vector primary) + PNG (preview)
+fig.savefig(RESULTS_DIR / 'Fig_CityStratified_PEP.pdf',
+            bbox_inches='tight', facecolor='#FAFAFA')
 fig.savefig(RESULTS_DIR / 'Fig_CityStratified_PEP.png',
             dpi=300, bbox_inches='tight', facecolor='#FAFAFA')
 print(f"[{TIMESTAMP}] Saved: Fig_CityStratified_PEP.png")
@@ -359,13 +379,16 @@ ax.set_xlim(70, 102)
 ax.axvline(90, color='#E74C3C', linestyle='--', alpha=0.5, linewidth=0.8)
 ax.grid(axis='x', alpha=0.3)
 
+# XF.1 (revised): single-line bold suptitle; no branding/subtitle.
 fig2.suptitle(
-    'Selected City Comparison: Structural Determinants of PEP Window Access\n'
-    'Hartford CT · San Juan PR · Jackson MS · Phoenix AZ · Denver CO · Milwaukee WI',
-    fontsize=12, fontweight='bold', y=0.96
+    'Selected City Comparison: Structural Determinants of PEP Window Access',
+    fontsize=13, fontweight='bold', y=0.985
 )
 plt.tight_layout(pad=4.0)
 fig2.subplots_adjust(top=0.85, wspace=0.3)
+# XF.2: dual save — PDF (vector primary) + PNG (preview)
+fig2.savefig(RESULTS_DIR / 'Fig_CityComparison_Focus.pdf',
+             bbox_inches='tight', facecolor='#FAFAFA')
 fig2.savefig(RESULTS_DIR / 'Fig_CityComparison_Focus.png',
              dpi=300, bbox_inches='tight', facecolor='#FAFAFA')
 print(f"[{TIMESTAMP}] Saved: Fig_CityComparison_Focus.png")

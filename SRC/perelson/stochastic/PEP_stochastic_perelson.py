@@ -48,6 +48,8 @@ Updated: 2026-03-10 15:32
 """
 
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
@@ -69,6 +71,9 @@ if str(SRC_DIR) not in sys.path:
 
 # Import the deterministic model
 from perelson.parenteral.PEP_parenteral_perelson import ParenteralExposureModel, REFERENCE_LOG10_VL
+from publication_style import set_publication_style, despine, get_colorblind_palette
+
+set_publication_style()
 
 # =============================================================================
 # VL DISTRIBUTION PARAMETERS
@@ -278,11 +283,9 @@ def plot_stochastic_analysis(save_path: str = None):
     Panel D: VL knowledge premium across delay times
     """
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-    fig.suptitle(
-        'PEP Efficacy Under Source VL Uncertainty — Stochastic Analysis\n'
-        'Prevention Theorem | Monte Carlo Extension (n=10,000)',
-        fontsize=14, fontweight='bold', y=0.98
-    )
+    # XF.1 (revised): single-line bold suptitle only; no branding/subtitle.
+    fig.suptitle('PEP Efficacy Under Source Viral Load Uncertainty',
+                 fontsize=14, fontweight='bold', y=0.99)
 
     distributions = ['pwid_untreated', 'pwid_mixed_treatment',
                      'general_community', 'acute_infection_enriched']
@@ -315,14 +318,15 @@ def plot_stochastic_analysis(save_path: str = None):
     ax.axvline(x=72, color='black', linewidth=1.5, linestyle='--',
                label='72h guideline', alpha=0.7)
     ax.axvline(x=24, color='navy', linewidth=1.5, linestyle='--',
-               label='24h optimal', alpha=0.7)
+               label='24h PEP initiation', alpha=0.7)
     ax.axhline(y=50, color='gray', linewidth=1, linestyle='-.',
                label='50% threshold', alpha=0.6)
 
-    ax.set_xlabel('Hours from Exposure to PEP Initiation', fontsize=11)
-    ax.set_ylabel('Expected PEP Efficacy % (Mean ± 50/95% CI)', fontsize=10)
+    ax.set_xlabel('Hours from Exposure to PEP Initiation')
+    ax.set_ylabel('Expected PEP Efficacy % (Mean ± 50/95% CI)')
     ax.set_title('A. Efficacy Under VL Uncertainty\nby Community VL Distribution',
-                 fontsize=12, fontweight='bold')
+                 fontweight='bold')
+    despine(ax)
     ax.legend(fontsize=8, loc='upper right')
     ax.set_xlim(0, 120)
     ax.set_ylim(0, 105)
@@ -343,8 +347,16 @@ def plot_stochastic_analysis(save_path: str = None):
                 color=params['color'], linewidth=2.5, label=params['label'])
         ax.fill_between(vl_range_log, density, alpha=0.08, color=params['color'])
 
+    # Replace existing dotted vertical line at 200 with shaded U=U band
+    ax.axvspan(np.log10(20), np.log10(200), alpha=0.15, color='gray', zorder=0,
+               label='U=U region\n(transmission risk ≈ 0)')
+
+    # Keep PARTNER2 threshold reference line at exactly 200
+    ax.axvline(x=np.log10(200), color='gray', linestyle='--', alpha=0.5, lw=0.8)
+    ax.text(np.log10(200), ax.get_ylim()[1] * 0.95,
+            '  PARTNER2 (200)', fontsize=8, color='gray', ha='left', va='top')
+
     for vl_mark, lbl, col in [
-        (np.log10(200),    'LLoQ\n200',  'green'),
         (np.log10(10000),  '10K',        'orange'),
         (np.log10(100000), '100K',       'red'),
     ]:
@@ -354,11 +366,12 @@ def plot_stochastic_analysis(save_path: str = None):
     tick_positions = [1.3, 2, 3, 4, 5, 6, 7]
     tick_labels = ['20\n(LLoD)', '100', '1K', '10K', '100K', '1M', '10M']
     ax.set_xticks(tick_positions)
-    ax.set_xticklabels(tick_labels, fontsize=8)
-    ax.set_xlabel('Source Viral Load (copies/mL)', fontsize=11)
-    ax.set_ylabel('Probability Density', fontsize=11)
+    ax.set_xticklabels(tick_labels)
+    ax.set_xlabel('Source Viral Load (copies/mL)')
+    ax.set_ylabel('Probability Density')
     ax.set_title('B. Community VL Distributions\n(What We Integrate Over)',
-                 fontsize=12, fontweight='bold')
+                 fontweight='bold')
+    despine(ax)
     ax.legend(fontsize=8)
     ax.grid(True, color='lightgray', linewidth=0.5)
 
@@ -375,14 +388,15 @@ def plot_stochastic_analysis(save_path: str = None):
     ax.axvline(x=72, color='black', linewidth=1.5, linestyle='--',
                label='72h guideline', alpha=0.7)
     ax.axvline(x=24, color='navy', linewidth=1.5, linestyle='--',
-               label='24h optimal', alpha=0.7)
+               label='24h PEP initiation', alpha=0.7)
     ax.axhline(y=50, color='gray', linewidth=1, linestyle='-.',
                alpha=0.6, label='50% of patients sub-therapeutic')
 
-    ax.set_xlabel('Hours from Exposure to PEP Initiation', fontsize=11)
-    ax.set_ylabel('P(PEP Efficacy < 50%) %', fontsize=11)
+    ax.set_xlabel('Hours from Exposure to PEP Initiation')
+    ax.set_ylabel('P(PEP Efficacy < 50%) %')
     ax.set_title('C. Probability of Sub-Therapeutic PEP\nby Delay and Community',
-                 fontsize=12, fontweight='bold')
+                 fontweight='bold')
+    despine(ax)
     ax.legend(fontsize=8)
     ax.set_xlim(0, 120)
     ax.set_ylim(0, 105)
@@ -404,9 +418,13 @@ def plot_stochastic_analysis(save_path: str = None):
         hours_p = [r['hours'] for r in premium_results]
         premiums = [r['premium_absolute'] * 100 for r in premium_results]
 
+        labels = {
+            'pwid_untreated': 'Premium: PWID untreated',
+            'acute_infection_enriched': 'Premium: Acute-enriched'
+        }
         ax.plot(hours_p, premiums, color=params['color'],
                 linewidth=2.5, marker='o', markersize=6,
-                label=f"Premium: {params['label'][:30]}")
+                label=labels[dist])
         ax.fill_between(hours_p, 0, premiums,
                         alpha=0.12, color=params['color'])
 
@@ -415,11 +433,11 @@ def plot_stochastic_analysis(save_path: str = None):
     ax.axhline(y=5, color='gray', linewidth=1, linestyle='-.',
                alpha=0.6, label='5% absolute premium')
 
-    ax.set_xlabel('Hours from Exposure to PEP Initiation', fontsize=11)
-    ax.set_ylabel('Efficacy Premium from Knowing Source VL\n(Absolute %, Mean)',
-                  fontsize=10)
-    ax.set_title('D. Value of Rapid Source VL Testing\n"VL Knowledge Premium"',
+    ax.set_xlabel('Hours from Exposure to PEP Initiation')
+    ax.set_ylabel('Efficacy Premium from Knowing Source VL\n(Absolute %, Mean)')
+    ax.set_title('D. Value of Rapid Source VL Testing\n(Efficacy gain if VL known at PEP initiation)',
                  fontsize=12, fontweight='bold')
+    despine(ax)
     ax.legend(fontsize=8)
     ax.set_xlim(0, 72)
     ax.grid(True, color='lightgray', linewidth=0.5)
@@ -432,7 +450,10 @@ def plot_stochastic_analysis(save_path: str = None):
     plt.tight_layout()
 
     if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        # XF.2: dual save — PDF (vector primary) + PNG (preview)
+        plt.savefig(save_path, dpi=600, bbox_inches='tight')
+        pdf_path = str(save_path).replace('.png', '.pdf') if str(save_path).endswith('.png') else f'{save_path}.pdf'
+        plt.savefig(pdf_path, bbox_inches='tight')
         print(f"Saved to {save_path}")
 
     plt.show()
