@@ -24,12 +24,10 @@ mpl.rcParams['axes.unicode_minus'] = False
 
 # ============================================================
 # Load source data — committed at SHA d047d2d (verified by §5.1).
-# Working-tree CSVs have diverged and should NOT be used for v2.
-# /tmp/multiscale_v3_d047d2d/ holds the fresh run that reproduced the
-# committed CSV byte-identical.
 # ============================================================
-BASE = '/Users/acdstudpro/PycharmProjects/Prevention-Theorem'
-COMMITTED = '/tmp/multiscale_v3_d047d2d/results_v3'
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE = os.path.dirname(SCRIPT_DIR)
+COMMITTED = os.path.join(BASE, 'SRC/multiscale_model/results_v3')
 REAL = pd.read_csv(os.path.join(COMMITTED, 'heterogeneity_realizations.csv'))
 SUMM = pd.read_csv(os.path.join(COMMITTED, 'heterogeneity_summary.csv'))
 
@@ -118,37 +116,57 @@ axA.axvline(72, color='#2D7A2D', linestyle='--', alpha=0.6, linewidth=1)
 axA.text(72, 102, 'CDC 72h', fontsize=8.5, color='#2D7A2D', ha='center',
          bbox=dict(facecolor='white', edgecolor='none', pad=1.5))
 
-# Verified t_crit annotations
-axA.axvline(TCRIT_P, color=COL_P, linestyle=':', alpha=0.55, linewidth=1.2)
-axA.axvline(TCRIT_M, color=COL_M, linestyle=':', alpha=0.55, linewidth=1.2)
-axA.text(TCRIT_P + 1.5, 50,
-         f'$t_\\mathrm{{crit}}^{{(p)}} \\approx {TCRIT_P:.1f}$ h',
-         fontsize=9.5, color=COL_P, va='center', weight='bold')
-axA.text(TCRIT_M + 1.5, 70,
-         f'$t_\\mathrm{{crit}}^{{(m)}} \\approx {TCRIT_M:.1f}$ h',
-         fontsize=9.5, color=COL_M, va='center', weight='bold')
+# --- F1.1 fix: place t_crit labels in low-traffic area BELOW the curves
+#     (around y=20-30, x>=TCRIT) where there is no NHP marker, no curve, no callout.
+#     Use bbox so labels are clearly separated from any underlying gridlines.
+TCRIT_LABEL_BBOX = dict(facecolor='white', edgecolor=None, boxstyle='round,pad=0.25', alpha=0.9)
 
-# NHP overlay (concordant=open up-triangle, partial=half-fill, non-concordant=filled down-triangle)
-# Otten 2000 mucosal: 12h ✓ (1.0), 36h ✓ (1.0), 72h ✗ (0.5 NHP vs ~0 model)
+# Parenteral t_crit label — bottom area, right of the dotted line
+axA.annotate(
+    r"$t^{(p)}_{\mathrm{crit}} \approx 34.5$ h",
+    xy=(TCRIT_P, 5),                                      # arrow tip at η=0.05 line
+    xytext=(TCRIT_P + 12, 22),                            # text below curves, right
+    fontsize=10.5, color=COL_P, weight='bold',
+    arrowprops=dict(arrowstyle='-', color=COL_P, lw=0.7, alpha=0.6),
+    ha='left', va='center',
+    bbox=dict(facecolor='white', edgecolor=COL_P, boxstyle='round,pad=0.3', alpha=0.95),
+)
+
+# Mucosal t_crit label — bottom area, right of mucosal dotted line, above parenteral label
+axA.annotate(
+    r"$t^{(m)}_{\mathrm{crit}} \approx 60.5$ h",
+    xy=(TCRIT_M, 5),
+    xytext=(TCRIT_M + 12, 36),
+    fontsize=10.5, color=COL_M, weight='bold',
+    arrowprops=dict(arrowstyle='-', color=COL_M, lw=0.7, alpha=0.6),
+    ha='left', va='center',
+    bbox=dict(facecolor='white', edgecolor=COL_M, boxstyle='round,pad=0.3', alpha=0.95),
+)
+
+# NHP overlay — colored markers; concordant (up-triangle) vs non-concordant (down-triangle).
+# Otten 2000 mucosal: 12h, 36h concordant; 72h non-concordant (model crashes to ~0)
+# Tsai 1998 parenteral: 24h, 48h non-concordant (model under-predicts)
 nhp_muc = [(12, 1.00, 'concordant'), (36, 1.00, 'concordant'), (72, 0.50, 'discordant')]
-# Tsai 1998 parenteral: 24h ✗ (1.0 NHP vs 0.5 model), 48h ✗ (0.5 NHP vs 0 model)
 nhp_par = [(24, 1.00, 'discordant'), (48, 0.50, 'discordant')]
 
 for delay, prot, concord in nhp_muc:
     marker = '^' if concord == 'concordant' else 'v'
-    fill = 'full' if prot >= 0.99 else ('left' if prot >= 0.4 else 'none')
-    axA.plot(delay, prot*100, marker=marker, color=COL_M, markerfacecolor=COL_M if fill=='full' else 'white',
-             markersize=10, markeredgewidth=1.6, markeredgecolor=COL_M, alpha=0.9)
+    face = COL_M if prot >= 0.99 else ('lightblue' if prot >= 0.4 else 'white')
+    axA.plot(delay, prot*100, marker=marker, color=COL_M, markerfacecolor=face,
+             markersize=11, markeredgewidth=1.8, markeredgecolor=COL_M, alpha=0.95, zorder=10)
 for delay, prot, concord in nhp_par:
     marker = '^' if concord == 'concordant' else 'v'
-    axA.plot(delay, prot*100, marker=marker, color=COL_P, markerfacecolor='white',
-             markersize=10, markeredgewidth=1.6, markeredgecolor=COL_P, alpha=0.9)
+    face = COL_P if prot >= 0.99 else ('mistyrose' if prot >= 0.4 else 'white')
+    axA.plot(delay, prot*100, marker=marker, color=COL_P, markerfacecolor=face,
+             markersize=11, markeredgewidth=1.8, markeredgecolor=COL_P, alpha=0.95, zorder=10)
 
-# U=U scope annotation (text box; band placement in caption)
-axA.text(0.99, 0.62,
-         'U=U (source VL <200 c/mL):\nframework not applicable\n(Methods, Rodger 2019; Bavinton 2018)',
+# --- F1.3 fix: U=U scope annotation in lower-right (empty space; was upper-right).
+axA.text(0.99, 0.32,
+         'U=U scope condition\n'
+         'Framework requires source VL ≥200 c/mL\n'
+         '(transmission-competent; Rodger 2019,\nBavinton 2018)',
          transform=axA.transAxes, ha='right', va='top',
-         fontsize=8.0, color='#555',
+         fontsize=8.0, color='#444',
          bbox=dict(facecolor='#f5f5f5', edgecolor='#bbb', boxstyle='round,pad=0.4'))
 
 axA.set_xlim(0, 200)
@@ -157,7 +175,31 @@ axA.set_xlabel('Hours from exposure to PEP initiation', fontsize=11)
 axA.set_ylabel(r'Expected PEP efficacy $E_\mathrm{PEP}(t)$ (%)', fontsize=11)
 axA.set_title('A. Route comparison: emergent $t_\\mathrm{crit}$ from multiscale dynamics',
               fontsize=12, weight='bold', loc='left', pad=8)
+from matplotlib.lines import Line2D
 leg = axA.legend(fontsize=9.5, framealpha=0.95, edgecolor='#bbb', loc='upper right')
+
+# --- F1.2 fix: NHP legend shows actual marker semantics (shape = concordance,
+#     color = route, fill = NHP protection level). Mirrors what's plotted.
+nhp_legend_handles = [
+    Line2D([0], [0], marker='^', color=COL_M, markerfacecolor=COL_M,
+           markersize=9, linestyle='None', markeredgewidth=1.6,
+           label='Mucosal, model concordant (NHP=100%)'),
+    Line2D([0], [0], marker='v', color=COL_M, markerfacecolor='lightblue',
+           markersize=9, linestyle='None', markeredgewidth=1.6,
+           label='Mucosal, not concordant (NHP=50%)'),
+    Line2D([0], [0], marker='v', color=COL_P, markerfacecolor='white',
+           markersize=9, linestyle='None', markeredgewidth=1.6,
+           label='Parenteral, not concordant (NHP=100%)'),
+    Line2D([0], [0], marker='v', color=COL_P, markerfacecolor='mistyrose',
+           markersize=9, linestyle='None', markeredgewidth=1.6,
+           label='Parenteral, not concordant (NHP=50%)'),
+]
+
+axA.add_artist(leg)
+nhp_leg = axA.legend(handles=nhp_legend_handles, loc='upper center',
+           bbox_to_anchor=(0.5, -0.13), ncol=2,
+           fontsize=8, framealpha=0.95, title='NHP empirical (▲ concordant,  ▼ not concordant)',
+           title_fontsize=8.5)
 axA.grid(True, alpha=0.25, linewidth=0.5)
 
 # Compression ratio annotation
