@@ -1,0 +1,18 @@
+Numerical claims verification
+Run: 2026-05-06 04:00:56
+Repository: /Users/acdstudpro/PycharmProjects/Prevention-Theorem
+Companion: /Users/acdstudpro/PycharmProjects/hiv-prevention-master
+v2-submission SHA: dfff300
+disclosure-2026-04-30 SHA: d047d2d (multiscale outputs reproduce byte-identical)
+
+Results:
+  Total claims: 24
+  Match: 22
+  Flagged for AC: 2
+  High-priority 5: PASS
+
+Flagged claims:
+  ✗ F_access_at_t_crit_par_alt: CSV value 0.121 reproduces ONLY at t_crit=32h. At canonical t_crit=34.5h (CV=0.3) value should be 0.144.
+  ✗ bound_envelope_par_jid_consistent: CSV value 15.9% reproduces ONLY at t_crit=32h. At canonical t_crit=34.5h value is 18.0%. INCONSISTENCY in main_v2.tex Table 3.
+
+Elapsed: 0.0s
