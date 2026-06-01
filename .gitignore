@@ -210,6 +210,3 @@ __marimo__/
 # Simulation output and archive directories
 archive/
 outputs/
-
-# Corner-2 run outputs (results held locally; not committed)
-results/corner2_prepwise_*/
