@@ -56,9 +56,9 @@ cf24       = pd.read_csv(RESULTS_DIR / 'city_pep_efficacy_24h_counterfactual.csv
 # Merge for plotting
 df = efficacy.copy()
 df = df.merge(delay_cost[['city','pep_24h_counterfactual_pct',
-                           'efficacy_loss_due_to_delay_pp']],
+                           'efficacy_lost_to_structural_delay_pp']],
               on='city', how='left')
-df['efficacy_lost_to_structural_delay_pp'] = df['efficacy_loss_due_to_delay_pp']
+df['efficacy_lost_to_structural_delay_pp'] = df['efficacy_lost_to_structural_delay_pp']
 
 # Clean region for color coding
 df['region_clean'] = df['region'].replace({
