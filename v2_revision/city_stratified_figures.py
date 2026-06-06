@@ -94,7 +94,7 @@ fig.patch.set_facecolor('#FAFAFA')
 # XF.1 (revised): single-line bold suptitle; no branding/subtitle.
 fig.suptitle(
     'City-Stratified PEP Efficacy Across 34 US Metropolitan Areas',
-    fontsize=14, fontweight='bold', y=0.985
+    fontsize=14, fontweight='bold', y=0.97
 )
 
 # ── Panel A: Ranked city PEP efficacy at city-specific structural delay ──
@@ -266,7 +266,7 @@ bars2 = ax.bar(x + width/2, df_gain['pep_24h_counterfactual_pct'],
                color='#BDC3C7', alpha=0.7, edgecolor='white')
 
 ax.set_xticks(x)
-ax.set_xticklabels(df_gain['city'], rotation=75, ha='right', fontsize=6.5)
+ax.set_xticklabels(df_gain['city'], rotation=45, ha='right', fontsize=6.5)
 ax.set_ylabel('PEP Efficacy (%)', fontsize=10)
 ax.set_title('D. Actual vs. Counterfactual (24h) PEP Efficacy\nBy City',
              fontsize=11, fontweight='bold', pad=8)
@@ -276,8 +276,7 @@ ax.axhline(y=90, color='#E74C3C', linestyle='--', linewidth=0.8, alpha=0.5)
 ax.grid(axis='y', alpha=0.3, linewidth=0.5)
 
 # ── Final layout ──────────────────────────────────────────────────────────
-plt.tight_layout(pad=4.0)
-fig.subplots_adjust(top=0.88, hspace=0.3, wspace=0.25)
+fig.subplots_adjust(top=0.93, bottom=0.12, left=0.07, right=0.96, hspace=0.42, wspace=0.30)
 # XF.2: dual save — PDF (vector primary) + PNG (preview)
 fig.savefig(RESULTS_DIR / 'Fig_CityStratified_PEP.pdf',
             bbox_inches='tight', facecolor='#FAFAFA')
@@ -387,10 +386,9 @@ ax.grid(axis='x', alpha=0.3)
 # XF.1 (revised): single-line bold suptitle; no branding/subtitle.
 fig2.suptitle(
     'Selected City Comparison: Structural Determinants of PEP Window Access',
-    fontsize=13, fontweight='bold', y=0.985
+    fontsize=13, fontweight='bold', y=0.97
 )
-plt.tight_layout(pad=4.0)
-fig2.subplots_adjust(top=0.85, wspace=0.3)
+fig2.subplots_adjust(top=0.88, bottom=0.20, left=0.07, right=0.97, wspace=0.32)
 # XF.2: dual save — PDF (vector primary) + PNG (preview)
 fig2.savefig(RESULTS_DIR / 'Fig_CityComparison_Focus.pdf',
              bbox_inches='tight', facecolor='#FAFAFA')

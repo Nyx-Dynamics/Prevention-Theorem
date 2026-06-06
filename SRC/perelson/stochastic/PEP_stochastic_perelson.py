@@ -285,7 +285,7 @@ def plot_stochastic_analysis(save_path: str = None):
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
     # XF.1 (revised): single-line bold suptitle only; no branding/subtitle.
     fig.suptitle('PEP Efficacy Under Source Viral Load Uncertainty',
-                 fontsize=14, fontweight='bold', y=0.99)
+                 fontsize=14, fontweight='bold', y=0.98)
 
     distributions = ['pwid_untreated', 'pwid_mixed_treatment',
                      'general_community', 'acute_infection_enriched']
@@ -448,7 +448,7 @@ def plot_stochastic_analysis(save_path: str = None):
             transform=ax.transAxes, fontsize=9, ha='center', style='italic',
             bbox=dict(boxstyle='round', facecolor='lightyellow', alpha=0.8))
 
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
 
     if save_path:
         # XF.2: dual save — PDF (vector primary) + PNG (preview)

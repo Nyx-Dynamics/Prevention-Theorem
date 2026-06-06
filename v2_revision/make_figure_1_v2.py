@@ -92,7 +92,7 @@ print(f"Verified t_crit: mucosal={TCRIT_M}h, parenteral={TCRIT_P}h, ratio={TCRIT
 # ============================================================
 # Figure
 # ============================================================
-fig = plt.figure(figsize=(13, 5.5), facecolor='white')
+fig = plt.figure(figsize=(13, 6.5), facecolor='white')
 gs = fig.add_gridspec(1, 2, width_ratios=[1.4, 1.0], wspace=0.25)
 axA = fig.add_subplot(gs[0, 0])
 axB = fig.add_subplot(gs[0, 1])
@@ -265,7 +265,7 @@ axB.text(5.0, 0.7, r'$\Rightarrow t_\mathrm{crit}^{(p)} \leq t_\mathrm{crit}^{(m
 axB.set_title('B. Three-state within-host model & route-dependent inoculum',
               fontsize=12, weight='bold', loc='left', pad=8)
 
-plt.tight_layout()
+plt.tight_layout(rect=[0, 0.10, 1, 1.0])
 out = os.path.join(OUT_DIR, 'Figure_1_Route_Dependent_PEP_Efficacy_Decay.png')
 plt.savefig(out, dpi=300, bbox_inches='tight', facecolor='white')
 out_pdf = os.path.join(OUT_DIR, 'Figure_1_Route_Dependent_PEP_Efficacy_Decay.pdf')

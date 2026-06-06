@@ -1,0 +1,40 @@
+# reproduce_all_v4.py — run provenance
+# Prevention-Theorem repository (Corner 2, PEP window paper)
+
+Run timestamp UTC:   2026-06-05T14:30:00.094985+00:00
+Run timestamp local: 2026-06-05T10:30:00.095109
+Host:                Mac
+Working dir:         /Users/acdmbpmax/PycharmProjects/Prevention-Theorem
+Python version:      3.12.12
+Platform:            macOS-26.2-arm64-arm-64bit
+
+Git HEAD:            e8b5744c1ad6f5fae93a7a1abda6bbe4911db234
+Git describe:        v2-submission-2026-05-05-6-ge8b5744
+Git status:          DIRTY (uncommitted changes present)
+Uncommitted files (first 20):
+  M SRC/perelson/stochastic/PEP_stochastic_perelson.py
+  A  finite_windows_supplement_plos_comp_bio.tex
+  A  finitie_windows_main_plos_comp_bio.tex
+  RD v3_revision/numerical_claims_v3.csv -> numerical_claims_v3.csv
+  AD numerical_claims_v4.csv
+  A  reproduce_all_v4.py
+   D results/city_analysis/Fig_CityComparison_Focus.png
+   D results/city_analysis/Fig_CityStratified_PEP.png
+   M results/city_analysis/city_analysis_manuscript_text.txt
+   M v2_revision/city_stratified_figures.py
+   M v2_revision/make_figure_1_v2.py
+  A  v3_revision/r3_pk_pd/envelope_corridor_figure.py
+  A  v3_revision/r3_pk_pd/generate_S2_tables.py
+  M  v3_revision/r3_pk_pd/pharmacy_sensitivity.py
+  ?? .DS_Store
+  ?? .output.txt
+  ?? data_output/
+  ?? finite_windows_supplement_plos_comp_bio.tex.bak
+  ?? pep_efficacy_curve.png
+  ?? pep_stochastic_results/
+
+Library versions:
+  numpy: 1.26.4
+  scipy: 1.16.3
+  pandas: 2.3.3
+  matplotlib: 3.10.7

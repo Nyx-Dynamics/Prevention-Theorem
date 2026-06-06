@@ -1,244 +1,328 @@
 """
-R3 Sensitivity Analysis: Pharmacy-Access Delay Layer
-====================================================
+pharmacy_sensitivity.py — v4 envelope-corridor framing for pharmacy access
 
-Quantifies the impact of a pharmacy-access delay (Δt_pharmacy) layered
-on top of the existing city-level structural delay in the v2 manuscript.
+This replaces the v3 scalar "envelope bound" calculation
+   bound = F_access(t_crit) * eps_max + (1 - F_access(t_crit)) * eps_min
+which mixed a population-level access distribution with per-patient PK
+efficacy and used a phantom eps_min = 0.05 floor inconsistent with the
+gating-event causal chain.
 
-Background
-----------
-The v2 structural delay formula (β₁·LateDx + β₂·LinkageGap + SDOH)
-captures system-level friction up to clinical decision-making but
-treats "PEP prescribed" and "first dose taken" as effectively
-coincident, which they are often not. The CDC 2025 nPEP MMWR
-explicitly documents pharmacy dispensing practices as a barrier;
-White et al. PLoS ONE 2025 found that pharmacy access materially
-affects PEP prescription fulfillment. National survey data show
-only 65.3% of EDs offer both HIV testing and PEP after sexual
-assault (Mayer 2020); only 25% of ED prescribers had prescribed
-nPEP in the past year (Lopez Castillo 2020).
+Under v4, pharmacy access is modeled as an UPSTREAM GATING EVENT:
+patients who do not acquire medication before t_crit never receive drug,
+PK is irrelevant, and E_PEP = 0 by construction.  The "envelope" is a 2D
+corridor in (t_acq, E_PEP) space, bounded above by perfect-adherence PK
+and below by low-adherence PK.  The corridor is a fixed property of viral
+kinetics + drug PK; pharmacy delays slide cities rightward along it.
 
-This sensitivity analysis applies a uniform Δt_pharmacy ∈ {0, 2, 4,
-6, 8, 10, 12} hours to all 34 cities and re-evaluates expected PEP
-efficacy under the R3 kinetically-aware framework.
+Reuses the canonical multiscale loading and ECDF construction from
+test_regression.py byte-identical (same realizations CSV, same P_seed and
+P_int curves) so numerical results match the canonical PK pipeline.
 
-Per-city base structural delay reconstruction
----------------------------------------------
-Reconstructed from late_dx_pct and retention via:
+Outputs (in v3_revision/results/pharmacy_sensitivity_corrected/):
+    envelope_corridor.csv             — t_acq grid x (upper, lower) curves
+    city_envelope_positions.csv       — long format, one row per (city, dt_pharm)
+    pharmacy_sensitivity_results.csv  — legacy schema, perfect-adherence only
+    pharmacy_displacement_summary.csv — N cities past t_crit at each dt_pharm
 
-    Δt_struct ≈ baseline + 1.2 * max(0, LateDx_pct - 17) +
-                0.3 * max(0, 90 - retention*100) + SDOH
+A note on Hartford's structural delay
+-------------------------------------
+This script reads each city's structural_delay_h directly from
+city_pep_efficacy_results.csv (Hartford = 24.4h, matching the manuscript
+prose).  The prior pharmacy_sensitivity.py used an internal reconstruction
+that produced Hartford = 27.2h, inconsistent with the city CSV and the
+manuscript.  Under the corrected (24.4h) value, Hartford crosses t_crit_R3
+at dt_pharm ~10h rather than the prior reported ~8h.  This brings the
+displacement story into alignment with the canonical structural delay
+table used elsewhere in the paper.
 
-with baseline = 2h and SDOH calibrated to roughly recover the
-manuscript's reported Hartford delay of 24.4h. The reconstruction is
-approximate; absolute values may shift by a few hours relative to the
-exact manuscript figures, but the sensitivity to Δt_pharmacy is what
-the analysis is about and is invariant to that calibration.
-
-References
-----------
-- Tanner MR et al. CDC nPEP recommendations 2025. MMWR 74(1):1-56.
-- White DAE et al. PLoS ONE 2025;20(3):e0320690.
-- Lopez Castillo H et al. PubMed PMID 33069548.
-- Qato DM et al. Availability of pharmacies in the United States
-  2007-2015. Med Care Res Rev.
-
-Author: A.C. Demidont, DO, AAHIVS (Nyx Dynamics LLC)
+Author: A. C. Demidont, DO, AAHIVS (Nyx Dynamics LLC)
 """
 
+from __future__ import annotations
+
 from pathlib import Path
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 
 from effective_epsilon import (
-    compute_E_PEP_r3_curve, T_CRIT_PARENTERAL_H,
-    DEFAULT_STAGE_CLEARABILITY,
-)
-from test_regression import (
-    load_realizations, compute_seed_int_curves, find_t_crit,
-    envelope_bound, v2_E_PEP,
+    compute_E_PEP_r3_curve,
+    T_CRIT_PARENTERAL_H,
+    DEFAULT_STAGE_CLEARABILITY,  # noqa: F401  (imported for parity with test_regression.py)
 )
 
 
+# ---------------------------------------------------------------------------
+# Paths (mirror test_regression.py)
+# ---------------------------------------------------------------------------
 REPO_ROOT = Path(__file__).resolve().parents[2]
-CITIES_CSV = REPO_ROOT / 'v3_revision' / 'data' / 'Table_34_cities_full.csv'
+REALIZATIONS_CSV = (
+    REPO_ROOT / 'SRC' / 'multiscale_model' / 'results_v3' /
+    'heterogeneity_realizations.csv'
+)
+SUMMARY_CSV = (
+    REPO_ROOT / 'SRC' / 'multiscale_model' / 'results_v3' /
+    'heterogeneity_summary.csv'
+)
+
+# Candidate locations for the city panel CSV.  First match wins.
+CITY_CSV_CANDIDATES = [
+    REPO_ROOT / 'results' / 'city_analysis' / 'city_pep_efficacy_results.csv',
+    REPO_ROOT / 'city_pep_efficacy_results.csv',
+    REPO_ROOT / 'v3_revision' / 'results' / 'city_pep_efficacy_results.csv',
+]
+
+OUT_DIR = REPO_ROOT / 'v3_revision' / 'results' / 'pharmacy_sensitivity_corrected'
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def reconstruct_structural_delay(
-    late_dx_pct: float,
-    retention: float,
-) -> float:
-    """Per-city structural delay reconstruction (calibrated).
+# ---------------------------------------------------------------------------
+# Canonical constants (parenteral baseline)
+# ---------------------------------------------------------------------------
+ROUTE = 'parenteral'
+V0_PARENTERAL = 1000
+CV_PARENTERAL = 0.3
+T_CRIT_BIOLOGICAL = T_CRIT_PARENTERAL_H  # 34.5 h
 
-    Linear fit anchored to:
-      - Milwaukee (late_dx 14.6%, retention 0.9332): 1.9 h
-      - Hartford  (late_dx 37.2%, retention 0.7524): 24.4 h
+# Adherence levels defining the corridor.  Upper = perfect; lower = bottom
+# of the realistic range AC swept in test_regression.py.
+ADHERENCE_UPPER = 1.0
+ADHERENCE_LOWER = 0.30
 
-    Late-diagnosis percentage is the dominant predictor per v2 supplement
-    (Hartford decomposition: Late Dx 21h, Linkage Gap 3h, SDOH 3h).
-    A small linkage-gap term refines the fit for cities with very low
-    retention but high(ish) late_dx.
+# t_acq grid: 0 to slightly past biological t_crit (matches test_regression.py).
+T_ACQ_GRID = np.arange(0.0, T_CRIT_BIOLOGICAL + 5.0, 0.5)
 
-        delay_h ≈ max(0, 1.0 * (late_dx_pct - 13) +
-                       0.2 * max(0, 90 - retention*100))
+# Pharmacy delay sweep (preserved from v3 for continuity).
+PHARMACY_DELAYS_H = [0, 2, 4, 6, 8, 10, 12]
 
-    Hartford check:  1.0 * 24.2 + 0.2 * 14.76 = 24.2 + 2.95 = 27.2h
-    Milwaukee check: 1.0 * 1.6  + 0.2 * 0     = 1.6h
-    (close to reported 24.4h and 1.9h within calibration tolerance)
+# E_PEP threshold defining the "off corridor" line.  Matches test_regression
+# convention (find_t_crit at eta=0.05).
+ETA = 0.05
+
+
+# ---------------------------------------------------------------------------
+# Multiscale loaders — verbatim from test_regression.py
+# ---------------------------------------------------------------------------
+def load_realizations(V0: int, cv: float) -> pd.DataFrame:
+    df = pd.read_csv(REALIZATIONS_CSV)
+    sub = df[(df['V0'] == V0) & (df['cv'] == cv)]
+    return sub.reset_index(drop=True)
+
+
+def compute_seed_int_curves(
+    df: pd.DataFrame, t_grid_h: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Empirical CDFs conditional on integration (v2 convention).
+    Spontaneous extinction is handled separately upstream.
     """
-    late_dx_contrib = max(0.0, 1.0 * (late_dx_pct - 13.0))
-    linkage_gap = max(0.0, 90.0 - retention * 100.0)
-    linkage_contrib = 0.2 * linkage_gap
-    return late_dx_contrib + linkage_contrib
+    sub = df[df['extincted'] == False].copy()  # noqa: E712  (pandas idiom)
+    denom = len(sub)
+    T_seed = sub['handoff_time_hours'].values
+    T_int = sub['T_int_hours'].values
+    P_seed = np.array([
+        float(np.sum((T_seed <= t) & ~np.isnan(T_seed))) / denom
+        for t in t_grid_h
+    ])
+    P_int = np.array([
+        float(np.sum((T_int <= t) & ~np.isnan(T_int))) / denom
+        for t in t_grid_h
+    ])
+    return P_seed, P_int
 
 
-def calibrate_to_hartford(
-    cities_df: pd.DataFrame,
-    hartford_reported_h: float = 24.4,
-) -> float:
-    """No-op kept for API compatibility; calibration is now in the formula."""
-    return 0.0
+def find_t_crit(t_grid_h: np.ndarray, E_PEP: np.ndarray,
+                eta: float = ETA) -> float:
+    below = np.where(E_PEP < eta)[0]
+    if len(below) == 0:
+        return float('inf')
+    return float(t_grid_h[below[0]])
 
 
-def run_sensitivity():
-    cities = pd.read_csv(CITIES_CSV)
-    cities['state'] = cities['state'].str.replace('\n', ' ', regex=False)
-
-    cities['delta_t_struct_h'] = cities.apply(
-        lambda r: reconstruct_structural_delay(
-            r['late_dx_pct'], r['retention']
-        ), axis=1
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+def find_city_csv() -> Path:
+    for p in CITY_CSV_CANDIDATES:
+        if p.exists():
+            return p
+    raise FileNotFoundError(
+        "Could not locate city_pep_efficacy_results.csv.  Searched: "
+        + ", ".join(str(p) for p in CITY_CSV_CANDIDATES)
     )
 
-    print(f"Per-city structural delay reconstruction "
-          f"(calibrated to Milwaukee 1.9h / Hartford 24.4h):")
-    print(f"  Range: {cities['delta_t_struct_h'].min():.1f}h to "
-          f"{cities['delta_t_struct_h'].max():.1f}h")
-    print(f"  Median: {cities['delta_t_struct_h'].median():.1f}h")
 
-    # Load parenteral V0=10^3 CV=0.3 realizations
-    df_par = load_realizations(V0=1000, cv=0.3)
-    t_pep_grid = np.arange(0.0, 60.0, 0.25)
-    P_seed, P_int = compute_seed_int_curves(df_par, t_pep_grid)
+def interp_at(t_query: float, t_grid: np.ndarray, curve: np.ndarray) -> float:
+    """Linear interpolation of a curve at an arbitrary t."""
+    if t_query <= t_grid[0]:
+        return float(curve[0])
+    if t_query >= t_grid[-1]:
+        return float(curve[-1])
+    return float(np.interp(t_query, t_grid, curve))
 
-    # Pre-compute R3 E_PEP curve at perfect adherence (route = parenteral,
-    # which is the route where pharmacy delay matters most acutely)
-    r3_curve = compute_E_PEP_r3_curve(
-        t_pep_grid, P_seed, P_int, T_CRIT_PARENTERAL_H,
-        adherence=1.0, n_replicates=1,
+
+# ---------------------------------------------------------------------------
+# Core: build corridor + city positions
+# ---------------------------------------------------------------------------
+def main():
+    print("=" * 80)
+    print("S14 PHARMACY ACCESS — v4 envelope-corridor framing")
+    print(f"Route: {ROUTE} (V0={V0_PARENTERAL}, CV={CV_PARENTERAL})")
+    print("=" * 80)
+
+    # ---- Multiscale realizations (same data path as test_regression.py)
+    df_par = load_realizations(V0_PARENTERAL, CV_PARENTERAL)
+    print(f"\nLoaded {len(df_par)} realizations from {REALIZATIONS_CSV.name}")
+
+    P_seed, P_int = compute_seed_int_curves(df_par, T_ACQ_GRID)
+
+    # ---- Compute upper and lower corridor curves
+    print(f"\nComputing envelope corridor:")
+    print(f"  upper curve at rho={ADHERENCE_UPPER}")
+    upper = compute_E_PEP_r3_curve(
+        T_ACQ_GRID, P_seed, P_int, T_CRIT_BIOLOGICAL,
+        adherence=ADHERENCE_UPPER, n_replicates=20,
     )
-    v2_curve = v2_E_PEP(P_seed, P_int)
+    print(f"  lower curve at rho={ADHERENCE_LOWER}")
+    lower = compute_E_PEP_r3_curve(
+        T_ACQ_GRID, P_seed, P_int, T_CRIT_BIOLOGICAL,
+        adherence=ADHERENCE_LOWER, n_replicates=20,
+    )
 
-    def E_at(t_h, curve):
-        idx = int(np.argmin(np.abs(t_pep_grid - t_h)))
-        return float(curve[idx])
+    t_crit_upper = find_t_crit(T_ACQ_GRID, upper['E_PEP'])
+    t_crit_lower = find_t_crit(T_ACQ_GRID, lower['E_PEP'])
+    print(f"\nAdherence-dependent t_crit (where E_PEP first drops below eta={ETA}):")
+    print(f"  t_crit at rho={ADHERENCE_UPPER}: {t_crit_upper:.1f} h")
+    print(f"  t_crit at rho={ADHERENCE_LOWER}: {t_crit_lower:.1f} h")
 
-    # Sensitivity grid
-    delta_pharmacy_grid = [0, 2, 4, 6, 8, 10, 12]
+    # ---- Save corridor
+    corridor_df = pd.DataFrame({
+        't_acq_h': T_ACQ_GRID,
+        'E_PEP_upper': upper['E_PEP'],
+        'E_PEP_lower': lower['E_PEP'],
+        'envelope_width': upper['E_PEP'] - lower['E_PEP'],
+        'eps_drug_upper': upper['eps_drug'],
+        'eps_drug_lower': lower['eps_drug'],
+        'biology_term': upper['biology_term'],  # same for both adherence values
+        'P_seed': P_seed,
+        'P_int': P_int,
+        'past_tcrit_upper': T_ACQ_GRID >= t_crit_upper,
+        'past_tcrit_lower': T_ACQ_GRID >= t_crit_lower,
+    })
+    corridor_df.to_csv(OUT_DIR / 'envelope_corridor.csv', index=False)
+    print(f"\nSaved {OUT_DIR / 'envelope_corridor.csv'}  ({len(corridor_df)} rows)")
 
-    print(f"\n{'='*84}")
-    print(f"R3 Sensitivity: Pharmacy Access Layer (parenteral exposure, perfect adherence)")
-    print('='*84)
-    print(f"t_crit_route = {T_CRIT_PARENTERAL_H}h | analysis: 34-city panel + Hartford spotlight")
+    # ---- Load city panel
+    city_csv = find_city_csv()
+    cities_df = pd.read_csv(city_csv)
+    print(f"\nLoaded city panel from {city_csv} ({len(cities_df)} cities)")
 
-    # Header
-    print(f"\n{'City':<13} {'Δt_struct':>10}" +
-          ''.join([f"  Δt+{p}h" for p in delta_pharmacy_grid]))
-    print('-' * 84)
-
-    # Cities ranked by structural delay
-    cities_sorted = cities.sort_values('delta_t_struct_h')
-    summary_table = []
-    for _, r in cities_sorted.iterrows():
-        row_strs = [f"{r['city']:<13} {r['delta_t_struct_h']:>9.1f}h"]
-        for dp in delta_pharmacy_grid:
-            total_delay = r['delta_t_struct_h'] + dp
-            if total_delay > t_pep_grid[-1]:
-                e_pep = 0.0
-            else:
-                e_pep = E_at(total_delay, r3_curve['E_PEP'])
-            row_strs.append(f" {e_pep:>5.2f}")
-            summary_table.append({
-                'city': r['city'],
-                'state': r['state'],
-                'late_dx_pct': r['late_dx_pct'],
-                'retention': r['retention'],
-                'delta_t_struct_h': r['delta_t_struct_h'],
-                'delta_t_pharmacy_h': dp,
-                'delta_t_total_h': total_delay,
-                'E_PEP_R3': e_pep,
-                'past_t_crit': total_delay > T_CRIT_PARENTERAL_H,
-            })
-        print(' '.join(row_strs))
-
-    # Cross-over summary
-    print(f"\n{'='*84}")
-    print("Cities with structural+pharmacy delay exceeding parenteral t_crit "
-          f"= {T_CRIT_PARENTERAL_H}h")
-    print('='*84)
-    print(f"\n  {'Δt_pharm':>9}  {'Past t_crit':>12}  {'Cities past t_crit':>20}")
-    print('-' * 60)
-    summary_df = pd.DataFrame(summary_table)
-    for dp in delta_pharmacy_grid:
-        sub = summary_df[summary_df['delta_t_pharmacy_h'] == dp]
-        n_past = int(sub['past_t_crit'].sum())
-        cities_past = sub[sub['past_t_crit']]['city'].tolist()
-        print(f"  {dp:>9} {n_past:>13d}/{len(sub):d}  "
-              f"  {', '.join(cities_past) if cities_past else '—'}")
-
-    # High-vulnerability cities highlighted in v2 Fig S1
-    print(f"\n{'='*84}")
-    print("High-vulnerability subset (v2 Figure S1)")
-    print('='*84)
-    spotlight = ['Hartford', 'SanJuan', 'Jackson', 'Phoenix', 'Denver', 'Milwaukee']
-    print(f"\n  {'City':<10}" + ''.join([f"  Δt+{p:>2}h" for p in delta_pharmacy_grid]))
-    print('-' * 70)
-    for city_name in spotlight:
-        if city_name not in summary_df['city'].values:
-            continue
-        row = [f"  {city_name:<10}"]
-        for dp in delta_pharmacy_grid:
-            r_row = summary_df[(summary_df['city'] == city_name) &
-                               (summary_df['delta_t_pharmacy_h'] == dp)].iloc[0]
-            past = '*' if r_row['past_t_crit'] else ' '
-            row.append(f"  {r_row['E_PEP_R3']:>4.2f}{past}")
-        print(' '.join(row))
-    print("\n  * = total delay exceeds parenteral t_crit (34.5 h); "
-          "E_PEP ≈ 0 in that regime")
-
-    # Envelope bound under each Δt_pharmacy scenario
-    print(f"\n{'='*84}")
-    print("Envelope bound (Eq. 4) under pharmacy-access shift")
-    print('='*84)
-    print("  Interpretation: shifting the access-delay distribution to longer")
-    print("                  delays REDUCES F_access(t_crit). Both the envelope")
-    print("                  bound and the mean point-estimate E_PEP tighten")
-    print("                  (decrease) — the additional pharmacy barrier")
-    print("                  monotonically lowers achievable prevention.")
-    print(f"\n  {'Δt_pharm':>9}  {'F_access@t_crit':>15}  {'Bound':>7}  "
-          f"{'mean E_PEP across 34 cities':>30}")
-    print('-' * 80)
-    eps_max_at_zero = float(r3_curve['eps_drug'][0])
-    for dp in delta_pharmacy_grid:
-        # F_access shifts ONLY if the access-delay distribution itself
-        # shifts; here we model that explicitly by shifting the median:
-        F_median_shifted = 96.0 + dp        # shifts entire F_access distribution
-        F_v, bnd = envelope_bound(
-            T_CRIT_PARENTERAL_H, eps_max_at_zero,
-            F_median_h=F_median_shifted,
+    if 'structural_delay_h' not in cities_df.columns:
+        raise ValueError(
+            f"city CSV at {city_csv} must contain a 'structural_delay_h' column. "
+            f"Got columns: {list(cities_df.columns)}"
         )
-        sub = summary_df[summary_df['delta_t_pharmacy_h'] == dp]
-        mean_E_PEP = float(sub['E_PEP_R3'].mean())
-        print(f"  {dp:>9}  {F_v:>15.4f}  {bnd:>7.4f}  "
-              f"{mean_E_PEP:>30.4f}")
 
-    return summary_df
+    # ---- Compute city positions on the corridor
+    city_rows = []
+    legacy_rows = []
+    for _, city in cities_df.iterrows():
+        dt_struct = float(city['structural_delay_h'])
+        for dt_pharm in PHARMACY_DELAYS_H:
+            t_acq = dt_struct + dt_pharm
+            e_up = interp_at(t_acq, T_ACQ_GRID, upper['E_PEP'])
+            e_lo = interp_at(t_acq, T_ACQ_GRID, lower['E_PEP'])
+            past_tcrit = t_acq >= t_crit_upper
+
+            city_rows.append({
+                'city': city['city'],
+                'state': city.get('state', ''),
+                'delta_t_struct_h': dt_struct,
+                'delta_t_pharm_h': dt_pharm,
+                't_acq_h': t_acq,
+                'E_PEP_upper': e_up,
+                'E_PEP_lower': e_lo,
+                'past_tcrit': past_tcrit,
+            })
+
+            # Legacy schema (perfect adherence only) for back-compat
+            retention = (
+                float(city['linkage_to_care_pct']) / 100.0
+                if 'linkage_to_care_pct' in cities_df.columns
+                else float('nan')
+            )
+            legacy_rows.append({
+                'city': city['city'],
+                'state': city.get('state', ''),
+                'late_dx_pct': city.get('late_dx_pct', float('nan')),
+                'retention': retention,
+                'delta_t_struct_h': dt_struct,
+                'delta_t_pharmacy_h': dt_pharm,
+                'delta_t_total_h': t_acq,
+                'E_PEP_R3': e_up,
+                'past_t_crit': past_tcrit,
+            })
+
+    city_positions_df = pd.DataFrame(city_rows)
+    city_positions_df.to_csv(OUT_DIR / 'city_envelope_positions.csv', index=False)
+    print(f"Saved {OUT_DIR / 'city_envelope_positions.csv'}  ({len(city_positions_df)} rows)")
+
+    legacy_df = pd.DataFrame(legacy_rows)
+    legacy_df.to_csv(OUT_DIR / 'pharmacy_sensitivity_results.csv', index=False)
+    print(f"Saved {OUT_DIR / 'pharmacy_sensitivity_results.csv'}  ({len(legacy_df)} rows)")
+
+    # ---- Displacement summary (replaces the misleading scalar bound)
+    summary_rows = []
+    for dt_pharm in PHARMACY_DELAYS_H:
+        subset = city_positions_df[city_positions_df['delta_t_pharm_h'] == dt_pharm]
+        n_past = int(subset['past_tcrit'].sum())
+        n_total = len(subset)
+        displaced_names = sorted(subset.loc[subset['past_tcrit'], 'city'].tolist())
+        summary_rows.append({
+            'delta_t_pharm_h': dt_pharm,
+            'n_cities_displaced_past_tcrit': n_past,
+            'n_cities_total': n_total,
+            'fraction_displaced': n_past / n_total if n_total else 0.0,
+            'median_t_acq_h': float(subset['t_acq_h'].median()),
+            'mean_E_PEP_upper': float(subset['E_PEP_upper'].mean()),
+            'mean_E_PEP_lower': float(subset['E_PEP_lower'].mean()),
+            'displaced_city_names': ', '.join(displaced_names) or '-',
+        })
+
+    summary_df = pd.DataFrame(summary_rows)
+    summary_df.to_csv(OUT_DIR / 'pharmacy_displacement_summary.csv', index=False)
+    print(f"Saved {OUT_DIR / 'pharmacy_displacement_summary.csv'}  ({len(summary_df)} rows)")
+
+    # ---- Console summary
+    print("\n" + "=" * 80)
+    print("PHARMACY DISPLACEMENT SUMMARY  (corridor framing, supersedes v3 scalar)")
+    print("=" * 80)
+    print(summary_df.to_string(index=False))
+
+    print("\nKey points:")
+    print(f"  - The envelope corridor is bounded by E_PEP at rho=1.0 (upper) and")
+    print(f"    rho=0.30 (lower), with adherence-dependent t_crit cliffs at")
+    print(f"    {t_crit_upper:.1f}h and {t_crit_lower:.1f}h.")
+    print(f"  - The corridor is a property of viral kinetics + drug PK and does")
+    print(f"    NOT change when pharmacy delays are added.  Cities slide rightward.")
+    print(f"  - Cities whose t_acq exceeds t_crit are off the corridor (E_PEP = 0).")
+
+    # ---- Hartford-specific evaluation (parallel to test_regression.py)
+    hartford = city_positions_df[city_positions_df['city'].str.contains(
+        'Hartford', case=False, na=False
+    )]
+    if not hartford.empty:
+        print("\nHartford trajectory (city CSV structural_delay_h):")
+        print(f"  Delay base: {hartford['delta_t_struct_h'].iloc[0]:.1f} h")
+        for _, row in hartford.iterrows():
+            marker = '  <-- off corridor' if row['past_tcrit'] else ''
+            print(f"    dt_pharm = {int(row['delta_t_pharm_h']):2d}h  "
+                  f"t_acq = {row['t_acq_h']:5.1f}h  "
+                  f"E_PEP_upper = {row['E_PEP_upper']:.4f}  "
+                  f"E_PEP_lower = {row['E_PEP_lower']:.4f}{marker}")
+        print(f"  (Note: t_crit_upper = {t_crit_upper:.1f}h; Hartford crosses at the "
+              f"first dt_pharm where t_acq >= t_crit_upper.)")
 
 
 if __name__ == '__main__':
-    df = run_sensitivity()
-    out_dir = REPO_ROOT / 'v3_revision' / 'results' / 'pharmacy_sensitivity'
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_csv = out_dir / 'pharmacy_sensitivity_results.csv'
-    df.to_csv(out_csv, index=False)
-    print(f"\nFull results saved: {out_csv}")
+    main()
