@@ -1,0 +1,37 @@
+# reproduce_all_v4.py — run provenance
+# Prevention-Theorem repository (Corner 2, PEP window paper)
+
+Run timestamp UTC:   2026-06-05T10:06:08.748010+00:00
+Run timestamp local: 2026-06-05T06:06:08.748140
+Host:                Mac
+Working dir:         /Users/acdmbpmax/PycharmProjects/Prevention-Theorem
+Python version:      3.9.6
+Platform:            macOS-26.2-arm64-arm-64bit
+
+Git HEAD:            e8b5744c1ad6f5fae93a7a1abda6bbe4911db234
+Git describe:        v2-submission-2026-05-05-6-ge8b5744
+Git status:          DIRTY (uncommitted changes present)
+Uncommitted files (first 20):
+  A  reproduce_all_v4.py
+   D results/city_analysis/Fig_CityComparison_Focus.png
+   D results/city_analysis/Fig_CityStratified_PEP.png
+   M results/city_analysis/city_analysis_manuscript_text.txt
+  A  v3_revision/envelope_corridor_figure.py
+  A  v3_revision/r3_pk_pd/envelope_corridor_figure.py
+  M  v3_revision/r3_pk_pd/pharmacy_sensitivity.py
+  ?? .DS_Store
+  ?? .output.txt
+  ?? data_output/
+  ?? pep_efficacy_curve.png
+  ?? pep_stochastic_results/
+  ?? pep_stochastic_vl_uncertainty.pdf
+  ?? results/city_analysis/Fig_CityComparison_Focus.pdf
+  ?? results/city_analysis/Fig_CityStratified_PEP.pdf
+  ?? v3_revision/results/
+  ?? v3_revision/runs/
+
+Library versions:
+  numpy: 1.26.4
+  scipy: 1.12.0
+  pandas: 2.3.3
+  matplotlib: 3.9.4
