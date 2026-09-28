@@ -107,20 +107,62 @@ def simulate_founder_phase(
     rng: np.random.Generator,
     dt: float = 0.001,        # 1.4 minute timestep (in days)
     max_time_days: float = 5.0,
+    poisson_seed: bool = False,
 ) -> Dict:
     """
     Simulate the stochastic founder phase using tau-leaping.
 
     Tracks individual virions and infected cells until either:
-      (a) extinction (V=0 and I=0 with no eclipse cells in pipeline)
+      (a) extinction (V < 1 and I=0 with no eclipse cells in pipeline)
       (b) handoff to deterministic phase (I >= I_handoff)
       (c) max_time exceeded
 
     Returns trajectory and final state for handoff to Phase 2.
+
+    Parameters
+    ----------
+    V0 : float
+        Founder virion count.  With poisson_seed=False (default) this is
+        an EXACT integer count and the routine is bit-for-bit identical to
+        the original implementation for every V0 >= 1.
+    poisson_seed : bool
+        If True, treat V0 as the EXPECTED founder count and draw the
+        realized count n0 ~ Poisson(V0) for this realization.  Required
+        whenever V0 is derived empirically (e.g. retained blood volume x
+        source titer), where a value below 1 means "on average fewer than
+        one particle transferred", not "a fractional virion".  n0 = 0 is a
+        genuine no-transfer event and returns extinction immediately.
+
+    Notes
+    -----
+    Event counts are bounded by int(V) below, so a non-integer 0 < V < 1
+    can fire no clearance and no infection events and can never satisfy an
+    exact V == 0 extinction test.  Before this was corrected such a value
+    ran the full step budget and exited through the max_time branch flagged
+    extincted=False, i.e. it reported guaranteed establishment for an
+    inoculum that should almost surely go extinct.  The extinction
+    condition is therefore V < 1 (equivalent to V == 0 for integer-valued
+    trajectories, so existing integer-V0 results are unchanged).
     """
     # State: V (free virions), E (eclipse cells, queue of remaining eclipse times),
     #        I (productive infected cells), R (integrated cells)
+    if poisson_seed:
+        V0 = float(rng.poisson(max(float(V0), 0.0)))
     V = float(V0)
+
+    # Sub-single-particle inoculum: no founder particle was transferred.
+    if V < 1.0:
+        zeros = np.array([0.0])
+        return {
+            'extincted': True,
+            'handoff_time': None,
+            'handoff_state': None,
+            'traj_t': np.array([0.0]),
+            'traj_V': np.array([V]),
+            'traj_I': zeros,
+            'traj_E': zeros,
+            'traj_R': zeros,
+        }
     E_queue = deque()   # each element is the time-to-end-eclipse for that cell
     I = 0.0
     R = 0.0
@@ -194,7 +236,7 @@ def simulate_founder_phase(
                 'traj_E': np.array(traj_E),
                 'traj_R': np.array(traj_R),
             }
-        if V == 0 and I == 0 and len(E_queue) == 0:
+        if V < 1.0 and I == 0 and len(E_queue) == 0:
             return {
                 'extincted': True,
                 'handoff_time': None,
@@ -297,11 +339,18 @@ def simulate_one_realization(
     params: WithinHostParameters,
     V0: float,
     rng: np.random.Generator,
+    poisson_seed: bool = False,
 ) -> Dict:
     """Run one full multiscale realization and return T_int (hours) or None
-    if extinction or max-time reached."""
+    if extinction or max-time reached.
 
-    phase1 = simulate_founder_phase(params, V0=V0, rng=rng)
+    poisson_seed=False (default) treats V0 as an exact founder count and
+    reproduces the original results exactly.  Set True when V0 is an
+    empirically derived EXPECTED count (see simulate_founder_phase).
+    """
+
+    phase1 = simulate_founder_phase(params, V0=V0, rng=rng,
+                                    poisson_seed=poisson_seed)
 
     if phase1['extincted']:
         return {

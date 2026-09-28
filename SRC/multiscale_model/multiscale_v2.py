@@ -68,6 +68,7 @@ def simulate_founder_phase(
     rng: np.random.Generator,
     dt: float = 0.005,        # 7 minute timestep
     max_time_days: float = 5.0,
+    poisson_seed: bool = False,
 ) -> Dict:
     """
     Tau-leaping with discrete-delay eclipse buffer.
@@ -80,10 +81,30 @@ def simulate_founder_phase(
 
     Buffer size = tau_eclipse / dt; independent of population size, so
     runtime is O(1) per step regardless of how many cells are in eclipse.
+
+    V0 is an exact founder count by default.  Set poisson_seed=True to treat
+    it as an EXPECTED count and draw n0 ~ Poisson(V0); required when V0 is
+    derived empirically (retained volume x source titer), where V0 < 1 means
+    "on average fewer than one particle transferred".  Event counts are
+    scaled down by int() when they exceed V, so a non-integer 0 < V < 1 can
+    fire no events and can never reach an exact V == 0 extinction test; such
+    a value previously ran to max_time and returned extincted=False.  The
+    extinction condition is therefore V < 1, which is identical to V == 0
+    for integer-valued trajectories.
     """
+    if poisson_seed:
+        V0 = float(rng.poisson(max(float(V0), 0.0)))
     V = float(V0)
     R = 0.0
     I = 0.0  # productive cells (cells that have exited eclipse)
+
+    if V < 1.0:
+        z = np.array([0.0])
+        return {
+            'extincted': True, 'handoff_time': None, 'handoff_state': None,
+            'traj_t': np.array([0.0]), 'traj_V': np.array([V]),
+            'traj_E': z, 'traj_I': z, 'traj_R': z,
+        }
 
     # Eclipse buffer: index 0 = cells that just entered eclipse,
     # index n_buffer-1 = cells about to exit eclipse next timestep
@@ -171,7 +192,7 @@ def simulate_founder_phase(
                 'traj_I': np.array(traj_I),
                 'traj_R': np.array(traj_R),
             }
-        if V == 0 and I == 0 and eclipse_buffer.sum() == 0:
+        if V < 1.0 and I == 0 and eclipse_buffer.sum() == 0:
             return {
                 'extincted': True,
                 'handoff_time': None,
@@ -257,8 +278,10 @@ def simulate_one_realization(
     params: WithinHostParameters,
     V0: float,
     rng: np.random.Generator,
+    poisson_seed: bool = False,
 ) -> Dict:
-    phase1 = simulate_founder_phase(params, V0=V0, rng=rng)
+    phase1 = simulate_founder_phase(params, V0=V0, rng=rng,
+                                    poisson_seed=poisson_seed)
     if phase1['extincted']:
         return {'T_int_hours': None, 'outcome': 'extinct',
                 'phase1': phase1, 'phase2': None}
