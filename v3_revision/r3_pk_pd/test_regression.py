@@ -75,10 +75,34 @@ def find_t_crit(t_grid_h: np.ndarray, E_PEP: np.ndarray,
     return float(t_grid_h[below[0]])
 
 
+def _F_access(t_crit_h: float, F_median_h: float, GSD: float) -> float:
+    """Fraction initiating PEP within t_crit under a log-normal delay."""
+    if t_crit_h == float('inf'):
+        return 1.0
+    z = (log(t_crit_h) - log(F_median_h)) / log(GSD)
+    return 0.5 * (1.0 + erf(z / sqrt(2.0)))
+
+
 def envelope_bound(t_crit_h: float, eps_max_at_zero: float,
                    F_median_h: float = 96.0, GSD: float = 2.0,
                    eta: float = 0.05) -> tuple[float, float]:
-    """Equation 4: Ē_PEP ≤ F_access(t_crit) * eps_max + (1-F_access) * eta.
+    """UPPER-BOUND CONVENTION of Equation 4. Retained for reproduction.
+
+        bound = F_access(t_crit) * eps_max + (1 - F_access) * eta
+
+    This reproduces the previously reported 11.3% at the canonical
+    operating point and is kept unchanged so the manuscript-reproduction
+    pathway is byte-identical.
+
+    Note on the second term.  `eta` is the efficacy threshold that DEFINES
+    t_crit (the level at which E_PEP is declared to have closed the
+    window).  Here it is also serving as the residual efficacy credited to
+    the (1 - F_access) fraction who never acquire drug inside the window.
+    Under the v4 gating-event framing that fraction receives no drug, so
+    its contribution is zero, and this expression is therefore the UPPER
+    end of a range rather than a point estimate.  Use
+    envelope_bound_range() for both ends; see numerical_claims_v4.csv
+    entry `bound_envelope_par_range`.
 
     Under R3, eps_max here is eps_drug(t_PEP=0) — the PEP efficacy
     at t_PEP just after exposure, which is the upper-bound PEP-side
@@ -87,12 +111,56 @@ def envelope_bound(t_crit_h: float, eps_max_at_zero: float,
     """
     if t_crit_h == float('inf'):
         return 1.0, eps_max_at_zero
-    mu = log(F_median_h)
-    sigma = log(GSD)
-    z = (log(t_crit_h) - mu) / sigma
-    F_access = 0.5 * (1.0 + erf(z / sqrt(2.0)))
+    F_access = _F_access(t_crit_h, F_median_h, GSD)
     bound = F_access * eps_max_at_zero + (1.0 - F_access) * eta
     return F_access, bound
+
+
+def envelope_bound_range(t_crit_h: float, eps_max_at_zero: float,
+                         F_median_h: float = 96.0, GSD: float = 2.0,
+                         eta: float = 0.05) -> tuple[float, float, float]:
+    """Distribution-free Equation 4 bound as a RANGE, not a point.
+
+    Returns (F_access, lower, upper):
+
+        lower = F_access(W) * eps_max
+                  no residual protection after the window (v4 gating rule:
+                  no drug acquired before t_crit implies E_PEP = 0)
+
+        upper = F_access(W) * eps_max + (1 - F_access(W)) * eta
+                  residual efficacy credited up to eta for the fraction
+                  that misses the window; equals envelope_bound()
+
+    The true bound lies between these, because someone initiating just
+    past t_crit receives some efficacy — below eta by construction, but
+    above zero.  At the canonical operating point (W = 34.5 h,
+    eps_max = 0.95, F_median = 96 h, GSD = 2.0) this returns
+    6.6% - 11.3%, which is the value reported in the CROI abstract.
+    """
+    if t_crit_h == float('inf'):
+        return 1.0, eps_max_at_zero, eps_max_at_zero
+    F_access = _F_access(t_crit_h, F_median_h, GSD)
+    lower = F_access * eps_max_at_zero
+    upper = lower + (1.0 - F_access) * eta
+    return F_access, lower, upper
+
+
+def envelope_band(windows_h, eps_max_at_zero: float = 0.95,
+                  F_median_h: float = 96.0, GSD: float = 2.0,
+                  eta: float = 0.05) -> pd.DataFrame:
+    """Window-sensitivity band from envelope_bound_range().
+
+    Generates the CROI graphic: one row per assumed PEP window W, with
+    F_access(W) and the lower/upper ends of the distribution-free bound.
+    """
+    rows = []
+    for W in windows_h:
+        F, lo, hi = envelope_bound_range(W, eps_max_at_zero, F_median_h,
+                                         GSD, eta)
+        rows.append({'window_h': W, 'F_access': F,
+                     'ceiling_lower_pct': lo * 100.0,
+                     'ceiling_upper_pct': hi * 100.0})
+    return pd.DataFrame(rows)
 
 
 def v2_E_PEP(P_seed, P_int):

@@ -1,0 +1,6 @@
+window_h,F_access,ceiling_lower_pct,ceiling_upper_pct,eps_max,F_median_h,GSD,eta,is_canonical_window,lower_convention,upper_convention
+28.0,0.03773416410753161,3.5847455902155025,8.396074769677844,0.95,96.0,2.0,0.05,False,zero residual post-window protection,eta=0.05 residual efficacy (legacy convention)
+34.5,0.0699131680115545,6.641750961097678,11.292185121039905,0.95,96.0,2.0,0.05,True,zero residual post-window protection,eta=0.05 residual efficacy (legacy convention)
+48.0,0.15865525393145719,15.072249123488431,19.278972853831146,0.95,96.0,2.0,0.05,False,zero residual post-window protection,eta=0.05 residual efficacy (legacy convention)
+60.0,0.24886305157963817,23.641989900065624,27.397674642167434,0.95,96.0,2.0,0.05,False,zero residual post-window protection,eta=0.05 residual efficacy (legacy convention)
+72.0,0.3390572259592901,32.210436466132556,35.51515033633611,0.95,96.0,2.0,0.05,False,zero residual post-window protection,eta=0.05 residual efficacy (legacy convention)
